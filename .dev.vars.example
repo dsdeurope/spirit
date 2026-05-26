@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════
+# VARIABLES D'ENVIRONNEMENT LOCALES — DÉVELOPPEMENT
+# ═══════════════════════════════════════════════════════════
+#
+# ⚠️  CE FICHIER NE DOIT JAMAIS ÊTRE COMMITÉ SUR GIT !
+#     Il est automatiquement ignoré par .gitignore
+#
+# Utilisation :
+# 1. Copiez ce fichier en .dev.vars
+# 2. Remplissez votre clé API Mistral
+# 3. Lancez: wrangler dev
+#
+# ═══════════════════════════════════════════════════════════
+
+MISTRAL_API_KEY=votre_clé_mistral_ici
+ALLOWED_ORIGIN=*
+
+# ═══════════════════════════════════════════════════════════
+# OBTENIR UNE CLÉ API MISTRAL
+# ═══════════════════════════════════════════════════════════
+# 1. Allez sur https://console.mistral.ai
+# 2. Créez un compte ou connectez-vous
+# 3. Allez dans "API Keys"
+# 4. Créez une nouvelle clé
+# 5. Copiez-la dans ce fichier
+#
+# ═══════════════════════════════════════════════════════════
+# PRODUCTION
+# ═══════════════════════════════════════════════════════════
+# Pour la production, utilisez :
+#   wrangler secret put MISTRAL_API_KEY
+#
+# Ne mettez jamais de clés API dans wrangler.toml !
+# ═══════════════════════════════════════════════════════════

@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>✦ Lectio Divina — Lecture biblique quotidienne</title>
+  <meta name="description" content="Application de lecture biblique quotidienne avec analyse théologique en 8 dimensions. Modes 2, 5 et 10 minutes." />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.2.0/dist/tabler-icons.min.css" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════
+       DESIGN TOKENS
+    ═══════════════════════════════════════════ */
+    :root {
+      --gold:         #B8882A;
+      --gold-light:   #D4A94A;
+      --gold-bg:      #FBF3E3;
+      --gold-border:  #D4A94A;
+
+      --bg:           #FAFAF8;
+      --bg-2:         #F4F3EF;
+      --bg-3:         #ECEAE3;
+
+      --text-1:       #1C1A16;
+      --text-2:       #6B6456;
+      --text-3:       #A09688;
+
+      --border-1:     #E2DDD4;
+      --border-2:     #EAE6DF;
+
+      --font-serif:   'Crimson Pro', Georgia, 'Times New Roman', serif;
+      --font-sans:    'DM Sans', system-ui, sans-serif;
+
+      --r-sm:   6px;
+      --r-md:  10px;
+      --r-lg:  16px;
+      --r-xl:  22px;
+
+      --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:          #16140F;
+        --bg-2:        #1E1B14;
+        --bg-3:        #27231A;
+        --text-1:      #F5F0E8;
+        --text-2:      #ADA494;
+        --text-3:      #6E6455;
+        --border-1:    #332E24;
+        --border-2:    #2A2620;
+        --gold-bg:     #201808;
+        --gold-border: #7A5C18;
+        --shadow:      0 1px 3px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
+      }
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══════════════════════════════════════════
+       APP SHELL
+    ═══════════════════════════════════════════ */
+    #app {
+      min-height: 100svh;
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen {
+      display: none;
+      flex: 1;
+      padding: 1.5rem 1.25rem 3rem;
+      animation: fadeIn .18s ease;
+    }
+    .screen.active { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ═══════════════════════════════════════════
+       TYPOGRAPHY
+    ═══════════════════════════════════════════ */
+    .app-logo {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: .03em;
+      text-align: center;
+      color: var(--text-1);
+      margin-bottom: 2px;
+    }
+    .app-logo .accent { color: var(--gold); }
+
+    .app-sub {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-3);
+      text-align: center;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 1.75rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       STREAK CARD
+    ═══════════════════════════════════════════ */
+    .streak-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-lg);
+      padding: 1.1rem 1.25rem;
+      text-align: center;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .streak-num {
+      font-family: var(--font-serif);
+      font-size: 48px;
+      font-weight: 500;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .streak-lbl {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-3);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    /* ═══════════════════════════════════════════
+       MODE BUTTONS
+    ═══════════════════════════════════════════ */
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 1.25rem;
+    }
+    .mode-btn {
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-lg);
+      padding: 1.1rem .5rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      transition: transform .1s, background .12s, box-shadow .12s;
+      box-shadow: var(--shadow);
+    }
+    .mode-btn:hover { background: var(--bg-3); }
+    .mode-btn:active { transform: scale(.97); }
+    .mode-btn.featured { border: 2px solid var(--gold-border); }
+    .mode-time { font-family: var(--font-serif); font-size: 36px; font-weight: 500; color: var(--text-1); line-height: 1; }
+    .mode-unit { font-size: 11px; color: var(--text-2); }
+    .mode-name { font-size: 10px; color: var(--text-3); letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+    .featured .mode-name { color: var(--gold); }
+
+    /* ═══════════════════════════════════════════
+       VERSE PREVIEW
+    ═══════════════════════════════════════════ */
+    .verse-preview {
+      border-left: 2px solid var(--gold-border);
+      padding: .8rem 1rem;
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--text-2);
+      font-style: italic;
+      line-height: 1.65;
+      background: var(--bg-2);
+      border-radius: 0 var(--r-md) var(--r-md) 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       COMMON COMPONENTS
+    ═══════════════════════════════════════════ */
+    .row-hd {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-2);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0;
+      transition: color .12s;
+    }
+    .back-btn:hover { color: var(--text-1); }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      background: var(--gold-bg);
+      color: var(--gold);
+      padding: 4px 10px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--gold-border);
+      letter-spacing: .04em;
+    }
+
+    .mini-ref {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-md);
+      padding: .65rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .mini-ref-lbl { font-size: 11px; color: var(--gold); letter-spacing: .1em; text-transform: uppercase; font-weight: 500; flex-shrink: 0; }
+    .mini-ref-txt { font-family: var(--font-serif); font-size: 14px; color: var(--text-2); font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* ═══════════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════════ */
+    .ctrl-row { display: flex; gap: 8px; }
+    .btn {
+      flex: 1;
+      padding: .7rem;
+      border-radius: var(--r-md);
+      border: 1px solid var(--border-1);
+      background: var(--bg-2);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      color: var(--text-1);
+      transition: background .12s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn:hover { background: var(--bg-3); }
+    .btn.gold { background: var(--gold-bg); border-color: var(--gold-border); color: var(--gold); font-weight: 500; }
+    .btn.gold:hover { filter: brightness(.96); }
+    .btn.full { width: 100%; flex: none; margin-top: 1rem; }
+
+    /* ═══════════════════════════════════════════
+       TIMER
+    ═══════════════════════════════════════════ */
+    .timer-wrap { position: relative; width: 128px; height: 128px; margin: 0 auto 1.25rem; }
+    .ring-svg { transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: var(--border-1); stroke-width: 5; }
+    .ring-fill { fill: none; stroke: var(--gold); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 346; stroke-dashoffset: 0; transition: stroke-dashoffset .85s linear; }
+    .timer-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+    .timer-num { font-family: var(--font-serif); font-size: 28px; font-weight: 500; color: var(--text-1); line-height: 1; }
+    .timer-st { font-size: 10px; color: var(--text-3); letter-spacing: .1em; text-transform: uppercase; }
+
+    /* ═══════════════════════════════════════════
+       PASSAGE CARD
+    ═══════════════════════════════════════════ */
+    .passage-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-lg);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      max-height: 260px;
+      overflow-y: auto;
+      box-shadow: var(--shadow);
+    }
+    .psg-ref { font-size: 11px; color: var(--gold); letter-spacing: .12em; text-transform: uppercase; font-weight: 500; margin-bottom: .75rem; }
+    .psg-text { font-family: var(--font-serif); font-size: 18px; line-height: 1.85; color: var(--text-1); white-space: pre-wrap; }
+
+    /* ═══════════════════════════════════════════
+       8-TAB ANALYSIS GRID
+    ═══════════════════════════════════════════ */
+    .tab-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      margin-bottom: 1.25rem;
+    }
+    .tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 8px 3px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--border-2);
+      background: var(--bg-2);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 10px;
+      color: var(--text-3);
+      transition: background .12s, color .12s;
+      min-width: 0;
+      line-height: 1.3;
+    }
+    .tab i { font-size: 16px; }
+    .tab span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: center; }
+    .tab.active { background: var(--gold-bg); color: var(--gold); border-color: var(--gold-border); font-weight: 500; }
+    .tab:hover:not(.active) { background: var(--bg-3); color: var(--text-2); }
+
+    .tab-panel { display: none; animation: fadeIn .15s ease; }
+    .tab-panel.active { display: block; }
+
+    .panel-hd {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border-2);
+    }
+    .panel-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--gold-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid var(--gold-border);
+    }
+    .panel-icon i { font-size: 18px; color: var(--gold); }
+    .panel-title { font-size: 15px; font-weight: 500; color: var(--text-1); }
+    .panel-text { font-family: var(--font-serif); font-size: 17px; line-height: 1.9; color: var(--text-1); }
+
+    /* ═══════════════════════════════════════════
+       LOADING
+    ═══════════════════════════════════════════ */
+    .loading-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 2rem 0;
+      color: var(--text-2);
+      font-size: 13px;
+      justify-content: center;
+    }
+    .dot { animation: blink 1.4s infinite both; font-size: 20px; color: var(--gold); }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes blink { 0%, 80%, 100% { opacity: 0; } 40% { opacity: 1; } }
+
+    /* ═══════════════════════════════════════════
+       REFLECTION
+    ═══════════════════════════════════════════ */
+    .refl-body { font-family: var(--font-serif); font-size: 18px; line-height: 1.9; color: var(--text-1); display: none; }
+
+    /* ═══════════════════════════════════════════
+       COMPLETE SCREEN
+    ═══════════════════════════════════════════ */
+    .complete-wrap { text-align: center; padding: 2rem 0; }
+    .complete-icon { font-size: 56px; margin-bottom: 1rem; color: var(--gold); }
+    .complete-title { font-family: var(--font-serif); font-size: 30px; color: var(--text-1); margin-bottom: 4px; }
+    .complete-sub { font-size: 14px; color: var(--text-2); margin-bottom: 1.75rem; }
+    .new-streak { font-family: var(--font-serif); font-size: 56px; font-weight: 500; color: var(--gold); line-height: 1; }
+    .new-streak-lbl { font-size: 11px; color: var(--text-3); letter-spacing: .1em; text-transform: uppercase; margin: 4px 0 1.5rem; }
+    .comp-verse {
+      border: 1px solid var(--gold-border);
+      border-radius: var(--r-lg);
+      padding: .9rem 1.1rem;
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--text-2);
+      font-style: italic;
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+      background: var(--gold-bg);
+    }
+
+    /* ═══════════════════════════════════════════
+       SCROLLBAR
+    ═══════════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-1); border-radius: 4px; }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (min-width: 600px) {
+      #app { border-left: 1px solid var(--border-2); border-right: 1px solid var(--border-2); }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════════════════════════════
+       HOME SCREEN
+  ══════════════════════════════════ -->
+  <div id="home" class="screen active">
+    <p class="app-logo">✦ Lectio <span class="accent">Divina</span></p>
+    <p class="app-sub">Parole du jour</p>
+
+    <div class="streak-card">
+      <div class="streak-num" id="streak-num">0</div>
+      <div class="streak-lbl">jours consécutifs</div>
+    </div>
+
+    <div class="modes-grid">
+      <button class="mode-btn" onclick="selectMode(2)">
+        <span class="mode-time">2</span>
+        <span class="mode-unit">min</span>
+        <span class="mode-name">étincelle</span>
+      </button>
+      <button class="mode-btn featured" onclick="selectMode(5)">
+        <span class="mode-time">5</span>
+        <span class="mode-unit">min</span>
+        <span class="mode-name">méditation</span>
+      </button>
+      <button class="mode-btn" onclick="selectMode(10)">
+        <span class="mode-time">10</span>
+        <span class="mode-unit">min</span>
+        <span class="mode-name">lectio</span>
+      </button>
+    </div>
+
+    <div class="verse-preview" id="verse-prev">Chargement...</div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       READING SCREEN
+  ══════════════════════════════════ -->
+  <div id="reading" class="screen">
+    <div class="row-hd">
+      <button class="back-btn" onclick="goHome()">
+        <i class="ti ti-arrow-left"></i> retour
+      </button>
+      <span class="badge" id="mode-badge">5 min</span>
+    </div>
+
+    <div class="timer-wrap">
+      <svg class="ring-svg" width="128" height="128" viewBox="0 0 110 110" aria-hidden="true">
+        <circle class="ring-bg" cx="55" cy="55" r="50"/>
+        <circle class="ring-fill" id="ring-fill" cx="55" cy="55" r="50"/>
+      </svg>
+      <div class="timer-center">
+        <div class="timer-num" id="timer-num">5:00</div>
+        <div class="timer-st" id="timer-st">en cours</div>
+      </div>
+    </div>
+
+    <div class="passage-card">
+      <div class="psg-ref" id="psg-ref">—</div>
+      <div class="psg-text" id="psg-text"></div>
+    </div>
+
+    <div class="ctrl-row">
+      <button class="btn" id="pause-btn" onclick="togglePause()">
+        <i class="ti ti-player-pause"></i> Pause
+      </button>
+      <button class="btn gold" onclick="finishEarly()">
+        <i class="ti ti-check"></i> Terminé
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       ANALYSIS SCREEN — 8 ONGLETS
+  ══════════════════════════════════ -->
+  <div id="analysis" class="screen">
+    <div class="row-hd">
+      <button class="back-btn" onclick="goHome()">
+        <i class="ti ti-arrow-left"></i> retour
+      </button>
+      <span class="badge">Analyse</span>
+    </div>
+
+    <div class="mini-ref">
+      <span class="mini-ref-lbl" id="anal-ref">—</span>
+      <span class="mini-ref-txt" id="anal-excerpt"></span>
+    </div>
+
+    <div id="anal-loading" class="loading-row" style="display:none;">
+      <span class="dot">•</span><span class="dot">•</span><span class="dot">•</span>
+      <span>Analyse théologique en cours...</span>
+    </div>
+
+    <div id="anal-content" style="display:none;">
+
+      <!-- Tab bar — 4×2 -->
+      <div class="tab-grid">
+        <button class="tab active" data-tab="contexte" onclick="switchTab('contexte')">
+          <i class="ti ti-map-2"></i><span>Contexte</span>
+        </button>
+        <button class="tab" data-tab="qui_parle" onclick="switchTab('qui_parle')">
+          <i class="ti ti-user-circle"></i><span>Qui parle</span>
+        </button>
+        <button class="tab" data-tab="pourquoi" onclick="switchTab('pourquoi')">
+          <i class="ti ti-help"></i><span>Pourquoi</span>
+        </button>
+        <button class="tab" data-tab="sens" onclick="switchTab('sens')">
+          <i class="ti ti-book"></i><span>Sens</span>
+        </button>
+        <button class="tab" data-tab="theme" onclick="switchTab('theme')">
+          <i class="ti ti-tag"></i><span>Thème</span>
+        </button>
+        <button class="tab" data-tab="destinataires" onclick="switchTab('destinataires')">
+          <i class="ti ti-users"></i><span>À qui</span>
+        </button>
+        <button class="tab" data-tab="theologiens" onclick="switchTab('theologiens')">
+          <i class="ti ti-certificate"></i><span>Théologiens</span>
+        </button>
+        <button class="tab" data-tab="spirituel" onclick="switchTab('spirituel')">
+          <i class="ti ti-flame"></i><span>Spirituel</span>
+        </button>
+      </div>
+
+      <!-- Tab panels -->
+      <div id="tab-contexte" class="tab-panel active">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-map-2"></i></div><div class="panel-title">Contexte historique</div></div>
+        <p class="panel-text" id="content-contexte"></p>
+      </div>
+
+      <div id="tab-qui_parle" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-user-circle"></i></div><div class="panel-title">Qui parle ?</div></div>
+        <p class="panel-text" id="content-qui_parle"></p>
+      </div>
+
+      <div id="tab-pourquoi" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-help"></i></div><div class="panel-title">Pourquoi ce message ?</div></div>
+        <p class="panel-text" id="content-pourquoi"></p>
+      </div>
+
+      <div id="tab-sens" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-book"></i></div><div class="panel-title">Sens du texte</div></div>
+        <p class="panel-text" id="content-sens"></p>
+      </div>
+
+      <div id="tab-theme" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-tag"></i></div><div class="panel-title">Thème principal</div></div>
+        <p class="panel-text" id="content-theme"></p>
+      </div>
+
+      <div id="tab-destinataires" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-users"></i></div><div class="panel-title">À qui s'adresse ce texte</div></div>
+        <p class="panel-text" id="content-destinataires"></p>
+      </div>
+
+      <div id="tab-theologiens" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-certificate"></i></div><div class="panel-title">Regard des théologiens</div></div>
+        <p class="panel-text" id="content-theologiens"></p>
+      </div>
+
+      <div id="tab-spirituel" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-flame"></i></div><div class="panel-title">Sens spirituel</div></div>
+        <p class="panel-text" id="content-spirituel"></p>
+      </div>
+
+      <button class="btn gold full" onclick="goToReflection()">
+        <i class="ti ti-heart"></i> Méditation personnelle
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       REFLECTION SCREEN
+  ══════════════════════════════════ -->
+  <div id="reflection" class="screen">
+    <div class="row-hd">
+      <button class="back-btn" onclick="showScreen('analysis')">
+        <i class="ti ti-arrow-left"></i> analyse
+      </button>
+      <span class="badge">méditation</span>
+    </div>
+
+    <div class="mini-ref">
+      <span class="mini-ref-lbl" id="refl-ref">—</span>
+      <span class="mini-ref-txt" id="refl-excerpt"></span>
+    </div>
+
+    <div id="refl-loading" class="loading-row">
+      <span class="dot">•</span><span class="dot">•</span><span class="dot">•</span>
+      <span>Méditation en cours...</span>
+    </div>
+    <div class="refl-body" id="refl-body"></div>
+
+    <button class="btn gold full" id="complete-btn" onclick="completeSession()" style="display:none;">
+      <i class="ti ti-check"></i> Marquer comme lu
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════
+       COMPLETE SCREEN
+  ══════════════════════════════════ -->
+  <div id="complete" class="screen">
+    <div class="complete-wrap">
+      <div class="complete-icon">✦</div>
+      <h1 class="complete-title">Bien joué</h1>
+      <p class="complete-sub">Tu as nourri ton âme aujourd'hui</p>
+      <div class="new-streak" id="comp-streak">1</div>
+      <p class="new-streak-lbl">jour(s) consécutifs</p>
+      <div class="comp-verse" id="comp-verse"></div>
+      <button class="btn full" onclick="goHome()">
+        <i class="ti ti-home"></i> Revenir à l'accueil
+      </button>
+    </div>
+  </div>
+
+</div><!-- /#app -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONFIGURATION — SÉCURISÉE POUR CLOUDFLARE
+   ⚠️  NE JAMAIS METTRE DE CLÉ API ICI POUR LA PRODUCTION
+   
+   Pour le développement local uniquement.
+   En production, utilisez Cloudflare Workers avec variable d'environnement.
+   
+   Instructions de déploiement :
+   1. Créez un fichier wrangler.toml à la racine
+   2. Ajoutez votre clé MISTRAL_API_KEY dans .dev.vars ou variables d'environnement Cloudflare
+   3. Déployez le worker (voir fichier WORKER_INSTRUCTIONS.md)
+═══════════════════════════════════════════════════════════ */
+const CONFIG = {
+  // URL du proxy Cloudflare Worker (à déployer séparément)
+  API_PROXY_URL: '/api/mistral',  // relatif si même domaine, ou https://votre-worker.votre-subdomain.workers.dev/api/mistral
+  
+  // Modèle Mistral
+  MODEL: 'mistral-large-latest',
+  
+  // Pour développement local uniquement (NE PAS COMMITER)
+  LOCAL_API_KEY: '',  // ← laissez vide en production, remplissez seulement en local dans .env non commité
+  
+  // Fallback pour démo sans API
+  USE_FALLBACK: false,  // mettre à true si vous voulez tester sans API key
+};
+
+/* ═══════════════════════════════════════════════════════════
+   PASSAGES BIBLIQUES (30 passages — 10 par mode)
+═══════════════════════════════════════════════════════════ */
+const PASSAGES = {
+  2: [
+    { ref: "Jean 3:16", text: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse pas, mais qu'il ait la vie éternelle." },
+    { ref: "Psaume 23:1-2", text: "L'Éternel est mon berger : je ne manquerai de rien. Il me fait reposer dans de verts pâturages, il me dirige vers des eaux paisibles." },
+    { ref: "Philippiens 4:13", text: "Je puis tout par celui qui me fortifie." },
+    { ref: "Romains 8:28", text: "Nous savons que toutes choses concourent au bien de ceux qui aiment Dieu, de ceux qui sont appelés selon son dessein." },
+    { ref: "Ésaïe 41:10", text: "Ne crains rien, car je suis avec toi ; je suis ton Dieu ; je te fortifie, je viens à ton secours, je te soutiens de ma droite triomphante." },
+    { ref: "Proverbes 3:5-6", text: "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse ; reconnais-le dans toutes tes voies, et il aplanira tes sentiers." },
+    { ref: "Matthieu 6:33", text: "Cherchez premièrement le royaume et la justice de Dieu ; et toutes ces choses vous seront données par-dessus." },
+    { ref: "Lamentations 3:22-23", text: "Les bontés de l'Éternel ne sont pas épuisées, ses compassions ne sont pas à leur terme. Elles se renouvellent chaque matin. Ta fidélité est grande !" },
+    { ref: "Josué 1:9", text: "Sois fort et courageux. Ne tremble pas et ne te laisse pas décourager, car l'Éternel, ton Dieu, est avec toi partout où tu iras." },
+    { ref: "Jérémie 29:11", text: "Car je connais les projets que j'ai formés sur vous, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance." },
+  ],
+  5: [
+    { ref: "Psaume 23", text: "L'Éternel est mon berger : je ne manquerai de rien. Il me fait reposer dans de verts pâturages, il me dirige vers des eaux paisibles. Il restaure mon âme, il me conduit dans les sentiers de la justice, à cause de son nom.\n\nQuand je marche dans la vallée de l'ombre de la mort, je ne crains aucun mal, car tu es avec moi : ta houlette et ton bâton me rassurent. Tu dresses une table devant moi, en face de mes adversaires ; tu oins d'huile ma tête, et ma coupe déborde.\n\nOui, le bonheur et la grâce m'accompagneront tous les jours de ma vie, et j'habiterai dans la maison de l'Éternel jusqu'à la fin de mes jours." },
+    { ref: "Matthieu 5:3-10 — Les Béatitudes", text: "Heureux les pauvres en esprit, car le royaume des cieux est à eux.\nHeureux ceux qui pleurent, car ils seront consolés.\nHeureux les débonnaires, car ils hériteront la terre.\nHeureux ceux qui ont faim et soif de la justice, car ils seront rassasiés.\nHeureux les miséricordieux, car ils obtiendront miséricorde.\nHeureux ceux qui ont le cœur pur, car ils verront Dieu.\nHeureux ceux qui procurent la paix, car ils seront appelés fils de Dieu.\nHeureux ceux qui sont persécutés pour la justice, car le royaume des cieux est à eux." },
+    { ref: "Jean 15:1-5", text: "Je suis le vrai cep, et mon Père est le vigneron. Tout sarment qui est en moi et qui ne porte pas de fruit, il le retranche ; et tout sarment qui porte du fruit, il l'émonde, afin qu'il en porte davantage.\n\nVous êtes déjà purs, à cause de la parole que je vous ai annoncée. Demeurez en moi, et je demeurerai en vous. Comme le sarment ne peut de lui-même porter du fruit, s'il ne demeure attaché au cep, ainsi vous ne le pouvez pas non plus, si vous ne demeurez en moi.\n\nJe suis le cep, vous êtes les sarments. Celui qui demeure en moi et en qui je demeure porte beaucoup de fruit, car sans moi vous ne pouvez rien faire." },
+    { ref: "Romains 8:35, 37-39", text: "Qui nous séparera de l'amour de Christ ? Sera-ce la tribulation, ou l'angoisse, ou la persécution, ou la faim, ou la nudité, ou le péril, ou l'épée ?\n\nMais dans toutes ces choses nous sommes plus que vainqueurs par celui qui nous a aimés. Car je suis persuadé que ni la mort ni la vie, ni les anges ni les dominations, ni les choses présentes ni les choses à venir, ni les puissances, ni la hauteur, ni la profondeur, ni aucune autre créature ne pourra nous séparer de l'amour de Dieu manifesté en Jésus-Christ notre Seigneur." },
+    { ref: "1 Corinthiens 13:4-8", text: "L'amour est patient, l'amour est plein de bonté ; l'amour n'est pas envieux ; l'amour ne se vante point, il ne s'enfle point d'orgueil, il ne fait rien de malhonnête, il ne cherche point son intérêt, il ne s'irrite point, il ne soupçonne point le mal, il ne se réjouit point de l'injustice, mais il se réjouit de la vérité.\n\nIl excuse tout, il croit tout, il espère tout, il supporte tout. L'amour ne périt jamais." },
+    { ref: "Philippiens 4:4-8", text: "Réjouissez-vous toujours dans le Seigneur ; je le dis encore, réjouissez-vous. Que votre douceur soit connue de tous les hommes. Le Seigneur est proche.\n\nNe vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces. Et la paix de Dieu, qui surpasse toute intelligence, gardera vos cœurs et vos pensées en Jésus-Christ.\n\nAu reste, frères, que tout ce qui est vrai, tout ce qui est honorable, tout ce qui est juste, tout ce qui est pur, tout ce qui est aimable, soit l'objet de vos pensées." },
+    { ref: "Ésaïe 40:28-31", text: "Ne le sais-tu pas ? Ne l'as-tu pas appris ? C'est le Dieu d'éternité, l'Éternel, qui a créé les extrémités de la terre. Il ne se fatigue point, il ne se lasse point ; sa sagesse est insondable.\n\nIl donne de la force à celui qui est fatigué, et il augmente la vigueur de celui qui est sans force. Les jeunes gens se fatiguent et se lassent, les plus vigoureux fléchissent et tombent ; mais ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles ; ils courent, et ne se lassent point ; ils marchent, et ne se fatiguent point." },
+    { ref: "Galates 5:22-25", text: "Mais le fruit de l'Esprit, c'est l'amour, la joie, la paix, la patience, la bonté, la bénignité, la fidélité, la douceur, la tempérance.\n\nContre de tels actes, il n'y a pas de loi. Ceux qui appartiennent à Jésus-Christ ont crucifié la chair avec ses passions et ses désirs. Si nous vivons par l'Esprit, marchons aussi selon l'Esprit." },
+    { ref: "Matthieu 6:25-29", text: "C'est pourquoi je vous dis : Ne vous inquiétez pas pour votre vie de ce que vous mangerez, ni pour votre corps, de quoi vous serez vêtus. La vie n'est-elle pas plus que la nourriture, et le corps plus que le vêtement ?\n\nRegardez les oiseaux du ciel : ils ne sèment ni ne moissonnent, et ils n'amassent rien dans des greniers ; et votre Père céleste les nourrit. Ne valez-vous pas beaucoup plus qu'eux ?\n\nEt pourquoi vous inquiéter au sujet du vêtement ? Considérez comment croissent les lis des champs : ils ne travaillent ni ne filent ; cependant Salomon même n'a pas été vêtu comme l'un d'eux." },
+    { ref: "Psaume 91:1-6", text: "Celui qui demeure sous l'abri du Très-Haut repose à l'ombre du Tout-Puissant. Je dis à l'Éternel : Mon refuge et ma forteresse, mon Dieu en qui je me confie !\n\nC'est lui qui te délivre du filet de l'oiseleur, de la peste et de ses ravages. Il te couvrira de ses ailes, et tu trouveras un refuge sous ses ailes ; sa fidélité est un bouclier et une armure.\n\nTu ne craindras ni les terreurs de la nuit, ni la flèche qui vole de jour, ni la peste qui marche dans les ténèbres, ni la contagion qui frappe en plein midi." },
+  ],
+  10: [
+    { ref: "Psaume 139:1-14", text: "Éternel, tu me sondes et tu me connais. Que je sois assis ou debout, tu le sais ; de loin, tu pénètres ma pensée. Que je marche ou que je me couche, tu l'observes ; tu es instruit de toutes mes voies.\n\nCar la parole n'est pas encore sur ma langue, que déjà, Éternel, tu la connais entièrement. Tu m'entoures par derrière et par devant, et tu mets ta main sur moi. Une telle connaissance est trop merveilleuse pour moi, trop élevée pour que je puisse la saisir.\n\nOù irais-je loin de ton Esprit, et où fuirais-je loin de ta face ? Si je monte aux cieux, tu y es ; si je me couche au séjour des morts, t'y voilà. Si je prends les ailes de l'aurore, si je vais habiter à l'extrémité de la mer, là aussi ta main me conduira, et ta droite me saisira.\n\nC'est toi qui as formé mes reins, qui m'as tissu dans le sein de ma mère. Je te loue de ce que je suis une créature si merveilleuse." },
+    { ref: "Jean 1:1-14", text: "Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu. Elle était au commencement avec Dieu. Toutes choses ont été faites par elle, et rien de ce qui a été fait n'a été fait sans elle.\n\nEn elle était la vie, et la vie était la lumière des hommes. La lumière luit dans les ténèbres, et les ténèbres ne l'ont point reçue.\n\nElle est venue chez les siens, et les siens ne l'ont pas reçue. Mais à tous ceux qui l'ont reçue, à ceux qui croient en son nom, elle a donné le pouvoir de devenir enfants de Dieu.\n\nEt la Parole a été faite chair, et elle a habité parmi nous, pleine de grâce et de vérité ; et nous avons contemplé sa gloire, une gloire comme la gloire du Fils unique venu du Père." },
+    { ref: "Romains 12:1-8", text: "Je vous exhorte donc, frères, par les compassions de Dieu, à offrir vos corps comme un sacrifice vivant, saint, agréable à Dieu, ce qui sera de votre part un culte raisonnable.\nNe vous conformez pas au siècle présent, mais soyez transformés par le renouvellement de l'intelligence, afin que vous discerniez quelle est la volonté de Dieu, ce qui est bon, agréable et parfait.\n\nCar, comme nous avons plusieurs membres dans un seul corps, et que tous les membres n'ont pas la même fonction, ainsi, nous qui sommes plusieurs, nous formons un seul corps en Christ, et nous sommes tous membres les uns des autres." },
+    { ref: "Hébreux 11:1-10", text: "Or la foi est une ferme assurance des choses qu'on espère, une démonstration de celles qu'on ne voit pas. C'est pour l'avoir eue que les anciens ont obtenu un témoignage favorable.\n\nC'est par la foi que nous reconnaissons que le monde a été formé par la parole de Dieu, en sorte que ce qu'on voit n'a pas été fait de choses visibles.\n\nOr, sans la foi il est impossible de lui être agréable ; car il faut que celui qui s'approche de Dieu croie que Dieu existe, et qu'il est le rémunérateur de ceux qui le cherchent.\n\nC'est par la foi qu'Abraham, lors de sa vocation, obéit et partit pour un lieu qu'il devait recevoir en héritage, et qu'il partit sans savoir où il allait." },
+    { ref: "Éphésiens 6:10-18", text: "Du reste, fortifiez-vous dans le Seigneur, et par sa force toute-puissante. Revêtez-vous de toutes les armes de Dieu, afin de pouvoir tenir ferme contre les ruses du diable.\n\nCar nous n'avons pas à lutter contre la chair et le sang, mais contre les dominations, contre les autorités, contre les princes des ténèbres de ce siècle.\n\nTenez donc ferme : ayez à vos reins la vérité pour ceinture, revêtez la cuirasse de la justice, mettez pour chaussure à vos pieds le zèle que donne l'Évangile de paix. Prenez le bouclier de la foi, avec lequel vous pourrez éteindre tous les traits enflammés du malin ; prenez aussi le casque du salut, et l'épée de l'Esprit, qui est la parole de Dieu." },
+    { ref: "Colossiens 3:12-17", text: "Ainsi donc, comme des élus de Dieu, saints et bien-aimés, revêtez-vous d'entrailles de miséricorde, de bonté, d'humilité, de douceur, de longanimité. Supportez-vous les uns les autres, et pardonnez-vous réciproquement.\n\nDe même que Christ vous a pardonné, pardonnez-vous aussi. Mais par-dessus toutes ces choses, revêtez-vous de la charité, qui est le lien de la perfection.\n\nEt que la paix de Christ règne dans vos cœurs. Que la parole de Christ habite parmi vous abondamment ; instruisez-vous et exhortez-vous les uns les autres en toute sagesse, chantant à Dieu dans vos cœurs avec reconnaissance." },
+    { ref: "1 Pierre 1:3-9", text: "Béni soit Dieu, le Père de notre Seigneur Jésus-Christ, qui, selon sa grande miséricorde, nous a régénérés, pour une espérance vivante, par la résurrection de Jésus-Christ d'entre les morts, pour un héritage qui ne peut ni se corrompre, ni se souiller, ni se faner.\n\nVous êtes gardés par la puissance de Dieu, par le moyen de la foi, pour le salut prêt à être révélé dans les derniers temps.\n\nVous vous en réjouissez, quoique maintenant vous soyez attristés pour un peu de temps par diverses épreuves, afin que l'épreuve de votre foi, plus précieuse que l'or périssable, ait pour résultat la louange, la gloire et l'honneur, lorsque Jésus-Christ apparaîtra." },
+    { ref: "Actes 2:42-47", text: "Ils persévéraient dans l'enseignement des apôtres, dans la communion fraternelle, dans la fraction du pain, et dans les prières. La crainte s'emparait de chacun, et il se faisait beaucoup de prodiges et de miracles par les apôtres.\n\nTous ceux qui croyaient étaient dans le même lieu, et ils avaient tout en commun. Ils vendaient leurs propriétés et leurs biens, et ils en partageaient le produit entre tous, selon les besoins de chacun.\n\nIls étaient chaque jour tous ensemble assidus au temple, ils rompaient le pain dans les maisons, et prenaient leur nourriture avec joie et simplicité de cœur, louant Dieu. Et le Seigneur ajoutait chaque jour à l'Église ceux qui étaient sauvés." },
+    { ref: "Psaume 119:105-112", text: "Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. Je jure, et je tiendrai mon serment, d'observer tes justes ordonnances.\n\nJe suis dans une profonde détresse ; Éternel, donne-moi la vie selon ta parole ! Tes témoignages sont mon héritage pour toujours, car ils sont la joie de mon cœur.\n\nJe penche mon cœur à pratiquer tes statuts, toujours et perpétuellement." },
+    { ref: "Matthieu 5:13-16", text: "Vous êtes le sel de la terre. Mais si le sel perd sa saveur, avec quoi la lui rendra-t-on ? Il ne sert plus qu'à être jeté dehors, et foulé aux pieds par les hommes.\n\nVous êtes la lumière du monde. Une ville située sur une montagne ne peut être cachée. Et on n'allume pas une lampe pour la mettre sous le boisseau, mais on la met sur le chandelier, et elle éclaire tous ceux qui sont dans la maison.\n\nQue votre lumière luise ainsi devant les hommes, afin qu'ils voient vos bonnes œuvres, et qu'ils glorifient votre Père qui est dans les cieux." },
+  ],
+};
+
+/* ═══════════════════════════════════════════════════════════
+   ÉTAT DE L'APPLICATION
+═══════════════════════════════════════════════════════════ */
+let mode         = 5;
+let passage      = null;
+let timerInterval = null;
+let timeLeft     = 300;
+let totalTime    = 300;
+let paused       = false;
+let streak       = 0;
+let doneToday    = false;
+let analysisData = null;
+let analysisPending = false;
+
+// Circumference for r=50: 2π×50 ≈ 314
+const CIRC = 2 * Math.PI * 50;
+
+/* ═══════════════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════════════ */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goHome() {
+  clearInterval(timerInterval);
+  showScreen('home');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
+function init() {
+  document.getElementById('streak-num').textContent = streak;
+  const idx = Math.floor(Date.now() / 86400000) % PASSAGES[5].length;
+  const p = PASSAGES[5][idx];
+  document.getElementById('verse-prev').textContent =
+    '« ' + p.text.substring(0, 90).replace(/\n/g, ' ') + '… » — ' + p.ref;
+  // Update ring stroke-dasharray
+  document.getElementById('ring-fill').style.strokeDasharray = CIRC;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   READING SESSION
+═══════════════════════════════════════════════════════════ */
+function selectMode(m) {
+  mode = m;
+  const idx = Math.floor(Date.now() / 86400000) % PASSAGES[m].length;
+  passage = PASSAGES[m][idx];
+
+  document.getElementById('mode-badge').textContent = m + ' min';
+  document.getElementById('psg-ref').textContent = passage.ref;
+  document.getElementById('psg-text').textContent = passage.text;
+
+  timeLeft  = m * 60;
+  totalTime = m * 60;
+  paused    = false;
+
+  document.getElementById('pause-btn').innerHTML = '<i class="ti ti-player-pause"></i> Pause';
+  analysisData    = null;
+  analysisPending = false;
+
+  updateTimer();
+  startTimer();
+  showScreen('reading');
+  fetchAnalysis(); // background fetch
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if (!paused) {
+      timeLeft--;
+      updateTimer();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        goToAnalysis();
+      }
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  document.getElementById('timer-num').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+
+  const offset = CIRC * (1 - timeLeft / totalTime);
+  document.getElementById('ring-fill').style.strokeDashoffset = offset;
+
+  const st = document.getElementById('timer-st');
+  if      (timeLeft <= 0) st.textContent = 'terminé';
+  else if (paused)        st.textContent = 'en pause';
+  else                    st.textContent = 'en cours';
+}
+
+function togglePause() {
+  paused = !paused;
+  const btn = document.getElementById('pause-btn');
+  if (paused) {
+    btn.innerHTML = '<i class="ti ti-player-play"></i> Reprendre';
+    document.getElementById('timer-st').textContent = 'en pause';
+  } else {
+    btn.innerHTML = '<i class="ti ti-player-pause"></i> Pause';
+    document.getElementById('timer-st').textContent = 'en cours';
+  }
+}
+
+function finishEarly() {
+  clearInterval(timerInterval);
+  goToAnalysis();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANALYSIS SCREEN
+═══════════════════════════════════════════════════════════ */
+function goToAnalysis() {
+  document.getElementById('anal-ref').textContent    = passage.ref;
+  document.getElementById('anal-excerpt').textContent = passage.text.replace(/\n/g, ' ').substring(0, 100) + '…';
+
+  if (analysisData) {
+    renderAnalysis(analysisData);
+    document.getElementById('anal-loading').style.display = 'none';
+    document.getElementById('anal-content').style.display = 'block';
+  } else {
+    document.getElementById('anal-loading').style.display = 'flex';
+    document.getElementById('anal-content').style.display = 'none';
+    analysisPending = true;
+  }
+
+  switchTab('contexte');
+  showScreen('analysis');
+}
+
+function renderAnalysis(d) {
+  const keys = ['contexte', 'qui_parle', 'pourquoi', 'sens', 'theme', 'destinataires', 'theologiens', 'spirituel'];
+  keys.forEach(k => {
+    const el = document.getElementById('content-' + k);
+    if (el && d[k]) el.textContent = d[k];
+  });
+  document.getElementById('anal-loading').style.display = 'none';
+  document.getElementById('anal-content').style.display = 'block';
+  analysisPending = false;
+}
+
+/**
+ * Appel API sécurisé via Cloudflare Worker
+ * La clé API Mistral n'est jamais exposée côté client
+ */
+async function fetchAnalysis() {
+  const prompt = `Tu es un théologien exégète francophone. Analyse ce passage biblique de façon précise, détaillée et accessible à tous — comme si tu l'expliquais à quelqu'un qui n'a jamais ouvert la Bible.
+
+Passage : "${passage.ref}"
+Texte : "${passage.text.substring(0, 600)}"
+
+Réponds UNIQUEMENT avec ce JSON valide, sans markdown, sans backticks :
+{
+"contexte":"[2-3 phrases : époque exacte, lieu géographique, situation politique et religieuse du moment]",
+"qui_parle":"[3-4 phrases : qui est cet auteur ? Son nom, son époque, son métier, sa personnalité, son histoire personnelle. Pourquoi Dieu l'a-t-il choisi ?]",
+"pourquoi":"[3-4 phrases : pourquoi ce message a-t-il été donné à ce moment précis ? Quelle crise, quelle souffrance, quel problème concret a motivé ces paroles ?]",
+"sens":"[2-3 phrases : que veut dire ce texte mot à mot, concrètement, en français simple que tout le monde comprend]",
+"theme":"[1-2 phrases : les thèmes principaux avec les mots-clés essentiels de ce passage]",
+"destinataires":"[2-3 phrases : à qui exactement ce texte était adressé ? Quel était leur état d'âme, leur peur, leur besoin à ce moment-là ?]",
+"theologiens":"[3-4 phrases : ce que des théologiens contemporains comme N.T. Wright, Timothy Keller, Henri Blocher ou d'autres penseurs francophones actuels disent de ce passage — expliqué simplement, sans jargon]",
+"spirituel":"[3-4 phrases : le sens spirituel profond pour aujourd'hui — qu'est-ce que ce texte dit à l'âme humaine ? Comment l'appliquer concrètement cette semaine ?]"
+}`;
+
+  try {
+    // En production : appel au proxy Cloudflare Worker
+    // En local : utilisation de la clé locale (uniquement pour tests)
+    const apiUrl = CONFIG.LOCAL_API_KEY 
+      ? 'https://api.mistral.ai/v1/chat/completions'
+      : CONFIG.API_PROXY_URL;
+
+    const headers = CONFIG.LOCAL_API_KEY
+      ? {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${CONFIG.LOCAL_API_KEY}`,
+        }
+      : {
+          'Content-Type': 'application/json',
+        };
+
+    const r = await fetch(apiUrl, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        model: CONFIG.MODEL,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 1500,
+        response_format: { type: 'json_object' },
+      }),
+    });
+
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    
+    const data = await r.json();
+    let txt = data.choices?.[0]?.message?.content ?? '{}';
+    txt = txt.replace(/```json|```/g, '').trim();
+    const json = JSON.parse(txt);
+    analysisData = json;
+    if (analysisPending) renderAnalysis(json);
+
+  } catch (e) {
+    console.error('Analyse API error:', e);
+    const fallback = getFallbackAnalysis();
+    analysisData = fallback;
+    if (analysisPending) renderAnalysis(fallback);
+  }
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const btn = document.querySelector('[data-tab="' + name + '"]');
+  if (btn) btn.classList.add('active');
+  const panel = document.getElementById('tab-' + name);
+  if (panel) panel.classList.add('active');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REFLECTION SCREEN
+═══════════════════════════════════════════════════════════ */
+function goToReflection() {
+  document.getElementById('refl-ref').textContent    = passage.ref;
+  document.getElementById('refl-excerpt').textContent = passage.text.replace(/\n/g, ' ').substring(0, 100) + '…';
+  document.getElementById('refl-loading').style.display = 'flex';
+  document.getElementById('refl-body').style.display    = 'none';
+  document.getElementById('complete-btn').style.display = 'none';
+  showScreen('reflection');
+  fetchReflection();
+}
+
+/**
+ * Appel API pour la méditation personnelle
+ */
+async function fetchReflection() {
+  const prompt = `Tu es un guide spirituel bienveillant. L'utilisateur vient de lire et d'étudier en profondeur le passage "${passage.ref}". Il a exploré le contexte, qui a écrit ce texte, pourquoi il a été écrit, et son sens spirituel.
+
+Rédige une méditation personnelle (3-4 phrases) en français, profonde et nourrissante. Tutoie la personne avec affection. Fais le lien entre ce qu'il vient d'apprendre et sa vie concrète d'aujourd'hui. Commence directement la méditation.`;
+
+  try {
+    const apiUrl = CONFIG.LOCAL_API_KEY 
+      ? 'https://api.mistral.ai/v1/chat/completions'
+      : CONFIG.API_PROXY_URL;
+
+    const headers = CONFIG.LOCAL_API_KEY
+      ? {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${CONFIG.LOCAL_API_KEY}`,
+        }
+      : {
+          'Content-Type': 'application/json',
+        };
+
+    const r = await fetch(apiUrl, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        model: CONFIG.MODEL,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 600,
+      }),
+    });
+    
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    
+    const data = await r.json();
+    const txt = data.choices?.[0]?.message?.content ?? 'Que cette Parole soit comme une graine plantée en toi aujourd\'hui.';
+    document.getElementById('refl-loading').style.display = 'none';
+    document.getElementById('refl-body').textContent      = txt;
+    document.getElementById('refl-body').style.display    = 'block';
+    document.getElementById('complete-btn').style.display = 'flex';
+  } catch (e) {
+    document.getElementById('refl-loading').style.display = 'none';
+    document.getElementById('refl-body').textContent      = 'Que cette Parole soit comme une graine plantée en toi aujourd\'hui — elle portera du fruit dans les moments où tu t\'y attendras le moins.';
+    document.getElementById('refl-body').style.display    = 'block';
+    document.getElementById('complete-btn').style.display = 'flex';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FALLBACK DATA (quand l'API n'est pas disponible)
+═══════════════════════════════════════════════════════════ */
+function getFallbackAnalysis() {
+  return {
+    contexte: "Ce passage s'inscrit dans la longue histoire de la révélation divine, dans un contexte de foi éprouvée.",
+    qui_parle: "L'auteur de ce texte est un homme profondément habité par Dieu, choisi pour transmettre une parole qui dépasse les circonstances de son temps.",
+    pourquoi: "Ce message a été donné à un moment de crise profonde, quand le peuple avait besoin d'être ancré dans une certitude plus grande que ses peurs.",
+    sens: "Ce texte dit simplement : Dieu est présent, fidèle, et rien de ce que tu traverses n'échappe à son amour.",
+    theme: "Fidélité de Dieu, espérance, confiance.",
+    destinataires: "Ce texte s'adressait à des hommes et femmes épuisés, découragés, qui se demandaient si Dieu les avait oubliés.",
+    theologiens: "Les théologiens contemporains voient dans ce passage un résumé de la grâce divine. L'accent n'est pas sur notre mérite, mais sur l'initiative gratuite de Dieu.",
+    spirituel: "Ce texte t'invite à lâcher ce que tu portes seul, et à faire confiance à un Dieu qui connaît ton chemin avant même que tu ne le marches.",
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════
+   COMPLETE
+═══════════════════════════════════════════════════════════ */
+function completeSession() {
+  if (!doneToday) { streak++; doneToday = true; }
+  document.getElementById('comp-streak').textContent = streak;
+  document.getElementById('comp-verse').textContent  =
+    '« ' + passage.text.replace(/\n/g, ' ').substring(0, 110) + '… » — ' + passage.ref;
+  document.getElementById('streak-num').textContent  = streak;
+  showScreen('complete');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════════════════════ */
+init();
+</script>
+</body>
+</html>

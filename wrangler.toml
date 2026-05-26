@@ -1,0 +1,39 @@
+name = "lectio-divina-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# ═══════════════════════════════════════════════════════════
+# CONFIGURATION CLOUDFLARE WORKER
+# ═══════════════════════════════════════════════════════════
+
+# Variables d'environnement publiques
+[vars]
+ALLOWED_ORIGIN = "*"  # ⚠️ En production, remplacez par votre domaine exact
+# Exemple: ALLOWED_ORIGIN = "https://lectio-divina.pages.dev"
+
+# Configuration développement local
+[dev]
+port = 8787
+local_protocol = "http"
+
+# ═══════════════════════════════════════════════════════════
+# SECRETS (à configurer avec wrangler secret put)
+# ═══════════════════════════════════════════════════════════
+# MISTRAL_API_KEY ← Ajoutez avec: wrangler secret put MISTRAL_API_KEY
+# 
+# Ne jamais mettre de clés API directement dans ce fichier !
+# Les secrets sont chiffrés et stockés de manière sécurisée.
+
+# ═══════════════════════════════════════════════════════════
+# ENVIRONNEMENTS MULTIPLES (optionnel)
+# ═══════════════════════════════════════════════════════════
+
+# [env.production]
+# name = "lectio-divina-api-prod"
+# [env.production.vars]
+# ALLOWED_ORIGIN = "https://votre-domaine.com"
+
+# [env.staging]
+# name = "lectio-divina-api-staging"
+# [env.staging.vars]
+# ALLOWED_ORIGIN = "*"
