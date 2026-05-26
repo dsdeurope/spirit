@@ -1246,6 +1246,299 @@ function completeSession() {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   BIBLE FUNCTIONS — LOUIS SEGOND 1910
+═══════════════════════════════════════════════════════════ */
+let currentBook = '';
+let currentChapter = 1;
+let totalChapters = 0;
+
+/**
+ * Charger un livre et son premier chapitre
+ */
+async function loadBookChapter() {
+  const select = document.getElementById('bible-book-select');
+  const value = select.value;
+  if (!value) return;
+  
+  const [book, chapters] = value.split('|');
+  currentBook = book;
+  currentChapter = 1;
+  totalChapters = parseInt(chapters);
+  
+  document.getElementById('chapter-nav').style.display = 'block';
+  document.getElementById('bible-content').style.display = 'none';
+  document.getElementById('bible-results').style.display = 'none';
+  document.getElementById('bible-loading').style.display = 'flex';
+  
+  updateCurrentRef();
+  await fetchBiblePassage(book, currentChapter);
+}
+
+/**
+ * Naviguer entre les chapitres
+ */
+function changeChapter(delta) {
+  const newChapter = currentChapter + delta;
+  if (newChapter < 1 || newChapter > totalChapters) return;
+  currentChapter = newChapter;
+  updateCurrentRef();
+  fetchBiblePassage(currentBook, currentChapter);
+}
+
+/**
+ * Mettre à jour la référence affichée
+ */
+function updateCurrentRef() {
+  document.getElementById('current-ref').textContent = `${currentBook} ${currentChapter}`;
+}
+
+/**
+ * Récupérer un passage depuis l'API Bible
+ */
+async function fetchBiblePassage(book, chapter) {
+  document.getElementById('bible-loading').style.display = 'flex';
+  document.getElementById('bible-content').style.display = 'none';
+  
+  try {
+    // API Bible Louis Segond 1910
+    const response = await fetch(`https://bible-api.com/${book}%20${chapter}?translation=ls`);
+    if (!response.ok) throw new Error('Erreur de chargement');
+    
+    const data = await response.json();
+    
+    if (data && data.verses && data.verses.length > 0) {
+      const text = data.verses.map(v => v.text).join('\n');
+      displayBiblePassage(`${book} ${chapter}`, text);
+    } else {
+      throw new Error('Aucun verset trouvé');
+    }
+  } catch (error) {
+    console.error('Erreur Bible:', error);
+    // Fallback avec des données statiques pour démo
+    displayBiblePassage(`${book} ${chapter}`, getFallbackBibleText(book, chapter));
+  }
+}
+
+/**
+ * Afficher un passage biblique
+ */
+function displayBiblePassage(ref, text) {
+  document.getElementById('bible-passage-ref').textContent = ref;
+  document.getElementById('bible-passage-text').textContent = text;
+  document.getElementById('bible-loading').style.display = 'none';
+  document.getElementById('bible-content').style.display = 'block';
+}
+
+/**
+ * Recherche dans la Bible
+ */
+async function searchBible() {
+  const input = document.getElementById('bible-search-input');
+  const query = input.value.trim();
+  if (!query) return;
+  
+  document.getElementById('bible-content').style.display = 'none';
+  document.getElementById('chapter-nav').style.display = 'none';
+  document.getElementById('bible-loading').style.display = 'flex';
+  document.getElementById('bible-results').style.display = 'none';
+  
+  try {
+    // Recherche via l'API
+    const response = await fetch(`https://bible-api.com/?search=${encodeURIComponent(query)}&translation=ls`);
+    if (!response.ok) throw new Error('Erreur de recherche');
+    
+    const data = await response.json();
+    displaySearchResults(data);
+  } catch (error) {
+    console.error('Erreur recherche:', error);
+    // Fallback recherche locale
+    displaySearchResults({ results: getFallbackSearchResults(query) });
+  }
+}
+
+/**
+ * Recherche rapide
+ */
+function quickSearch(term) {
+  document.getElementById('bible-search-input').value = term;
+  searchBible();
+}
+
+/**
+ * Effacer la recherche
+ */
+function clearSearch() {
+  document.getElementById('bible-search-input').value = '';
+  document.getElementById('bible-results').style.display = 'none';
+  if (currentBook) {
+    document.getElementById('chapter-nav').style.display = 'block';
+    document.getElementById('bible-content').style.display = 'block';
+  }
+}
+
+/**
+ * Afficher les résultats de recherche
+ */
+function displaySearchResults(data) {
+  const resultsContainer = document.getElementById('results-list');
+  const countLabel = document.getElementById('results-count');
+  const results = data.results || [];
+  
+  if (results.length === 0) {
+    resultsContainer.innerHTML = '<p style="color: var(--text-2); font-size: 14px; text-align: center; padding: 2rem;">Aucun résultat trouvé.</p>';
+  } else {
+    resultsContainer.innerHTML = results.slice(0, 20).map(r => `
+      <div class="passage-card" style="margin-bottom: 0; cursor: pointer;" 
+           onclick="goToBiblePassage('${r.reference}')">
+        <div class="psg-ref">${r.reference}</div>
+        <div class="psg-text" style="font-size: 15px;">${r.text}</div>
+      </div>
+    `).join('');
+  }
+  
+  countLabel.textContent = `${results.length} résultat(s)`;
+  document.getElementById('bible-loading').style.display = 'none';
+  document.getElementById('bible-results').style.display = 'block';
+}
+
+/**
+ * Aller à un passage spécifique
+ */
+function goToBiblePassage(ref) {
+  // Parse la référence (ex: "Jean 3:16")
+  const match = ref.match(/(.+)\s+(\d+):?(\d*)/);
+  if (match) {
+    const [, book, chapter, verse] = match;
+    const bookOption = Array.from(document.querySelectorAll('#bible-book-select option'))
+      .find(opt => opt.value.startsWith(book));
+    
+    if (bookOption) {
+      document.getElementById('bible-book-select').value = bookOption.value;
+      loadBookChapter().then(() => {
+        // Scroll to verse if needed
+      });
+    }
+  }
+}
+
+/**
+ * Enrichir un passage avec analyse IA
+ */
+async function enrichPassage() {
+  const ref = document.getElementById('bible-passage-ref').textContent;
+  const text = document.getElementById('bible-passage-text').textContent;
+  
+  // Stocker pour l'écran d'enrichissement
+  window.enrichmentData = { ref, text };
+  
+  document.getElementById('enrich-ref').textContent = ref;
+  document.getElementById('enrich-excerpt').textContent = text.substring(0, 80) + '…';
+  document.getElementById('enrich-loading').style.display = 'flex';
+  document.getElementById('enrich-content').style.display = 'none';
+  showScreen('enrichment');
+  
+  // Appel API pour analyse enrichie
+  const prompt = `Tu es un expert en théologie biblique. Analyse ce passage de la Bible Louis Segond 1910:
+
+Référence: ${ref}
+Texte: ${text}
+
+Fournis une analyse structurée en français avec:
+1. Contexte historique et littéraire (2-3 phrases)
+2. Qui parle et à qui ? (2-3 phrases)
+3. Thèmes théologiques principaux (liste)
+4. Application spirituelle pour aujourd'hui (3-4 phrases)
+
+Sois précis, profond, mais accessible.`;
+
+  try {
+    const apiUrl = CONFIG.LOCAL_API_KEY
+      ? 'https://api.mistral.ai/v1/chat/completions'
+      : CONFIG.API_PROXY_URL;
+
+    const headers = CONFIG.LOCAL_API_KEY
+      ? {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${CONFIG.LOCAL_API_KEY}`,
+        }
+      : {
+          'Content-Type': 'application/json',
+        };
+
+    const r = await fetch(apiUrl, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        model: CONFIG.MODEL,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 1000,
+      }),
+    });
+
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+
+    const data = await r.json();
+    const analysis = data.choices?.[0]?.message?.content ?? 'Analyse non disponible.';
+    
+    document.getElementById('enrich-loading').style.display = 'none';
+    document.getElementById('enrich-content').innerHTML = `<div class="panel-text" style="white-space: pre-wrap;">${analysis}</div>`;
+    document.getElementById('enrich-content').style.display = 'block';
+  } catch (e) {
+    console.error('Erreur enrichissement:', e);
+    document.getElementById('enrich-loading').style.display = 'none';
+    document.getElementById('enrich-content').innerHTML = '<p style="color: var(--text-2);">L\'analyse enrichie n\'est pas disponible pour le moment. Vous pouvez toujours méditer sur ce passage.</p>';
+    document.getElementById('enrich-content').style.display = 'block';
+  }
+}
+
+/**
+ * Textes bibliques de fallback (pour démo sans API)
+ */
+function getFallbackBibleText(book, chapter) {
+  const fallbacks = {
+    'Genèse 1': 'Au commencement, Dieu créa les cieux et la terre. La terre était informe et vide: il y avait des ténèbres à la surface de l\'abîme, et l\'esprit de Dieu se mouvait au-dessus des eaux. Dieu dit: Que la lumière soit! Et la lumière fut.',
+    'Psaumes 23': 'L\'Éternel est mon berger: je ne manquerai de rien. Il me fait reposer dans de verts pâturages, Il me dirige près des eaux paisibles. Il restaure mon âme, Il me conduit dans les sentiers de la justice, A cause de son nom.',
+    'Jean 3': 'Il y avait un homme des pharisiens, nommé Nicodème, un chef des Juifs. Il alla, pendant la nuit, vers Jésus, et lui dit: Rabbi, nous savons que tu es un docteur venu de Dieu; car personne ne peut faire ces miracles que tu fais, si Dieu n\'est avec lui.',
+    'Matthieu 5': 'Quand Jésus vit la foule, il monta sur la montagne; et, après qu\'il se fut assis, ses disciples s\'approchèrent de lui. Alors il prit la parole, et leur enseigna ces choses: Heureux les pauvres en esprit, car le royaume des cieux est à eux!',
+  };
+  return fallbacks[`${book} ${chapter}`] || `Passage de ${book} chapitre ${chapter}. Pour lire le texte complet, assurez-vous que l\'API Bible est accessible.`;
+}
+
+/**
+ * Résultats de recherche de fallback
+ */
+function getFallbackSearchResults(query) {
+  const q = query.toLowerCase();
+  const results = [];
+  
+  if (q.includes('genèse') || q.includes('commencement')) {
+    results.push({ reference: 'Genèse 1:1', text: 'Au commencement, Dieu créa les cieux et la terre.' });
+  }
+  if (q.includes('psaume') || q.includes('berger')) {
+    results.push({ reference: 'Psaumes 23:1', text: 'L\'Éternel est mon berger: je ne manquerai de rien.' });
+  }
+  if (q.includes('jean') || q.includes('naître')) {
+    results.push({ reference: 'Jean 3:16', text: 'Car Dieu a tant aimé le monde qu\'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu\'il ait la vie éternelle.' });
+  }
+  if (q.includes('amour') || q.includes('charité')) {
+    results.push({ reference: '1 Corinthiens 13:4', text: 'La charité est patiente, elle est pleine de bonté; la charité n\'est point envieuse.' });
+    results.push({ reference: '1 Jean 4:8', text: 'Celui qui n\'aime pas n\'a pas connu Dieu, car Dieu est amour.' });
+  }
+  if (q.includes('foi')) {
+    results.push({ reference: 'Hébreux 11:1', text: 'Or la foi est une ferme assurance des choses qu\'on espère, une démonstration de celles qu\'on ne voit pas.' });
+  }
+  if (q.includes('espérance')) {
+    results.push({ reference: 'Romains 15:13', text: 'Que le Dieu de l\'espérance vous remplisse de toute joie et de toute paix dans la foi.' });
+  }
+  if (q.includes('évangile') || q.includes('bonne nouvelle')) {
+    results.push({ reference: 'Marc 1:15', text: 'Le temps est accompli, et le royaume de Dieu est proche. Repentez-vous, et croyez à la bonne nouvelle.' });
+  }
+  
+  return results.length > 0 ? results : [{ reference: 'Recherche', text: 'Essayez avec: Genèse, Psaumes, amour, foi, espérance, ou un numéro de chapitre.' }];
+}
+
+/* ═══════════════════════════════════════════════════════════
    BOOT
 ═══════════════════════════════════════════════════════════ */
 init();
