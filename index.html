@@ -426,6 +426,11 @@
       <div class="streak-lbl">jours consécutifs</div>
     </div>
 
+    <!-- Navigation vers la Bible -->
+    <button class="btn gold full" onclick="showScreen('bible')" style="margin-bottom: 1.25rem;">
+      <i class="ti ti-book"></i> Bible en ligne (Louis Segond 1910)
+    </button>
+
     <div class="modes-grid">
       <button class="mode-btn" onclick="selectMode(2)">
         <span class="mode-time">2</span>
@@ -579,6 +584,237 @@
       <button class="btn gold full" onclick="goToReflection()">
         <i class="ti ti-heart"></i> Méditation personnelle
       </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       BIBLE SCREEN — LOUIS SEGOND 1910
+  ══════════════════════════════════ -->
+  <div id="bible" class="screen">
+    <div class="row-hd">
+      <button class="back-btn" onclick="goHome()">
+        <i class="ti ti-arrow-left"></i> retour
+      </button>
+      <span class="badge">Bible LS 1910</span>
+    </div>
+
+    <!-- Search Bar -->
+    <div style="margin-bottom: 1.25rem;">
+      <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+        <input type="text" id="bible-search-input" placeholder="Rechercher un livre, chapitre ou verset..." 
+          style="flex: 1; padding: .7rem 1rem; border-radius: var(--r-md); border: 1px solid var(--border-1); 
+            background: var(--bg-2); color: var(--text-1); font-family: var(--font-sans); font-size: 14px;" />
+        <button class="btn gold" onclick="searchBible()" style="flex: 0 0 auto;">
+          <i class="ti ti-search"></i>
+        </button>
+      </div>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+        <button class="btn" onclick="quickSearch('Genèse')" style="font-size: 12px; padding: .4rem .6rem;">Genèse</button>
+        <button class="btn" onclick="quickSearch('Psaumes')" style="font-size: 12px; padding: .4rem .6rem;">Psaumes</button>
+        <button class="btn" onclick="quickSearch('Évangile')" style="font-size: 12px; padding: .4rem .6rem;">Évangile</button>
+        <button class="btn" onclick="quickSearch('amour')" style="font-size: 12px; padding: .4rem .6rem;">Amour</button>
+        <button class="btn" onclick="quickSearch('foi')" style="font-size: 12px; padding: .4rem .6rem;">Foi</button>
+        <button class="btn" onclick="quickSearch('espérance')" style="font-size: 12px; padding: .4rem .6rem;">Espérance</button>
+      </div>
+    </div>
+
+    <!-- Book Selector -->
+    <div style="margin-bottom: 1.25rem;">
+      <select id="bible-book-select" onchange="loadBookChapter()" 
+        style="width: 100%; padding: .7rem 1rem; border-radius: var(--r-md); border: 1px solid var(--border-1); 
+          background: var(--bg-2); color: var(--text-1); font-family: var(--font-sans); font-size: 14px;">
+        <option value="">Sélectionner un livre...</option>
+        <optgroup label="Ancien Testament">
+          <option value="Genèse|50">Genèse (50 ch.)</option>
+          <option value="Exode|40">Exode (40 ch.)</option>
+          <option value="Lévitique|27">Lévitique (27 ch.)</option>
+          <option value="Nombres|36">Nombres (36 ch.)</option>
+          <option value="Deutéronome|34">Deutéronome (34 ch.)</option>
+          <option value="Josué|24">Josué (24 ch.)</option>
+          <option value="Juges|21">Juges (21 ch.)</option>
+          <option value="Ruth|4">Ruth (4 ch.)</option>
+          <option value="1 Samuel|31">1 Samuel (31 ch.)</option>
+          <option value="2 Samuel|24">2 Samuel (24 ch.)</option>
+          <option value="1 Rois|22">1 Rois (22 ch.)</option>
+          <option value="2 Rois|25">2 Rois (25 ch.)</option>
+          <option value="1 Chroniques|29">1 Chroniques (29 ch.)</option>
+          <option value="2 Chroniques|36">2 Chroniques (36 ch.)</option>
+          <option value="Esdras|10">Esdras (10 ch.)</option>
+          <option value="Néhémie|13">Néhémie (13 ch.)</option>
+          <option value="Esther|10">Esther (10 ch.)</option>
+          <option value="Job|42">Job (42 ch.)</option>
+          <option value="Psaumes|150">Psaumes (150 ch.)</option>
+          <option value="Proverbes|31">Proverbes (31 ch.)</option>
+          <option value="Ecclésiaste|12">Ecclésiaste (12 ch.)</option>
+          <option value="Cantique|8">Cantique des Cantiques (8 ch.)</option>
+          <option value="Ésaïe|66">Ésaïe (66 ch.)</option>
+          <option value="Jérémie|52">Jérémie (52 ch.)</option>
+          <option value="Lamentations|5">Lamentations (5 ch.)</option>
+          <option value="Ézéchiel|48">Ézéchiel (48 ch.)</option>
+          <option value="Daniel|12">Daniel (12 ch.)</option>
+          <option value="Osée|14">Osée (14 ch.)</option>
+          <option value="Joël|3">Joël (3 ch.)</option>
+          <option value="Amos|9">Amos (9 ch.)</option>
+          <option value="Abdias|1">Abdias (1 ch.)</option>
+          <option value="Jonas|4">Jonas (4 ch.)</option>
+          <option value="Michée|7">Michée (7 ch.)</option>
+          <option value="Nahum|3">Nahum (3 ch.)</option>
+          <option value="Habacuc|3">Habacuc (3 ch.)</option>
+          <option value="Sophonie|3">Sophonie (3 ch.)</option>
+          <option value="Aggée|2">Aggée (2 ch.)</option>
+          <option value="Zacharie|14">Zacharie (14 ch.)</option>
+          <option value="Malachie|4">Malachie (4 ch.)</option>
+        </optgroup>
+        <optgroup label="Nouveau Testament">
+          <option value="Matthieu|28">Matthieu (28 ch.)</option>
+          <option value="Marc|16">Marc (16 ch.)</option>
+          <option value="Luc|24">Luc (24 ch.)</option>
+          <option value="Jean|21">Jean (21 ch.)</option>
+          <option value="Actes|28">Actes (28 ch.)</option>
+          <option value="Romains|16">Romains (16 ch.)</option>
+          <option value="1 Corinthiens|16">1 Corinthiens (16 ch.)</option>
+          <option value="2 Corinthiens|13">2 Corinthiens (13 ch.)</option>
+          <option value="Galates|6">Galates (6 ch.)</option>
+          <option value="Éphésiens|6">Éphésiens (6 ch.)</option>
+          <option value="Philippiens|4">Philippiens (4 ch.)</option>
+          <option value="Colossiens|4">Colossiens (4 ch.)</option>
+          <option value="1 Thessaloniciens|5">1 Thessaloniciens (5 ch.)</option>
+          <option value="2 Thessaloniciens|3">2 Thessaloniciens (3 ch.)</option>
+          <option value="1 Timothée|6">1 Timothée (6 ch.)</option>
+          <option value="2 Timothée|4">2 Timothée (4 ch.)</option>
+          <option value="Tite|3">Tite (3 ch.)</option>
+          <option value="Philémon|1">Philémon (1 ch.)</option>
+          <option value="Hébreux|13">Hébreux (13 ch.)</option>
+          <option value="Jacques|5">Jacques (5 ch.)</option>
+          <option value="1 Pierre|5">1 Pierre (5 ch.)</option>
+          <option value="2 Pierre|3">2 Pierre (3 ch.)</option>
+          <option value="1 Jean|5">1 Jean (5 ch.)</option>
+          <option value="2 Jean|1">2 Jean (1 ch.)</option>
+          <option value="3 Jean|1">3 Jean (1 ch.)</option>
+          <option value="Jude|1">Jude (1 ch.)</option>
+          <option value="Apocalypse|22">Apocalypse (22 ch.)</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <!-- Chapter Navigation -->
+    <div id="chapter-nav" style="display: none; margin-bottom: 1.25rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <button class="btn" onclick="changeChapter(-1)" style="flex: 0 0 auto; padding: .5rem .8rem;">
+          <i class="ti ti-chevron-left"></i>
+        </button>
+        <span id="current-ref" style="font-family: var(--font-serif); font-size: 16px; font-weight: 500; color: var(--gold);"></span>
+        <button class="btn" onclick="changeChapter(1)" style="flex: 0 0 auto; padding: .5rem .8rem;">
+          <i class="ti ti-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="bible-loading" class="loading-row" style="display:none;">
+      <span class="dot">•</span><span class="dot">•</span><span class="dot">•</span>
+      <span>Chargement du texte biblique...</span>
+    </div>
+
+    <!-- Content -->
+    <div id="bible-content" style="display: none;">
+      <div class="passage-card">
+        <div class="psg-ref" id="bible-passage-ref"></div>
+        <div class="psg-text" id="bible-passage-text" style="max-height: none;"></div>
+      </div>
+      
+      <!-- Enrichment Button -->
+      <button class="btn gold full" onclick="enrichPassage()">
+        <i class="ti ti-sparkles"></i> Enrichir ce passage (analyse approfondie)
+      </button>
+    </div>
+
+    <!-- Search Results -->
+    <div id="bible-results" style="display: none;">
+      <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 13px; color: var(--text-2);" id="results-count"></span>
+        <button class="btn" onclick="clearSearch()" style="padding: .4rem .6rem; font-size: 12px;">
+          <i class="ti ti-x"></i> Effacer
+        </button>
+      </div>
+      <div id="results-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       ENRICHMENT SCREEN
+  ══════════════════════════════════ -->
+  <div id="enrichment" class="screen">
+    <div class="row-hd">
+      <button class="back-btn" onclick="showScreen('bible')">
+        <i class="ti ti-arrow-left"></i> bible
+      </button>
+      <span class="badge">Analyse enrichie</span>
+    </div>
+
+    <div class="mini-ref">
+      <span class="mini-ref-lbl" id="enrich-ref">—</span>
+      <span class="mini-ref-txt" id="enrich-excerpt"></span>
+    </div>
+
+    <div id="enrich-loading" class="loading-row">
+      <span class="dot">•</span><span class="dot">•</span><span class="dot">•</span>
+      <span>Analyse théologique approfondie en cours...</span>
+    </div>
+
+    <div id="enrich-content" style="display: none;">
+      <!-- Tab bar — 4×2 -->
+      <div class="tab-grid">
+        <button class="tab active" data-tab="e_contexte" onclick="switchEnrichTab('e_contexte')">
+          <i class="ti ti-map-2"></i><span>Contexte</span>
+        </button>
+        <button class="tab" data-tab="e_exegese" onclick="switchEnrichTab('e_exegese')">
+          <i class="ti ti-book"></i><span>Exégèse</span>
+        </button>
+        <button class="tab" data-tab="e_theologie" onclick="switchEnrichTab('e_theologie')">
+          <i class="ti ti-certificate"></i><span>Théologie</span>
+        </button>
+        <button class="tab" data-tab="e_application" onclick="switchEnrichTab('e_application')">
+          <i class="ti ti-heart"></i><span>Application</span>
+        </button>
+        <button class="tab" data-tab="e_prieres" onclick="switchEnrichTab('e_prieres')">
+          <i class="ti ti-pray"></i><span>Prières</span>
+        </button>
+        <button class="tab" data-tab="e_liens" onclick="switchEnrichTab('e_liens')">
+          <i class="ti ti-link"></i><span>Liens bibliques</span>
+        </button>
+      </div>
+
+      <!-- Tab panels -->
+      <div id="tab-e_contexte" class="tab-panel active">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-map-2"></i></div><div class="panel-title">Contexte historique et littéraire</div></div>
+        <p class="panel-text" id="content-e_contexte"></p>
+      </div>
+
+      <div id="tab-e_exegese" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-book"></i></div><div class="panel-title">Exégèse détaillée</div></div>
+        <p class="panel-text" id="content-e_exegese"></p>
+      </div>
+
+      <div id="tab-e_theologie" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-certificate"></i></div><div class="panel-title">Enseignement théologique</div></div>
+        <p class="panel-text" id="content-e_theologie"></p>
+      </div>
+
+      <div id="tab-e_application" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-heart"></i></div><div class="panel-title">Application pratique</div></div>
+        <p class="panel-text" id="content-e_application"></p>
+      </div>
+
+      <div id="tab-e_prieres" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-pray"></i></div><div class="panel-title">Suggestions de prières</div></div>
+        <p class="panel-text" id="content-e_prieres"></p>
+      </div>
+
+      <div id="tab-e_liens" class="tab-panel">
+        <div class="panel-hd"><div class="panel-icon"><i class="ti ti-link"></i></div><div class="panel-title">Liens avec d'autres passages</div></div>
+        <p class="panel-text" id="content-e_liens"></p>
+      </div>
     </div>
   </div>
 

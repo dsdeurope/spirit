@@ -1,0 +1,16 @@
+{
+  "name": "lectio-divina",
+  "version": "1.0.0",
+  "description": "Application de lecture biblique quotidienne avec analyse théologique",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "keywords": ["biblical", "theology", "cloudflare-worker", "mistral-ai"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
