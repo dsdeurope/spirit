@@ -94,7 +94,7 @@ export default {
           model: body.model || 'mistral-large-latest',
           messages: body.messages,
           temperature: body.temperature ?? 0.7,
-          max_tokens: body.max_tokens ?? 1500,
+          max_tokens: body.max_tokens ?? 800,
           response_format: body.response_format,
         }),
       });
