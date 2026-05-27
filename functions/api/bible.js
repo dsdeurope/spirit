@@ -1,25 +1,57 @@
 // functions/api/bible.js
 
-export async function onRequestPost(context) {
+export async function onRequest(context) {
   const { request } = context;
   
   // Récupère la clé API depuis les variables d'environnement de Cloudflare Pages
   const MISTRAL_API_KEY = context.env.MISTRAL_API_KEY;
 
+  // En-têtes CORS obligatoires pour autoriser le frontend à consommer l'API
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Content-Type": "application/json"
+  };
+
+  // 1. Gestion impérative de la pré-vérification OPTIONS (évite l'erreur 405/403 navigateur)
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  // 2. Vérification de la méthode (Seul POST est autorisé pour cette endpoint)
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Méthode non autorisée. Utilisez POST." }), {
+      status: 405,
+      headers: corsHeaders
+    });
+  }
+
   if (!MISTRAL_API_KEY) {
-    return new Response(JSON.stringify({ error: "Clé API Mistral non configurée dans les variables d'environnement" }), {
+    return new Response(JSON.stringify({ error: "Clé API Mistral non configurée dans les variables d'environnement Cloudflare." }), {
       status: 500,
-      headers: { "Content-Type": "application/json" }
+      headers: corsHeaders
     });
   }
 
   try {
-    const { book, chapter, verse } = await request.json();
+    // 3. Parsing du corps de la requête
+    let dataInput = {};
+    try {
+      dataInput = await request.json();
+    } catch (e) {
+      return new Response(JSON.stringify({ error: "Format JSON invalide." }), {
+        status: 400,
+        headers: corsHeaders
+      });
+    }
+
+    const { book, chapter, verse } = dataInput;
 
     if (!book || !chapter) {
-      return new Response(JSON.stringify({ error: "Livre et chapitre requis" }), {
+      return new Response(JSON.stringify({ error: "Les paramètres 'book' et 'chapter' sont requis." }), {
         status: 400,
-        headers: { "Content-Type": "application/json" }
+        headers: corsHeaders
       });
     }
 
@@ -35,6 +67,7 @@ export async function onRequestPost(context) {
     promptText += `. Réponds UNIQUEMENT par le texte biblique, sans introduction, sans commentaire, sans 'Voici le texte'. Commence directement par le premier mot du verset. Si le chapitre est long, assure-toi de ne rien omettre.`;
 
     // Appel à l'API Mistral avec capacité étendue pour les longs chapitres
+    // CORRECTION : Suppression de l'espace à la fin de l'URL
     const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -54,20 +87,21 @@ export async function onRequestPost(context) {
           }
         ],
         temperature: 0.1, // Très faible pour éviter toute hallucination ou modification du texte sacré
-        max_tokens: 2500, // Augmenté à 2500 pour couvrir les chapitres les plus longs (ex: Psaume 119, Genèse 1) sans coupure
+        max_tokens: 2500, // Augmenté à 2500 pour couvrir les chapitres les plus longs sans coupure
         top_p: 1
       })
     });
 
     if (!response.ok) {
       const errData = await response.text();
-      throw new Error(`Erreur Mistral: ${response.status} - ${errData}`);
+      console.error(`Erreur Mistral API : ${response.status}`, errData);
+      throw new Error(`Erreur API Mistral (${response.status}) : ${errData.substring(0, 150)}`);
     }
 
     const data = await response.json();
     
-    if (!data.choices || data.choices.length === 0) {
-      throw new Error("Aucun texte biblique généré");
+    if (!data.choices || data.choices.length === 0 || !data.choices[0].message) {
+      throw new Error("Aucun texte biblique généré (structure invalide).");
     }
 
     const bibleText = data.choices[0].message.content.trim();
@@ -77,14 +111,14 @@ export async function onRequestPost(context) {
       text: bibleText,
       reference: `${book} ${chapter}${verse ? ':' + verse : ''}`
     }), {
-      headers: { "Content-Type": "application/json" }
+      headers: corsHeaders
     });
 
   } catch (error) {
-    console.error("Erreur API Bible:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error("Erreur interne bible.js:", error);
+    return new Response(JSON.stringify({ error: error.message || "Une erreur inattendue est survenue." }), {
       status: 500,
-      headers: { "Content-Type": "application/json" }
+      headers: corsHeaders
     });
   }
 }
