@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lectio Divina — Étude Biblique Premium</title>
     
-    <!-- Google Fonts: Playfair Display (Titres) & Inter (Corps) -->
+    <!-- Typographie Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -19,365 +19,734 @@
             --text-muted: #6E6E73;
             --accent: #1B2A4A; /* Bleu Indigo Profond */
             --accent-light: #F0F4F8;
-            --shadow-soft: 0 4px 20px rgba(27, 42, 74, 0.04);
+            --shadow-soft: 0 8px 30px rgba(27, 42, 74, 0.06);
+            --shadow-hover: 0 12px 40px rgba(27, 42, 74, 0.10);
             --radius: 16px;
+            
             --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         [data-theme="dark"] {
-            /* Palette Mode Sombre - Noir Mat */
+            /* Palette Mode Sombre - Mat & Profond */
             --bg-site: #0F0F11;
             --bg-card: #161619;
             --text-main: #E4E4E7;
             --text-muted: #A1A1AA;
-            --accent: #818CF8; /* Violet/bleu pastel doux */
-            --accent-light: #27272A;
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --accent: #818CF8; /* Violet/Blue Pastel Doux */
+            --accent-light: #1E1E24;
+            --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.6);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.4s ease, color 0.4s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         
         body { 
-            background: var(--bg-site); 
+            background-color: var(--bg-site); 
             color: var(--text-main); 
-            min-height: 100vh; 
             font-family: var(--font-sans);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
+            line-height: 1.7;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
         }
 
         h1, h2, h3, h4, .serif-font { font-family: var(--font-serif); }
 
-        /* --- Écran de Verrouillage --- */
+        /* --- LOCK SCREEN --- */
         #lock-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-site);
             z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
         }
-        .lock-logo { font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem; }
-        .lock-title { font-size: 1.8rem; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 600; }
-        .lock-subtitle { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; }
+        #lock-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .lock-content {
+            text-align: center;
+            max-width: 400px;
+            padding: 2rem;
+        }
+        .lock-title {
+            font-size: 2.5rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .lock-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+        }
+        .lock-input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
         .lock-input {
-            padding: 1rem 1.5rem; font-size: 1.1rem; border: none; border-radius: var(--radius);
-            background: var(--bg-card); color: var(--text-main);
-            box-shadow: var(--shadow-soft); width: 100%; max-width: 320px; text-align: center;
-            outline: none; margin-bottom: 1.5rem;
-            font-family: var(--font-sans);
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid rgba(128,128,128,0.1);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
         }
-        .lock-input:focus { box-shadow: 0 0 0 2px var(--accent); }
+        .lock-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(27, 42, 74, 0.05);
+        }
         .lock-btn {
-            padding: 1rem 2.5rem; font-size: 1rem; font-weight: 600; border: none; border-radius: var(--radius);
-            background: var(--accent); color: white; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(27, 42, 74, 0.2);
-            transition: transform 0.2s;
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(27, 42, 74, 0.2);
         }
-        .lock-btn:hover { transform: translateY(-2px); }
-        .lock-error { color: #EF4444; margin-top: 1rem; font-size: 0.9rem; display: none; }
+        .lock-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(27, 42, 74, 0.3);
+        }
+        .lock-error {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            min-height: 1.2em;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .lock-error.visible { opacity: 1; }
 
-        /* --- Header --- */
-        header { 
-            padding: 2rem 1.5rem; 
-            max-width: 1200px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center;
+        /* --- MAIN APP --- */
+        #app-container {
+            display: none; /* Caché par défaut */
+            opacity: 0;
+            transition: opacity 0.8s ease;
         }
-        .logo { font-size: 1.8rem; font-weight: 700; color: var(--accent); font-family: var(--font-serif); letter-spacing: -0.02em; }
+        #app-container.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .brand {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .streak-badge {
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
         .theme-toggle {
-            background: transparent; border: none; color: var(--text-main);
-            width: 44px; height: 44px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 1.2rem;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background 0.2s;
         }
         .theme-toggle:hover { background: var(--accent-light); }
 
-        /* --- Main Layout --- */
-        main { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 4rem; }
-        
-        .section-card {
+        /* Layout Grid */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 5% 4rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 3rem;
+        }
+        @media (max-width: 1024px) {
+            main { grid-template-columns: 1fr; }
+        }
+
+        /* Sidebar Cards */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 3rem; /* Augmenté de 20% */
+            padding: 2rem;
             box-shadow: var(--shadow-soft);
-            margin-bottom: 2.5rem;
-            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(128,128,128,0.05);
+            padding-bottom: 1rem;
+        }
+        .verse-text {
+            font-style: italic;
+            color: var(--text-main);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+        .verse-ref {
+            font-weight: 600;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-serif);
+        }
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+        .dim-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+        }
+        /* Couleurs des dimensions (subtiles) */
+        .dim-1 { background: rgba(27, 42, 74, 0.05); color: var(--accent); }
+        .dim-2 { background: rgba(245, 158, 11, 0.08); color: #b45309; }
+        .dim-3 { background: rgba(16, 185, 129, 0.08); color: #047857; }
+        .dim-4 { background: rgba(139, 92, 246, 0.08); color: #6d28d9; }
+        .dim-5 { background: rgba(239, 68, 68, 0.08); color: #b91c1c; }
+        .dim-6 { background: rgba(107, 114, 128, 0.08); color: var(--text-muted); }
+        .dim-7 { background: rgba(249, 115, 22, 0.08); color: #c2410c; }
+        .dim-8 { background: rgba(59, 130, 246, 0.08); color: #1d4ed8; }
+
+        /* Main Content Area */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
         }
 
-        .section-title {
-            font-size: 2rem; color: var(--text-main); margin-bottom: 2rem;
-            text-align: center; font-weight: 600;
+        /* Timer Section */
+        .timer-section {
+            text-align: center;
+            padding: 1rem 0;
         }
-
-        /* --- Timer Section --- */
-        .timer-modes { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2.5rem; }
+        .timer-title {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        .mode-selector {
+            display: inline-flex;
+            background: var(--accent-light);
+            padding: 0.4rem;
+            border-radius: 12px;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
         .mode-btn {
-            padding: 0.8rem 1.5rem; border: none; border-radius: var(--radius);
-            font-family: var(--font-sans); font-weight: 500; font-size: 0.95rem;
-            cursor: pointer; background: var(--accent-light); color: var(--text-muted);
+            padding: 0.6rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         .mode-btn.active {
-            background: var(--accent); color: white;
-            box-shadow: 0 4px 12px rgba(27, 42, 74, 0.2);
+            background: var(--bg-card);
+            color: var(--accent);
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-
-        .timer-display-container {
-            text-align: center; margin-bottom: 2.5rem; position: relative;
-        }
-        .timer-value {
-            font-size: 4.5rem; font-weight: 300; color: var(--text-main);
-            font-variant-numeric: tabular-nums; letter-spacing: -2px;
-            font-family: var(--font-serif);
-        }
-        .timer-controls { display: flex; justify-content: center; gap: 1.5rem; }
-        .control-btn {
-            padding: 0.8rem 2rem; border: none; border-radius: var(--radius);
-            font-weight: 600; font-size: 0.95rem; cursor: pointer;
-            background: transparent; color: var(--accent);
-            transition: all 0.2s;
-        }
-        .control-btn.primary {
-            background: var(--accent); color: white;
-            box-shadow: 0 4px 12px rgba(27, 42, 74, 0.2);
-        }
-        .control-btn:hover { transform: translateY(-2px); }
-        .control-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-        /* --- Book Selector --- */
-        .book-selector-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;
-        }
-        @media (max-width: 600px) { .book-selector-grid { grid-template-columns: 1fr; } }
         
-        .select-group label {
-            display: block; font-size: 0.85rem; color: var(--text-muted);
-            margin-bottom: 0.5rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;
+        .timer-display-wrapper {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            margin: 0 auto 2.5rem;
         }
-        .custom-select {
-            width: 100%; padding: 1rem; border: none; border-radius: var(--radius);
-            background: var(--accent-light); color: var(--text-main);
-            font-size: 1rem; font-family: var(--font-sans); cursor: pointer;
-            outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236E6E73'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.2rem;
+        .timer-svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
         }
-        [data-theme="dark"] .custom-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23A1A1AA'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); }
+        .timer-circle-bg {
+            fill: none;
+            stroke: var(--accent-light);
+            stroke-width: 6;
+        }
+        .timer-circle-progress {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 690;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+        }
+        .timer-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            font-variant-numeric: tabular-nums;
+        }
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        .btn-control {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-sans);
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(27, 42, 74, 0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(27, 42, 74, 0.3);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid rgba(128,128,128,0.2);
+        }
+        .btn-secondary:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
 
-        /* --- Tabs --- */
-        .tabs { display: flex; gap: 2rem; border-bottom: 1px solid var(--accent-light); margin-bottom: 2.5rem; overflow-x: auto; }
+        /* Context Selector (Book/Chapter) */
+        .context-selector {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 600px) { .context-selector { grid-template-columns: 1fr; } }
+        .select-group label {
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+        .select-custom {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-site);
+            border: 1px solid rgba(128,128,128,0.1);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 1rem;
+            font-family: var(--font-serif);
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236E6E73'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+        }
+        .select-custom:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.05);
+        }
+
+        /* Tabs System */
+        .tabs-wrapper {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+        .tabs-header {
+            display: flex;
+            border-bottom: 1px solid rgba(128,128,128,0.05);
+            overflow-x: auto;
+        }
         .tab-btn {
-            padding: 1rem 0.5rem; border: none; background: transparent;
-            color: var(--text-muted); font-family: var(--font-serif);
-            font-size: 1.1rem; font-weight: 500; cursor: pointer;
-            position: relative; transition: color 0.3s;
+            flex: 1;
+            padding: 1.2rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
             white-space: nowrap;
+            position: relative;
         }
-        .tab-btn.active { color: var(--accent); font-weight: 700; }
+        .tab-btn:hover { color: var(--text-main); background: rgba(128,128,128,0.02); }
+        .tab-btn.active {
+            color: var(--accent);
+            background: var(--accent-light);
+            font-weight: 600;
+        }
         .tab-btn.active::after {
-            content: ''; position: absolute; bottom: -1px; left: 0; width: 100%;
-            height: 2px; background: var(--accent);
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            height: 3px;
+            background: var(--accent);
         }
-        .tab-content { display: none; animation: fadeIn 0.5s ease; }
+        .tab-content {
+            padding: 3rem;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Content Area --- */
-        .content-area {
-            font-size: 1.05rem; line-height: 1.8; color: var(--text-main);
-            max-width: 720px; margin: 0 auto;
+        /* Content Typography */
+        .rich-text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-main);
+            max-width: 800px;
+            margin: 0 auto;
         }
-        .content-area h1, .content-area h2, .content-area h3, .content-area h4 {
-            font-family: var(--font-serif); color: var(--accent); margin-top: 2.5rem; margin-bottom: 1rem;
-            font-weight: 700; line-height: 1.3;
+        .rich-text h1, .rich-text h2, .rich-text h3, .rich-text h4 {
+            font-family: var(--font-serif);
+            color: var(--accent);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.3;
         }
-        .content-area h1 { font-size: 2.2rem; }
-        .content-area h2 { font-size: 1.8rem; }
-        .content-area h3 { font-size: 1.4rem; }
-        .content-area h4 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-main); }
-        .content-area p { margin-bottom: 1.5rem; text-align: justify; }
-        .content-area strong { color: var(--accent); font-weight: 600; }
-        .content-area ul { margin-bottom: 1.5rem; padding-left: 1.5rem; }
-        .content-area li { margin-bottom: 0.8rem; }
-
+        .rich-text h1 { font-size: 2.2rem; border-bottom: 1px solid rgba(128,128,128,0.1); padding-bottom: 0.5rem; }
+        .rich-text h2 { font-size: 1.8rem; }
+        .rich-text h3 { font-size: 1.5rem; }
+        .rich-text h4 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-main); }
+        .rich-text p { margin-bottom: 1.5rem; text-align: justify; }
+        .rich-text strong { color: var(--accent); font-weight: 600; }
+        .rich-text ul { margin-bottom: 1.5rem; padding-left: 2rem; }
+        .rich-text li { margin-bottom: 0.8rem; }
+        
         .bible-link {
-            color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent);
-            font-weight: 500; transition: all 0.2s;
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--accent);
+            font-weight: 600;
+            transition: all 0.2s;
         }
-        .bible-link:hover { color: var(--text-main); border-bottom-style: solid; background: var(--accent-light); }
-
-        .action-btn {
-            display: block; margin: 2rem auto 0; padding: 1rem 3rem;
-            background: var(--accent); color: white; border: none; border-radius: var(--radius);
-            font-size: 1rem; font-weight: 600; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(27, 42, 74, 0.2);
-            transition: transform 0.2s;
+        .bible-link:hover {
+            background: var(--accent);
+            color: #fff;
+            border-bottom-style: solid;
         }
-        .action-btn:hover { transform: translateY(-2px); }
 
-        /* --- Loading State --- */
+        /* Loading State */
         .loading-state {
-            text-align: center; padding: 3rem; color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 0;
+            color: var(--text-muted);
+            text-align: center;
         }
         .spinner {
-            width: 32px; height: 32px; border: 3px solid var(--accent-light);
-            border-top-color: var(--accent); border-radius: 50%;
-            animation: spin 0.8s linear infinite; margin: 0 auto 1.5rem;
+            width: 40px; height: 40px;
+            border: 3px solid var(--accent-light);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 1.1rem;
+        }
 
-        /* --- Search Box --- */
-        .search-box { display: flex; gap: 1rem; margin-bottom: 2rem; }
+        /* Search Box in Dictionary Tab */
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
         .search-input {
-            flex: 1; padding: 1rem; border: none; border-radius: var(--radius);
-            background: var(--accent-light); color: var(--text-main);
-            font-size: 1rem; outline: none;
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 1px solid rgba(128,128,128,0.1);
+            border-radius: 12px;
+            background: var(--bg-site);
+            color: var(--text-main);
+            font-size: 1rem;
+            font-family: var(--font-sans);
         }
-        .search-btn {
-            padding: 0 1.5rem; background: var(--accent); color: white;
-            border: none; border-radius: var(--radius); cursor: pointer;
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.05);
+        }
+        .btn-search {
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
         }
+        .btn-search:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(27, 42, 74, 0.2); }
 
         /* Responsive */
-        @media (max-width: 600px) {
-            .section-card { padding: 2rem 1.5rem; }
-            .timer-value { font-size: 3.5rem; }
-            .tabs { gap: 1.5rem; }
+        @media (max-width: 768px) {
+            .timer-display-wrapper { width: 200px; height: 200px; }
+            .timer-text { font-size: 2.5rem; }
+            .tab-content { padding: 1.5rem; }
             .search-box { flex-direction: column; }
-            .search-btn { padding: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Écran de Verrouillage -->
+    <!-- 1. ÉCRAN DE VERROUILLAGE -->
     <div id="lock-screen">
-        <div class="lock-logo">✝</div>
-        <h1 class="lock-title">Lectio Divina</h1>
-        <p class="lock-subtitle">Accès Privé — Étude Biblique Approfondie</p>
-        <input type="password" id="access-code" class="lock-input" placeholder="Code d'accès" autocomplete="off">
-        <button class="lock-btn" onclick="checkAccess()">Entrer</button>
-        <p id="lock-error" class="lock-error">Code incorrect. Veuillez réessayer.</p>
+        <div class="lock-content">
+            <h1 class="lock-title">Lectio Divina</h1>
+            <p class="lock-subtitle">Accès Privé — Étude Biblique Premium</p>
+            
+            <div class="lock-input-group">
+                <input type="password" id="access-code" class="lock-input" placeholder="Entrez le code d'accès" maxlength="20">
+            </div>
+            
+            <button class="lock-btn" onclick="checkAccess()">Entrer</button>
+            <div id="lock-error" class="lock-error">Code incorrect. Veuillez réessayer.</div>
+        </div>
     </div>
 
-    <!-- Application Principale (Masquée par défaut si non déverrouillée) -->
-    <div id="app-content" style="display: none;">
+    <!-- 2. APPLICATION PRINCIPALE (Cachée par défaut) -->
+    <div id="app-container">
         <header>
-            <div class="logo">Lectio Divina</div>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème">
-                <span id="icon-sun" style="display:none;">☀️</span>
-                <span id="icon-moon">🌙</span>
-            </button>
+            <div class="brand">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                Lectio Divina
+            </div>
+            <div class="header-actions">
+                <div class="streak-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3.3.9.8 1.8 1.5 2.8z"/></svg>
+                    <span id="streak-count">0 jour</span>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème">
+                    <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+            </div>
         </header>
 
         <main>
-            <!-- Carte Principale -->
-            <div class="section-card">
+            <!-- Sidebar: Passage du Jour & Dimensions -->
+            <aside class="sidebar">
+                <div class="card">
+                    <h3 class="card-title">Passage du Jour</h3>
+                    <div id="daily-passage">
+                        <span class="verse-ref">Jean 3:16</span>
+                        <p class="verse-text">"Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."</p>
+                    </div>
+                    <div class="dimensions-grid">
+                        <div class="dim-tag dim-1">Amour</div>
+                        <div class="dim-tag dim-2">Grâce</div>
+                        <div class="dim-tag dim-3">Salut</div>
+                        <div class="dim-tag dim-4">Foi</div>
+                        <div class="dim-tag dim-5">Sacrifice</div>
+                        <div class="dim-tag dim-6">Éternité</div>
+                        <div class="dim-tag dim-7">Rédemption</div>
+                        <div class="dim-tag dim-8">Espérance</div>
+                    </div>
+                </div>
                 
-                <!-- 1. Sélecteur de Temps de Méditation -->
-                <h2 class="section-title serif-font">Temps de Méditation</h2>
-                <div class="timer-modes">
-                    <button class="mode-btn active" data-duration="120">2 min</button>
-                    <button class="mode-btn" data-duration="300">5 min</button>
-                    <button class="mode-btn" data-duration="600">10 min</button>
+                <div class="card" style="flex:1; display:flex; align-items:center; justify-content:center; text-align:center; color:var(--text-muted); font-style:italic; font-family:var(--font-serif);">
+                    "Ta parole est une lampe à mes pieds, Et une lumière sur mon sentier." <br><span style="font-size:0.8rem; margin-top:1rem;">— Psaumes 119:105</span>
                 </div>
+            </aside>
 
-                <div class="timer-display-container">
-                    <div class="timer-value" id="timer-display">02:00</div>
-                </div>
-                <div class="timer-controls">
-                    <button class="control-btn primary" id="start-btn">Démarrer</button>
-                    <button class="control-btn" id="pause-btn" disabled>Pause</button>
-                    <button class="control-btn" id="reset-btn">Reset</button>
-                </div>
+            <!-- Main Content -->
+            <div class="content-area">
+                
+                <!-- Timer Section -->
+                <section class="timer-section card">
+                    <h2 class="timer-title">Temps de Méditation</h2>
+                    
+                    <div class="mode-selector">
+                        <button class="mode-btn active" data-duration="120" onclick="setTimerMode(120, this)">2 min</button>
+                        <button class="mode-btn" data-duration="300" onclick="setTimerMode(300, this)">5 min</button>
+                        <button class="mode-btn" data-duration="600" onclick="setTimerMode(600, this)">10 min</button>
+                    </div>
 
-                <hr style="border:0; border-top:1px solid var(--accent-light); margin: 3rem 0;">
+                    <div class="timer-display-wrapper">
+                        <svg class="timer-svg" viewBox="0 0 220 220">
+                            <circle class="timer-circle-bg" cx="110" cy="110" r="100"></circle>
+                            <circle class="timer-circle-progress" id="progress-ring" cx="110" cy="110" r="100"></circle>
+                        </svg>
+                        <div class="timer-text" id="timer-display">02:00</div>
+                    </div>
 
-                <!-- 2. Sélecteur de Livre et Chapitre (Contexte) -->
-                <h2 class="section-title serif-font">Étude du Texte</h2>
-                <div class="book-selector-grid">
+                    <div class="timer-controls">
+                        <button class="btn-control btn-primary" id="start-btn" onclick="startTimer()">Démarrer</button>
+                        <button class="btn-control btn-secondary" id="pause-btn" onclick="pauseTimer()" disabled>Pause</button>
+                        <button class="btn-control btn-secondary" id="reset-btn" onclick="resetTimer()">Reset</button>
+                    </div>
+                </section>
+
+                <!-- Context Selector (Books & Chapters) -->
+                <section class="context-selector">
                     <div class="select-group">
-                        <label>Livre Biblique</label>
-                        <select id="book-select" class="custom-select" onchange="loadChapters()">
+                        <label for="book-select">Livre Biblique</label>
+                        <select id="book-select" class="select-custom" onchange="loadChapters()">
                             <option value="">Sélectionner un livre...</option>
                             <!-- Rempli par JS -->
                         </select>
                     </div>
                     <div class="select-group">
-                        <label>Chapitre</label>
-                        <select id="chapter-select" class="custom-select" disabled onchange="setContext()">
+                        <label for="chapter-select">Chapitre</label>
+                        <select id="chapter-select" class="select-custom" disabled onchange="updateContext()">
                             <option value="">Sélectionner un chapitre...</option>
                             <!-- Rempli par JS -->
                         </select>
                     </div>
-                </div>
-                <p id="current-context" style="text-align:center; color:var(--accent); font-weight:600; font-family:var(--font-serif); font-size:1.2rem; min-height:1.5rem;"></p>
+                </section>
 
-                <hr style="border:0; border-top:1px solid var(--accent-light); margin: 3rem 0;">
+                <!-- Analysis Tabs -->
+                <div class="tabs-wrapper">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" onclick="switchTab('theological')">Analyse Théologique</button>
+                        <button class="tab-btn" onclick="switchTab('meditative')">Méditation Guidée</button>
+                        <button class="tab-btn" onclick="switchTab('biblical')">Contexte Biblique</button>
+                        <button class="tab-btn" onclick="switchTab('dictionary')">Recherche & Dictionnaire</button>
+                    </div>
 
-                <!-- 3. Onglets d'Analyse -->
-                <div class="tabs">
-                    <button class="tab-btn active" data-tab="theological">Analyse Théologique</button>
-                    <button class="tab-btn" data-tab="meditative">Méditation Guidée</button>
-                    <button class="tab-btn" data-tab="biblical">Contexte Biblique</button>
-                    <button class="tab-btn" data-tab="dictionary">Recherche & Dictionnaire</button>
-                </div>
-
-                <!-- Contenu : Analyse Théologique -->
-                <div class="tab-content active" id="theological">
-                    <div id="theo-loading" class="loading-state" style="display:none;">
-                        <div class="spinner"></div>
-                        <p>L'IA rédige une analyse adaptée à votre temps de méditation...</p>
-                    </div>
-                    <div id="theo-content" class="content-area">
-                        <p>Sélectionnez un livre et un chapitre ci-dessus, puis générez une analyse théologique approfondie.</p>
-                        <button class="action-btn" onclick="generateAnalysis('theological')">Générer l'analyse</button>
-                    </div>
-                </div>
-
-                <!-- Contenu : Méditation Guidée -->
-                <div class="tab-content" id="meditative">
-                    <div id="med-loading" class="loading-state" style="display:none;">
-                        <div class="spinner"></div>
-                        <p>Préparation de votre parcours spirituel...</p>
-                    </div>
-                    <div id="med-content" class="content-area">
-                        <p>Obtenez un guide de méditation structuré (Lectio, Meditatio, Oratio, Contemplatio).</p>
-                        <button class="action-btn" onclick="generateAnalysis('meditative')">Générer la méditation</button>
-                    </div>
-                </div>
-
-                <!-- Contenu : Contexte Biblique -->
-                <div class="tab-content" id="biblical">
-                    <div id="bib-loading" class="loading-state" style="display:none;">
-                        <div class="spinner"></div>
-                        <p>Recherche des liens historiques et scripturaires...</p>
-                    </div>
-                    <div id="bib-content" class="content-area">
-                        <p>Découvrez le contexte historique, les liens avec l'Ancien Testament et les originaux grecs/hébreux.</p>
-                        <button class="action-btn" onclick="generateAnalysis('biblical')">Générer le contexte</button>
-                    </div>
-                </div>
-
-                <!-- Contenu : Dictionnaire & Recherche -->
-                <div class="tab-content" id="dictionary">
-                    <div class="search-box">
-                        <input type="text" id="dict-input" class="search-input" placeholder="Ex: Grâce, Rédemption, Alliance...">
-                        <button class="search-btn" onclick="searchDefinition()">Rechercher</button>
-                    </div>
-                    <div id="dict-loading" class="loading-state" style="display:none;">
-                        <div class="spinner"></div>
-                        <p>Recherche dans le dictionnaire théologique...</p>
-                    </div>
-                    <div id="dict-content" class="content-area"></div>
-                    
-                    <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--accent-light);">
-                        <h3 style="font-family:var(--font-serif); color:var(--text-main); margin-bottom:1rem;">Lire un passage spécifique</h3>
-                        <div class="search-box">
-                            <input type="text" id="bible-passage-input" class="search-input" placeholder="Ex: Jean 3:16">
-                            <button class="search-btn" onclick="fetchBiblePassage()">Lire</button>
+                    <!-- Tab: Theological -->
+                    <div id="tab-theological" class="tab-content active">
+                        <div id="loading-theological" class="loading-state" style="display:none;">
+                            <div class="spinner"></div>
+                            <p class="loading-text">L'IA rédige l'analyse pour <span id="ctx-theo"></span>...</p>
                         </div>
-                        <div id="bible-text-result" class="content-area" style="background:var(--accent-light); padding:1.5rem; border-radius:var(--radius); display:none;"></div>
+                        <div id="content-theological" class="rich-text">
+                            <p>Sélectionnez un livre et un chapitre, puis cliquez ci-dessous pour générer une analyse théologique approfondie adaptée à votre temps de méditation.</p>
+                            <div style="margin-top:2rem; text-align:center;">
+                                <button class="btn-control btn-primary" onclick="generateContent('theological')">Générer l'analyse</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Meditative -->
+                    <div id="tab-meditative" class="tab-content">
+                        <div id="loading-meditative" class="loading-state" style="display:none;">
+                            <div class="spinner"></div>
+                            <p class="loading-text">Préparation de la méditation pour <span id="ctx-med"></span>...</p>
+                        </div>
+                        <div id="content-meditative" class="rich-text">
+                            <p>Obtenez un parcours de Lectio Divina structuré (Lectio, Meditatio, Oratio, Contemplatio) basé sur le passage choisi.</p>
+                            <div style="margin-top:2rem; text-align:center;">
+                                <button class="btn-control btn-primary" onclick="generateContent('meditative')">Générer la méditation</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Biblical -->
+                    <div id="tab-biblical" class="tab-content">
+                        <div id="loading-biblical" class="loading-state" style="display:none;">
+                            <div class="spinner"></div>
+                            <p class="loading-text">Recherche du contexte pour <span id="ctx-bib"></span>...</p>
+                        </div>
+                        <div id="content-biblical" class="rich-text">
+                            <p>Découvrez les liens historiques, littéraires et les références croisées pour enrichir votre compréhension du texte.</p>
+                            <div style="margin-top:2rem; text-align:center;">
+                                <button class="btn-control btn-primary" onclick="generateContent('biblical')">Générer le contexte</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Dictionary -->
+                    <div id="tab-dictionary" class="tab-content">
+                        <div class="search-box">
+                            <input type="text" id="dict-input" class="search-input" placeholder="Ex: Grâce, Rédemption, Alliance...">
+                            <button class="btn-search" onclick="searchDefinition()">Rechercher</button>
+                        </div>
+                        <div id="loading-dictionary" class="loading-state" style="display:none;">
+                            <div class="spinner"></div>
+                            <p class="loading-text">Recherche de la définition théologique...</p>
+                        </div>
+                        <div id="content-dictionary" class="rich-text">
+                            <p style="color:var(--text-muted); text-align:center;">Tapez un mot clé ci-dessus pour obtenir sa définition biblique et spirituelle.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -388,7 +757,7 @@
     <script>
         // --- CONFIGURATION & DATA ---
         const ACCESS_CODE = "2Zohvjdc51430@";
-        let currentDuration = 120; // Défaut 2 min
+        let currentDuration = 120;
         let timeLeft = 120;
         let timerInterval = null;
         let isRunning = false;
@@ -457,17 +826,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             checkLockStatus();
             initTheme();
-            initTimer();
-            initTabs();
             initBookSelector();
+            initTimerUI();
+            loadStreak();
         });
 
-        // --- LOCK SCREEN LOGIC ---
+        // --- 1. LOCK SCREEN LOGIC ---
         function checkLockStatus() {
             const unlocked = localStorage.getItem('lectio_unlocked');
             if (unlocked === 'true') {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('app-content').style.display = 'block';
+                unlockApp();
             }
         }
 
@@ -477,146 +845,168 @@
             
             if (input === ACCESS_CODE) {
                 localStorage.setItem('lectio_unlocked', 'true');
-                document.getElementById('lock-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('lock-screen').style.display = 'none';
-                    document.getElementById('app-content').style.display = 'block';
-                }, 500);
+                unlockApp();
             } else {
-                errorMsg.style.display = 'block';
-                // Animation de secousse
-                const inputEl = document.getElementById('access-code');
-                inputEl.style.transform = 'translateX(10px)';
-                setTimeout(() => inputEl.style.transform = 'translateX(-10px)', 100);
-                setTimeout(() => inputEl.style.transform = 'translateX(0)', 200);
+                errorMsg.classList.add('visible');
+                setTimeout(() => errorMsg.classList.remove('visible'), 3000);
+                document.getElementById('access-code').value = '';
             }
         }
 
-        // Allow Enter key
+        function unlockApp() {
+            const lockScreen = document.getElementById('lock-screen');
+            const appContainer = document.getElementById('app-container');
+            
+            lockScreen.classList.add('hidden');
+            setTimeout(() => {
+                lockScreen.style.display = 'none';
+                appContainer.classList.add('visible');
+            }, 600);
+        }
+
+        // Allow Enter key on lock screen
         document.getElementById('access-code').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') checkAccess();
         });
 
-        // --- THEME LOGIC ---
+        // --- 2. THEME LOGIC ---
         function initTheme() {
             const toggle = document.getElementById('theme-toggle');
-            const sun = document.getElementById('icon-sun');
-            const moon = document.getElementById('icon-moon');
-            const saved = localStorage.getItem('theme') || 'light';
+            const sunIcon = document.getElementById('icon-sun');
+            const moonIcon = document.getElementById('icon-moon');
+            const savedTheme = localStorage.getItem('theme') || 'light';
             
-            if (saved === 'dark') {
+            if (savedTheme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
-                sun.style.display = 'inline'; moon.style.display = 'none';
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
             }
-            
+
             toggle.addEventListener('click', () => {
-                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-                if (isDark) {
+                const current = document.documentElement.getAttribute('data-theme');
+                if (current === 'dark') {
                     document.documentElement.removeAttribute('data-theme');
                     localStorage.setItem('theme', 'light');
-                    sun.style.display = 'none'; moon.style.display = 'inline';
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
                 } else {
                     document.documentElement.setAttribute('data-theme', 'dark');
                     localStorage.setItem('theme', 'dark');
-                    sun.style.display = 'inline'; moon.style.display = 'none';
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
                 }
             });
         }
 
-        // --- TIMER LOGIC ---
-        function initTimer() {
-            const modeBtns = document.querySelectorAll('.mode-btn');
-            const startBtn = document.getElementById('start-btn');
-            const pauseBtn = document.getElementById('pause-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const display = document.getElementById('timer-display');
-
-            function updateDisplay() {
-                const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-                const s = (timeLeft % 60).toString().padStart(2, '0');
-                display.textContent = `${m}:${s}`;
-            }
-
-            modeBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (isRunning) return;
-                    modeBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentDuration = parseInt(btn.dataset.duration);
-                    timeLeft = currentDuration;
-                    updateDisplay();
-                });
-            });
-
-            startBtn.addEventListener('click', () => {
-                if (isRunning) return;
-                isRunning = true;
-                startBtn.disabled = true;
-                pauseBtn.disabled = false;
-                startBtn.textContent = "En cours...";
-                
-                timerInterval = setInterval(() => {
-                    if (timeLeft > 0) {
-                        timeLeft--;
-                        updateDisplay();
-                    } else {
-                        clearInterval(timerInterval);
-                        isRunning = false;
-                        startBtn.disabled = false;
-                        pauseBtn.disabled = true;
-                        startBtn.textContent = "Démarrer";
-                        alert("Temps de méditation terminé.");
-                    }
-                }, 1000);
-            });
-
-            pauseBtn.addEventListener('click', () => {
-                if (!isRunning) return;
-                clearInterval(timerInterval);
-                isRunning = false;
-                startBtn.disabled = false;
-                pauseBtn.disabled = true;
-                startBtn.textContent = "Reprendre";
-            });
-
-            resetBtn.addEventListener('click', () => {
-                clearInterval(timerInterval);
-                isRunning = false;
-                timeLeft = currentDuration;
-                updateDisplay();
-                startBtn.disabled = false;
-                pauseBtn.disabled = true;
-                startBtn.textContent = "Démarrer";
-            });
+        // --- 3. TIMER LOGIC ---
+        function initTimerUI() {
+            const circumference = 2 * Math.PI * 100;
+            const progressRing = document.getElementById('progress-ring');
+            progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+            updateTimerDisplay();
         }
 
-        // --- BOOK SELECTOR LOGIC ---
+        function setTimerMode(seconds, btn) {
+            if (isRunning) return;
+            currentDuration = seconds;
+            timeLeft = seconds;
+            
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            updateTimerDisplay();
+            resetProgress();
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const s = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('timer-display').textContent = `${m}:${s}`;
+            
+            const percent = timeLeft / currentDuration;
+            const circumference = 2 * Math.PI * 100;
+            const offset = circumference - (percent * circumference);
+            document.getElementById('progress-ring').style.strokeDashoffset = offset;
+        }
+
+        function resetProgress() {
+            document.getElementById('progress-ring').style.strokeDashoffset = 0;
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('start-btn').style.opacity = '0.5';
+            document.getElementById('pause-btn').disabled = false;
+            
+            timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    incrementStreak();
+                    alert("Temps de méditation terminé. Que la paix soit avec vous.");
+                    resetTimerUI();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            if (!isRunning) return;
+            clearInterval(timerInterval);
+            isRunning = false;
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('start-btn').style.opacity = '1';
+            document.getElementById('start-btn').textContent = "Reprendre";
+            document.getElementById('pause-btn').disabled = true;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = currentDuration;
+            updateTimerDisplay();
+            resetProgress();
+            resetTimerUI();
+        }
+
+        function resetTimerUI() {
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('start-btn').style.opacity = '1';
+            document.getElementById('start-btn').textContent = "Démarrer";
+            document.getElementById('pause-btn').disabled = true;
+        }
+
+        // --- 4. CONTEXT SELECTION (BOOKS & CHAPTERS) ---
         function initBookSelector() {
-            const bookSelect = document.getElementById('book-select');
+            const select = document.getElementById('book-select');
             bibleBooks.forEach((book, idx) => {
                 const opt = document.createElement('option');
                 opt.value = idx;
                 opt.textContent = book.name;
-                bookSelect.appendChild(opt);
+                select.appendChild(opt);
             });
         }
 
         function loadChapters() {
             const bookIdx = document.getElementById('book-select').value;
             const chapSelect = document.getElementById('chapter-select');
-            const contextLabel = document.getElementById('current-context');
-            
             chapSelect.innerHTML = '<option value="">Sélectionner un chapitre...</option>';
-            chapSelect.disabled = true;
-            contextLabel.textContent = "";
-            selectedBook = "";
-            selectedChapter = "";
-
-            if (bookIdx === "") return;
+            
+            if (bookIdx === "") {
+                chapSelect.disabled = true;
+                selectedBook = "";
+                selectedChapter = "";
+                updateContextLabels();
+                return;
+            }
 
             const book = bibleBooks[bookIdx];
             selectedBook = book.name;
-
+            
             for (let i = 1; i <= book.chapters; i++) {
                 const opt = document.createElement('option');
                 opt.value = i;
@@ -624,102 +1014,83 @@
                 chapSelect.appendChild(opt);
             }
             chapSelect.disabled = false;
+            updateContextLabels();
         }
 
-        function setContext() {
-            const chap = document.getElementById('chapter-select').value;
-            const contextLabel = document.getElementById('current-context');
+        function updateContext() {
+            selectedChapter = document.getElementById('chapter-select').value;
+            updateContextLabels();
+        }
+
+        function updateContextLabels() {
+            const ctx = selectedBook && selectedChapter ? `${selectedBook} ${selectedChapter}` : "ce passage";
+            document.getElementById('ctx-theo').textContent = ctx;
+            document.getElementById('ctx-med').textContent = ctx;
+            document.getElementById('ctx-bib').textContent = ctx;
+        }
+
+        // --- 5. TABS & CONTENT GENERATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             
-            if (chap) {
-                selectedChapter = chap;
-                contextLabel.textContent = `Texte actif : ${selectedBook} ${selectedChapter}`;
-            } else {
-                selectedChapter = "";
-                contextLabel.textContent = "";
-            }
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
         }
 
-        // --- TABS LOGIC ---
-        function initTabs() {
-            const tabs = document.querySelectorAll('.tab-btn');
-            const contents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    contents.forEach(c => c.classList.remove('active'));
-                    tab.classList.add('active');
-                    document.getElementById(tab.dataset.tab).classList.add('active');
-                });
-            });
-        }
-
-        // --- MARKDOWN & LINK PARSER ---
-        function parseMarkdown(text) {
-            if (!text) return "";
-            let html = text
-                .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
-                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/\n\n/g, '</p><p>');
-            return `<p>${html}</p>`;
-        }
-
-        function makeBibleLinks(html) {
-            const regex = /\b((?:1|2|3)\s)?([A-Za-zÀ-ÿ]+)\s(\d+):(\d+)\b/gi;
-            return html.replace(regex, (match, prefix, book, chapter, verse) => {
-                const fullName = (prefix ? prefix.trim() + " " : "") + book;
-                const key = fullName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                const slug = bookMap[key] || key.replace(/\s+/g, '');
-                if (slug) {
-                    return `<a href="https://saintebible.com/${slug}/${chapter}-${verse}.htm" target="_blank" class="bible-link">${match}</a>`;
-                }
-                return match;
-            });
-        }
-
-        // --- API CALLS ---
-        async function generateAnalysis(type) {
+        async function generateContent(type) {
             if (!selectedBook || !selectedChapter) {
-                alert("Veuillez sélectionner un livre et un chapitre avant de générer une analyse.");
+                alert("Veuillez sélectionner un Livre et un Chapitre avant de générer une analyse.");
+                // Scroll to selector
+                document.querySelector('.context-selector').scrollIntoView({ behavior: 'smooth' });
                 return;
             }
 
-            const contentDiv = document.getElementById(`${type === 'theological' ? 'theo' : type === 'meditative' ? 'med' : 'bib'}-content`);
-            const loadingDiv = document.getElementById(`${type === 'theological' ? 'theo' : type === 'meditative' ? 'med' : 'bib'}-loading`);
+            const contentDiv = document.getElementById(`content-${type}`);
+            const loadingDiv = document.getElementById(`loading-${type}`);
             
             contentDiv.style.display = 'none';
-            loadingDiv.style.display = 'block';
+            loadingDiv.style.display = 'flex';
 
-            // Calcul du temps en minutes pour le prompt
-            const minutes = currentDuration / 60;
-            const timeText = minutes >= 1 ? `${minutes} minutes` : `${currentDuration} secondes`;
+            // Calcul du temps de lecture estimé en mots (approx 130 mots/min)
+            const wordsPerMin = 130;
+            const targetWords = Math.round((currentDuration / 60) * wordsPerMin);
+            const timeLabel = currentDuration === 120 ? "2 minutes" : (currentDuration === 300 ? "5 minutes" : "10 minutes");
 
             let prompt = "";
+            const passage = `${selectedBook} ${selectedChapter}`;
+
             if (type === 'theological') {
-                prompt = `Agis comme un théologien expert. Analyse le chapitre complet de ${selectedBook} ${selectedChapter}. Fournis une analyse structurée et approfondie. La longueur du texte doit être calibrée pour une lecture et une réflexion d'environ ${timeText}. Utilise des titres clairs.`;
+                prompt = `Agis comme un théologien expert. Rédige une analyse théologique et doctrinale approfondie et structurée pour le chapitre complet suivant : ${passage}. 
+                L'analyse doit être calibrée très précisément pour un temps de lecture de ${timeLabel} (environ ${targetWords} mots). 
+                Utilise des titres clairs (##, ###) et mets en gras les concepts clés. Inclue les implications pour la foi contemporaine.`;
             } else if (type === 'meditative') {
-                prompt = `Agis comme un guide spirituel. Propose une méditation guidée (Lectio Divina) basée sur ${selectedBook} ${selectedChapter}. Structure ta réponse pour remplir un temps de prière d'environ ${timeText}. Inclus des pistes de réflexion et de prière.`;
+                prompt = `Agis comme un guide spirituel expérimenté. Prépare une méditation guidée structurée (Lectio, Meditatio, Oratio, Contemplatio) basée sur le chapitre suivant : ${passage}.
+                Le contenu doit être calibré pour un temps de méditation de ${timeLabel} (environ ${targetWords} mots). 
+                Ton ton doit être doux, invitant et profond. Utilise des titres pour chaque étape.`;
             } else if (type === 'biblical') {
-                prompt = `Agis comme un exégète. Donne le contexte historique et littéraire de ${selectedBook} ${selectedChapter}. La réponse doit être détaillée et adaptée à une étude d'environ ${timeText}. Mentionne les liens inter-testamentaires.`;
+                prompt = `Agis comme un exégète biblique. Donne le contexte historique, littéraire et les liens avec le reste de la Bible pour : ${passage}.
+                Limite ta réponse pour un temps de lecture de ${timeLabel} (environ ${targetWords} mots). 
+                Explique les termes originaux importants et les références croisées. Structure avec des titres.`;
             }
 
             try {
-                const res = await fetch('/api/analyze', {
+                const response = await fetch(`/api/analyze`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt, type })
+                    body: JSON.stringify({ prompt: prompt, type: type })
                 });
-                const data = await res.json();
-                if (data.error) throw new Error(data.error);
+
+                if (!response.ok) throw new Error('Erreur API');
+                const data = await response.json();
                 
-                let rawHtml = parseMarkdown(data.result);
-                contentDiv.innerHTML = makeBibleLinks(rawHtml);
-            } catch (err) {
-                contentDiv.innerHTML = `<p style="color:#EF4444">Erreur : ${err.message}</p>`;
+                let html = parseMarkdown(data.result);
+                html = makeBibleLinks(html);
+                
+                contentDiv.innerHTML = html;
+            } catch (error) {
+                contentDiv.innerHTML = `<p style="color:#ef4444; text-align:center;">Une erreur est survenue lors de la génération. Veuillez réessayer.</p>`;
+                console.error(error);
             } finally {
                 loadingDiv.style.display = 'none';
                 contentDiv.style.display = 'block';
@@ -730,72 +1101,80 @@
             const word = document.getElementById('dict-input').value.trim();
             if (!word) return;
 
-            const contentDiv = document.getElementById('dict-content');
-            const loadingDiv = document.getElementById('dict-loading');
+            const contentDiv = document.getElementById('content-dictionary');
+            const loadingDiv = document.getElementById('loading-dictionary');
             
-            contentDiv.innerHTML = '';
-            loadingDiv.style.display = 'block';
+            contentDiv.style.display = 'none';
+            loadingDiv.style.display = 'flex';
 
-            const prompt = `Agis comme un dictionnaire théologique. Donne la définition, le sens spirituel et un exemple biblique pour le mot : "${word}".`;
+            const prompt = `Agis comme un dictionnaire théologique et biblique expert. Donne une définition claire, le sens spirituel/théologique et un exemple d'usage dans la Bible pour le mot suivant : "${word}". Structure ta réponse avec des titres si nécessaire.`;
 
             try {
-                const res = await fetch('/api/analyze', {
+                const response = await fetch(`/api/analyze`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt, type: 'dictionary' })
+                    body: JSON.stringify({ prompt: prompt, type: 'definition' })
                 });
-                const data = await res.json();
-                if (data.error) throw new Error(data.error);
+
+                if (!response.ok) throw new Error('Erreur API');
+                const data = await response.json();
                 
-                let rawHtml = parseMarkdown(data.result);
-                contentDiv.innerHTML = makeBibleLinks(rawHtml);
-            } catch (err) {
-                contentDiv.innerHTML = `<p style="color:#EF4444">Erreur : ${err.message}</p>`;
+                let html = parseMarkdown(data.result);
+                html = makeBibleLinks(html);
+                
+                contentDiv.innerHTML = html;
+            } catch (error) {
+                contentDiv.innerHTML = `<p style="color:#ef4444; text-align:center;">Erreur lors de la recherche.</p>`;
             } finally {
                 loadingDiv.style.display = 'none';
+                contentDiv.style.display = 'block';
             }
         }
 
-        async function fetchBiblePassage() {
-            const input = document.getElementById('bible-passage-input').value.trim();
-            const resultDiv = document.getElementById('bible-text-result');
-            if (!input) return;
+        // --- 6. UTILS (Markdown, Links, Streak) ---
+        function parseMarkdown(text) {
+            if (!text) return "";
+            let html = text
+                .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/^\- (.*$)/gim, '<li>$1</li>')
+                .replace(/\n\n/g, '</p><p>');
+            return `<p>${html}</p>`;
+        }
 
-            const regex = /^([a-zA-ZÀ-ÿ]+)\s?(\d+):(\d+)$/i;
-            const match = input.match(regex);
-            
-            if (!match) {
-                resultDiv.style.display = 'block';
-                resultDiv.innerHTML = "<p>Format invalide. Utilisez 'Livre Chapitre:Verset' (ex: Jean 3:16).</p>";
-                return;
-            }
+        function makeBibleLinks(html) {
+            const regex = /\b((?:1|2|3)\s)?([A-Za-zÀ-ÿ]+)\s(\d+):(\d+)\b/gi;
+            return html.replace(regex, (match, prefix, book, chapter, verse) => {
+                const fullName = (prefix ? prefix.trim() + " " : "") + book;
+                const key = fullName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const urlSlug = bookMap[key] || key.replace(/\s+/g, '');
+                if (urlSlug) {
+                    return `<a href="https://saintebible.com/${urlSlug}/${chapter}-${verse}.htm" target="_blank" rel="noopener noreferrer" class="bible-link">${match}</a>`;
+                }
+                return match;
+            });
+        }
 
-            const bookName = match[1];
-            const chapter = match[2];
-            const verse = match[3];
-            
-            const foundBook = bibleBooks.find(b => b.name.toLowerCase().startsWith(bookName.toLowerCase()));
-            if (!foundBook) {
-                resultDiv.style.display = 'block';
-                resultDiv.innerHTML = "<p>Livre non trouvé.</p>";
-                return;
-            }
+        function loadStreak() {
+            const streak = parseInt(localStorage.getItem('lectio_streak') || 0);
+            const label = streak === 1 ? "jour" : "jours";
+            document.getElementById('streak-count').textContent = `${streak} ${label}`;
+        }
 
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = "<p>Chargement du texte...</p>";
-
-            try {
-                const res = await fetch('/api/bible', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ book: foundBook.name, chapter, verse })
-                });
-                const data = await res.json();
-                if (data.error) throw new Error(data.error);
-                
-                resultDiv.innerHTML = `<h4 style="margin-bottom:1rem">${data.reference}</h4><p>${makeBibleLinks(data.text.replace(/\n/g, '<br>'))}</p>`;
-            } catch (err) {
-                resultDiv.innerHTML = `<p style="color:#EF4444">Erreur : ${err.message}</p>`;
+        function incrementStreak() {
+            const today = new Date().toDateString();
+            const lastDate = localStorage.getItem('lectio_last_date');
+            if (lastDate !== today) {
+                let streak = parseInt(localStorage.getItem('lectio_streak') || 0);
+                streak++;
+                localStorage.setItem('lectio_streak', streak);
+                localStorage.setItem('lectio_last_date', today);
+                const label = streak === 1 ? "jour" : "jours";
+                document.getElementById('streak-count').textContent = `${streak} ${label}`;
             }
         }
     </script>
