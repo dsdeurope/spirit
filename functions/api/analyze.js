@@ -1,50 +1,62 @@
 // functions/api/analyze.js
 
 export async function onRequest(context) {
-  const { request } = context;
+  const { request, env } = context;
   
-  // Récupération sécurisée de la clé API depuis les variables d'environnement Cloudflare
-  const MISTRAL_API_KEY = context.env.MISTRAL_API_KEY;
+  // Récupération sécurisée de la clé API
+  const MISTRAL_API_KEY = env.MISTRAL_API_KEY;
 
-  // Gestion stricte du CORS pour éviter les blocages navigateur
+  // En-têtes CORS obligatoires pour que le navigateur accepte la réponse
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Content-Type": "application/json"
   };
 
+  // 1. Gestion impérative de la pré-vérification OPTIONS (évite l'erreur 405/403 navigateur)
   if (request.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Vérification de la clé API
+  // 2. Vérification de la méthode (Seul POST est autorisé pour l'analyse)
+  if (request.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Méthode non autorisée. Utilisez POST." }), {
+      status: 405,
+      headers: corsHeaders
+    });
+  }
+
+  // 3. Vérification de la clé API
   if (!MISTRAL_API_KEY) {
-    return new Response(JSON.stringify({ error: "Clé API Mistral non configurée dans les variables d'environnement Cloudflare." }), {
+    return new Response(JSON.stringify({ error: "Clé API Mistral manquante dans les variables Cloudflare." }), {
       status: 500,
-      headers: { "Content-Type": "application/json", ...corsHeaders }
+      headers: corsHeaders
     });
   }
 
   try {
-    // On force la lecture en POST uniquement pour la robustesse
-    if (request.method !== "POST") {
-      return new Response(JSON.stringify({ error: "Méthode non autorisée. Utilisez POST." }), {
-        status: 405,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
+    // 4. Parsing du corps de la requête
+    let dataInput = {};
+    try {
+      dataInput = await request.json();
+    } catch (e) {
+      return new Response(JSON.stringify({ error: "Format JSON invalide." }), {
+        status: 400,
+        headers: corsHeaders
       });
     }
 
-    const dataInput = await request.json();
     const { prompt, type, durationMinutes } = dataInput;
 
     if (!prompt) {
-      return new Response(JSON.stringify({ error: "Le paramètre 'prompt' est requis." }), {
+      return new Response(JSON.stringify({ error: "Le champ 'prompt' est requis." }), {
         status: 400,
-        headers: { "Content-Type": "application/json", ...corsHeaders }
+        headers: corsHeaders
       });
     }
 
-    // --- CONSTRUCTION DU PROMPT SYSTÈME OPTIMISÉ ---
+    // 5. Construction du Prompt Système avec contrainte de longueur stricte
     const systemInstruction = `Tu es un théologien exégète et bibliste francophone de haut niveau. 
     Tu rédiges des analyses détaillées, riches, historiquement précises et accessibles.
     
@@ -54,39 +66,39 @@ export async function onRequest(context) {
     Si le sujet semble court, creuse les implications pratiques, les racines hébraïques/grecques, et le contexte culturel pour atteindre cet objectif.
     Le texte doit être dense, nourri et structuré avec des paragraphes clairs.`;
 
-    // --- AJOUT DE LA CONTRAINTE DE TEMPS ---
     let finalUserPrompt = prompt;
+    
+    // Ajout de la contrainte de temps si présente
     if (durationMinutes) {
       finalUserPrompt += ` \n\n[CONTRAINE DE FORMAT] : Ce contenu est destiné à une méditation profonde de ${durationMinutes} minute(s). 
       Adapte la densité et la longueur du texte pour offrir une lecture riche et continue correspondant exactement à ce temps de parole (environ 130 mots par minute). 
       Ne sois jamais superficiel.`;
     }
 
-    // --- APPEL À L'API MISTRAL (CORRIGÉ) ---
-    // Correction 1 : Suppression des espaces dans l'URL
-    // Correction 2 : Utilisation de backticks (`) pour l'injection de la clé API
+    // 6. Appel à l'API Mistral
     const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${MISTRAL_API_KEY}` // Correction critique ici
+        "Authorization": `Bearer ${MISTRAL_API_KEY}`
       },
       body: JSON.stringify({
-        model: "mistral-large-latest", // Modèle le plus puissant pour le respect des contraintes longues
+        model: "mistral-large-latest", // Modèle performant pour le raisonnement théologique
         messages: [
           { role: "system", content: systemInstruction },
           { role: "user", content: finalUserPrompt }
         ],
         temperature: 0.6, // Équilibre créativité/rigueur
-        max_tokens: 2500, // Réservoir suffisant pour 300-400 mots sans coupure
+        max_tokens: 2500, // Augmenté pour permettre 300-400 mots sans coupure
         top_p: 1
       })
     });
 
+    // 7. Gestion des erreurs de l'API externe
     if (!response.ok) {
       const errText = await response.text();
       console.error(`Erreur Mistral API : ${response.status}`, errText);
-      throw new Error(`Erreur API Mistral (${response.status}) : ${errText.substring(0, 100)}`);
+      throw new Error(`Erreur API Mistral (${response.status}) : ${errText.substring(0, 150)}`);
     }
 
     const data = await response.json();
@@ -97,14 +109,14 @@ export async function onRequest(context) {
 
     const analysisText = data.choices[0].message.content.trim();
 
-    // Retour de la réponse avec les headers CORS
+    // 8. Réponse réussie vers le frontend
     return new Response(JSON.stringify({ 
       success: true, 
       result: analysisText,
       type: type,
-      wordCount: analysisText.split(/\s+/).length // Estimation du nombre de mots pour débogage
+      wordCount: analysisText.split(/\s+/).length
     }), {
-      headers: { "Content-Type": "application/json", ...corsHeaders }
+      headers: corsHeaders
     });
 
   } catch (error) {
@@ -113,7 +125,7 @@ export async function onRequest(context) {
       error: error.message || "Une erreur inattendue est survenue lors de l'analyse." 
     }), {
       status: 500,
-      headers: { "Content-Type": "application/json", ...corsHeaders }
+      headers: corsHeaders
     });
   }
 }
