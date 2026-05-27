@@ -1,1182 +1,1741 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lectio Divina — Étude Biblique Premium</title>
-    
-    <!-- Typographie Premium -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lectio Divina — Étude Biblique Premium</title>
 
-    <style>
-        :root {
-            /* Palette Mode Clair - Style Éditorial */
-            --bg-site: #FDFBF7; /* Blanc crème/albâtre */
-            --bg-card: #FFFFFF;
-            --text-main: #1C1C1E;
-            --text-muted: #6E6E73;
-            --accent: #1B2A4A; /* Bleu Indigo Profond */
-            --accent-light: #F0F4F8;
-            --shadow-soft: 0 8px 30px rgba(27, 42, 74, 0.06);
-            --shadow-hover: 0 12px 40px rgba(27, 42, 74, 0.10);
-            --radius: 16px;
-            
-            --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-        }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <!-- Tabler Icons (page 2) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.2.0/dist/tabler-icons.min.css" />
 
-        [data-theme="dark"] {
-            /* Palette Mode Sombre - Mat & Profond */
-            --bg-site: #0F0F11;
-            --bg-card: #161619;
-            --text-main: #E4E4E7;
-            --text-muted: #A1A1AA;
-            --accent: #818CF8; /* Violet/Blue Pastel Doux */
-            --accent-light: #1E1E24;
-            --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.4);
-            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.6);
-        }
+  <style>
+    /* ══════════════════════════════════════════════
+       DESIGN TOKENS
+    ══════════════════════════════════════════════ */
+    :root {
+      --bg-site:    #FDFBF7;
+      --bg-card:    #FFFFFF;
+      --bg-subtle:  #F5F3EE;
+      --text-1:     #1A1A1E;
+      --text-2:     #5C5C6B;
+      --text-3:     #9595A4;
+      --accent:     #1B2A4A;
+      --accent-rgb: 27, 42, 74;
+      --accent-lt:  #EEF2F8;
+      --gold:       #B8882A;
+      --gold-bg:    #FBF3E3;
+      --gold-bd:    #D4A94A;
+      --border:     rgba(26,26,30,.08);
+      --border-md:  rgba(26,26,30,.12);
+      --shadow-sm:  0 2px 8px rgba(26,26,30,.05), 0 1px 3px rgba(26,26,30,.04);
+      --shadow-md:  0 8px 32px rgba(26,26,30,.07), 0 2px 8px rgba(26,26,30,.04);
+      --shadow-lg:  0 20px 60px rgba(26,26,30,.1), 0 4px 16px rgba(26,26,30,.05);
+      --r-sm:  8px;
+      --r-md:  14px;
+      --r-lg:  20px;
+      --r-xl:  28px;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans:  'Inter', system-ui, sans-serif;
+      --ease:  cubic-bezier(.4,0,.2,1);
+    }
+    [data-theme="dark"] {
+      --bg-site:   #0D0D10;
+      --bg-card:   #141418;
+      --bg-subtle: #1A1A20;
+      --text-1:    #E8E8F0;
+      --text-2:    #9090A0;
+      --text-3:    #5A5A6A;
+      --accent:    #7B8FD0;
+      --accent-rgb:123,143,208;
+      --accent-lt: #161A28;
+      --gold-bg:   #1C1408;
+      --gold-bd:   #6A5018;
+      --border:    rgba(255,255,255,.06);
+      --border-md: rgba(255,255,255,.10);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,.3);
+      --shadow-md: 0 8px 32px rgba(0,0,0,.4);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,.5);
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-        
-        body { 
-            background-color: var(--bg-site); 
-            color: var(--text-main); 
-            font-family: var(--font-sans);
-            line-height: 1.7;
-            transition: background-color 0.4s ease, color 0.4s ease;
-            overflow-x: hidden;
-        }
+    /* ══════════════════════════════════════════════
+       RESET & BASE
+    ══════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-site);
+      color: var(--text-1);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      overflow-x: hidden;
+      transition: background .4s var(--ease), color .4s var(--ease);
+    }
+    h1,h2,h3,h4 { font-family: var(--font-serif); }
+    button { font-family: var(--font-sans); }
+    select, input { font-family: var(--font-sans); }
 
-        h1, h2, h3, h4, .serif-font { font-family: var(--font-serif); }
+    /* ══════════════════════════════════════════════
+       LOCK SCREEN
+    ══════════════════════════════════════════════ */
+    #lock-screen {
+      position: fixed; inset: 0;
+      background: var(--bg-site);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity .6s var(--ease), visibility .6s var(--ease);
+    }
+    #lock-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .lock-logo {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem,5vw,3rem);
+      font-weight: 700;
+      color: var(--text-1);
+      letter-spacing: -.03em;
+      margin-bottom: .4rem;
+    }
+    .lock-sub {
+      font-size: .9rem;
+      color: var(--text-3);
+      margin-bottom: 3rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .lock-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 2.5rem;
+      width: min(400px, 90vw);
+      box-shadow: var(--shadow-lg);
+    }
+    .lock-input {
+      width: 100%; padding: 1rem 1.25rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-md);
+      border-radius: var(--r-md);
+      color: var(--text-1);
+      font-size: 1.1rem;
+      text-align: center;
+      letter-spacing: .12em;
+      transition: border-color .2s, box-shadow .2s;
+      margin-bottom: 1rem;
+    }
+    .lock-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.1); }
+    .lock-btn {
+      width: 100%; padding: 1rem;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: var(--r-md);
+      font-size: 1rem; font-weight: 600;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, opacity .2s;
+      box-shadow: 0 4px 16px rgba(var(--accent-rgb),.25);
+    }
+    .lock-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(var(--accent-rgb),.35); }
+    .lock-err {
+      font-size: .85rem; color: #ef4444;
+      text-align: center; margin-top: 1rem;
+      min-height: 1.2em; opacity: 0;
+      transition: opacity .3s;
+    }
+    .lock-err.show { opacity: 1; }
+    .lock-divider {
+      height: 1px; background: var(--border);
+      margin: 1.5rem 0;
+    }
+    .lock-hint {
+      font-size: .8rem; color: var(--text-3);
+      text-align: center; font-style: italic;
+    }
 
-        /* --- LOCK SCREEN --- */
-        #lock-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-site);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-        #lock-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        .lock-content {
-            text-align: center;
-            max-width: 400px;
-            padding: 2rem;
-        }
-        .lock-title {
-            font-size: 2.5rem;
-            color: var(--text-main);
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-        .lock-subtitle {
-            color: var(--text-muted);
-            margin-bottom: 2.5rem;
-            font-size: 1rem;
-        }
-        .lock-input-group {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-        .lock-input {
-            width: 100%;
-            padding: 1rem 1.2rem;
-            background: var(--bg-card);
-            border: 1px solid rgba(128,128,128,0.1);
-            border-radius: 12px;
-            color: var(--text-main);
-            font-size: 1.1rem;
-            text-align: center;
-            letter-spacing: 0.1em;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-soft);
-        }
-        .lock-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(27, 42, 74, 0.05);
-        }
-        .lock-btn {
-            width: 100%;
-            padding: 1rem;
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 4px 15px rgba(27, 42, 74, 0.2);
-        }
-        .lock-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(27, 42, 74, 0.3);
-        }
-        .lock-error {
-            color: #ef4444;
-            font-size: 0.9rem;
-            margin-top: 1rem;
-            min-height: 1.2em;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .lock-error.visible { opacity: 1; }
+    /* ══════════════════════════════════════════════
+       APP CONTAINER
+    ══════════════════════════════════════════════ */
+    #app-container { display: none; opacity: 0; transition: opacity .8s var(--ease); }
+    #app-container.visible { display: block; opacity: 1; }
 
-        /* --- MAIN APP --- */
-        #app-container {
-            display: none; /* Caché par défaut */
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-        #app-container.visible {
-            display: block;
-            opacity: 1;
-        }
+    /* ══════════════════════════════════════════════
+       HEADER
+    ══════════════════════════════════════════════ */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(var(--bg-site-rgb, 253,251,247),.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+    }
+    [data-theme="dark"] header { background: rgba(13,13,16,.88); }
+    .header-inner {
+      max-width: 1400px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      height: 68px; gap: 1.5rem;
+    }
+    .brand {
+      font-family: var(--font-serif);
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--text-1); letter-spacing: -.03em;
+      display: flex; align-items: center; gap: .6rem;
+      flex-shrink: 0;
+    }
+    .brand svg { color: var(--accent); }
+    /* Page Nav */
+    .page-nav {
+      display: flex; align-items: center;
+      gap: .25rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: .3rem;
+    }
+    .page-nav-btn {
+      padding: .45rem 1.1rem;
+      border: none; border-radius: 30px;
+      background: transparent;
+      color: var(--text-2);
+      font-size: .85rem; font-weight: 500;
+      cursor: pointer;
+      transition: all .25s var(--ease);
+      white-space: nowrap;
+    }
+    .page-nav-btn.active {
+      background: var(--bg-card);
+      color: var(--accent);
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+    }
+    /* Right actions */
+    .header-right { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+    .streak-pill {
+      display: flex; align-items: center; gap: .5rem;
+      background: var(--gold-bg);
+      border: 1px solid var(--gold-bd);
+      color: var(--gold);
+      padding: .4rem .9rem;
+      border-radius: 20px;
+      font-size: .82rem; font-weight: 600;
+    }
+    .theme-btn {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-subtle); border: 1px solid var(--border);
+      border-radius: 50%; cursor: pointer;
+      color: var(--text-2);
+      transition: all .2s;
+    }
+    .theme-btn:hover { color: var(--text-1); background: var(--bg-card); }
 
-        /* Header */
-        header {
-            padding: 2rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .brand {
-            font-family: var(--font-serif);
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-main);
-            letter-spacing: -0.03em;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-        .streak-badge {
-            background: var(--accent-light);
-            color: var(--accent);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .theme-toggle {
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 50%;
-            transition: background 0.2s;
-        }
-        .theme-toggle:hover { background: var(--accent-light); }
+    /* ══════════════════════════════════════════════
+       PAGE SYSTEM
+    ══════════════════════════════════════════════ */
+    .page { display: none; animation: pgIn .35s var(--ease); }
+    .page.active { display: block; }
+    @keyframes pgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Layout Grid */
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 5% 4rem;
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 3rem;
-        }
-        @media (max-width: 1024px) {
-            main { grid-template-columns: 1fr; }
-        }
+    /* ══════════════════════════════════════════════
+       PAGE 1 — ÉTUDE BIBLIQUE
+    ══════════════════════════════════════════════ */
+    .p1-main {
+      max-width: 1400px; margin: 0 auto;
+      padding: 2.5rem 5% 5rem;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 2.5rem;
+    }
+    @media (max-width: 1024px) { .p1-main { grid-template-columns: 1fr; } }
 
-        /* Sidebar Cards */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-        .card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 2rem;
-            box-shadow: var(--shadow-soft);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-        }
-        .card-title {
-            font-family: var(--font-serif);
-            font-size: 1.4rem;
-            color: var(--text-main);
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            border-bottom: 1px solid rgba(128,128,128,0.05);
-            padding-bottom: 1rem;
-        }
-        .verse-text {
-            font-style: italic;
-            color: var(--text-main);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            font-size: 1.05rem;
-        }
-        .verse-ref {
-            font-weight: 600;
-            color: var(--accent);
-            display: block;
-            margin-bottom: 0.5rem;
-            font-family: var(--font-serif);
-        }
-        .dimensions-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.8rem;
-        }
-        .dim-tag {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 0.6rem 0.8rem;
-            border-radius: 8px;
-            font-weight: 600;
-            text-align: center;
-        }
-        /* Couleurs des dimensions (subtiles) */
-        .dim-1 { background: rgba(27, 42, 74, 0.05); color: var(--accent); }
-        .dim-2 { background: rgba(245, 158, 11, 0.08); color: #b45309; }
-        .dim-3 { background: rgba(16, 185, 129, 0.08); color: #047857; }
-        .dim-4 { background: rgba(139, 92, 246, 0.08); color: #6d28d9; }
-        .dim-5 { background: rgba(239, 68, 68, 0.08); color: #b91c1c; }
-        .dim-6 { background: rgba(107, 114, 128, 0.08); color: var(--text-muted); }
-        .dim-7 { background: rgba(249, 115, 22, 0.08); color: #c2410c; }
-        .dim-8 { background: rgba(59, 130, 246, 0.08); color: #1d4ed8; }
+    .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
 
-        /* Main Content Area */
-        .content-area {
-            display: flex;
-            flex-direction: column;
-            gap: 2.5rem;
-        }
+    /* Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .card-label {
+      font-size: .75rem; font-weight: 600;
+      color: var(--text-3);
+      letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .card-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-        /* Timer Section */
-        .timer-section {
-            text-align: center;
-            padding: 1rem 0;
-        }
-        .timer-title {
-            font-family: var(--font-serif);
-            font-size: 2rem;
-            color: var(--text-main);
-            margin-bottom: 2rem;
-            font-weight: 600;
-        }
-        .mode-selector {
-            display: inline-flex;
-            background: var(--accent-light);
-            padding: 0.4rem;
-            border-radius: 12px;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-        }
-        .mode-btn {
-            padding: 0.6rem 1.5rem;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            font-weight: 500;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .mode-btn.active {
-            background: var(--bg-card);
-            color: var(--accent);
-            font-weight: 600;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .timer-display-wrapper {
-            position: relative;
-            width: 240px;
-            height: 240px;
-            margin: 0 auto 2.5rem;
-        }
-        .timer-svg {
-            transform: rotate(-90deg);
-            width: 100%;
-            height: 100%;
-        }
-        .timer-circle-bg {
-            fill: none;
-            stroke: var(--accent-light);
-            stroke-width: 6;
-        }
-        .timer-circle-progress {
-            fill: none;
-            stroke: var(--accent);
-            stroke-width: 6;
-            stroke-linecap: round;
-            stroke-dasharray: 690;
-            stroke-dashoffset: 0;
-            transition: stroke-dashoffset 1s linear;
-        }
-        .timer-text {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: var(--font-serif);
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: var(--text-main);
-            font-variant-numeric: tabular-nums;
-        }
-        .timer-controls {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-        }
-        .btn-control {
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: var(--font-sans);
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(27, 42, 74, 0.2);
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(27, 42, 74, 0.3);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-muted);
-            border: 1px solid rgba(128,128,128,0.2);
-        }
-        .btn-secondary:hover {
-            border-color: var(--text-main);
-            color: var(--text-main);
-        }
+    .verse-ref { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; color: var(--accent); display: block; margin-bottom: .6rem; }
+    .verse-text { font-style: italic; font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.75; color: var(--text-1); margin-bottom: 1.25rem; }
 
-        /* Context Selector (Book/Chapter) */
-        .context-selector {
-            background: var(--bg-card);
-            padding: 2rem;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-soft);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        @media (max-width: 600px) { .context-selector { grid-template-columns: 1fr; } }
-        .select-group label {
-            display: block;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-        }
-        .select-custom {
-            width: 100%;
-            padding: 1rem;
-            background: var(--bg-site);
-            border: 1px solid rgba(128,128,128,0.1);
-            border-radius: 10px;
-            color: var(--text-main);
-            font-size: 1rem;
-            font-family: var(--font-serif);
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236E6E73'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.2em;
-        }
-        .select-custom:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.05);
-        }
+    .tags-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: .5rem;
+    }
+    .tag {
+      font-size: .7rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .05em;
+      padding: .5rem .7rem; border-radius: var(--r-sm);
+      text-align: center;
+    }
+    .tag-1 { background: rgba(var(--accent-rgb),.07); color: var(--accent); }
+    .tag-2 { background: rgba(184,136,42,.1); color: var(--gold); }
+    .tag-3 { background: rgba(16,185,129,.08); color: #047857; }
+    .tag-4 { background: rgba(139,92,246,.08); color: #6d28d9; }
+    .tag-5 { background: rgba(239,68,68,.08); color: #b91c1c; }
+    .tag-6 { background: rgba(107,114,128,.08); color: var(--text-2); }
+    .tag-7 { background: rgba(249,115,22,.08); color: #c2410c; }
+    .tag-8 { background: rgba(59,130,246,.08); color: #1d4ed8; }
 
-        /* Tabs System */
-        .tabs-wrapper {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-soft);
-            overflow: hidden;
-        }
-        .tabs-header {
-            display: flex;
-            border-bottom: 1px solid rgba(128,128,128,0.05);
-            overflow-x: auto;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 1.2rem 1.5rem;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-family: var(--font-serif);
-            font-size: 1.1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            position: relative;
-        }
-        .tab-btn:hover { color: var(--text-main); background: rgba(128,128,128,0.02); }
-        .tab-btn.active {
-            color: var(--accent);
-            background: var(--accent-light);
-            font-weight: 600;
-        }
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; width: 100%;
-            height: 3px;
-            background: var(--accent);
-        }
-        .tab-content {
-            padding: 3rem;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    /* Sidebar quote card */
+    .quote-card {
+      flex: 1;
+      background: linear-gradient(135deg, rgba(var(--accent-rgb),.04), rgba(var(--accent-rgb),.01));
+      border: 1px solid rgba(var(--accent-rgb),.1);
+      border-radius: var(--r-lg);
+      padding: 1.75rem;
+      display: flex; flex-direction: column;
+      justify-content: center;
+    }
+    .quote-text { font-family: var(--font-serif); font-size: 1.05rem; font-style: italic; line-height: 1.8; color: var(--text-1); }
+    .quote-attr { font-size: .8rem; color: var(--text-3); margin-top: .75rem; }
 
-        /* Content Typography */
-        .rich-text {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            color: var(--text-main);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .rich-text h1, .rich-text h2, .rich-text h3, .rich-text h4 {
-            font-family: var(--font-serif);
-            color: var(--accent);
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-        .rich-text h1 { font-size: 2.2rem; border-bottom: 1px solid rgba(128,128,128,0.1); padding-bottom: 0.5rem; }
-        .rich-text h2 { font-size: 1.8rem; }
-        .rich-text h3 { font-size: 1.5rem; }
-        .rich-text h4 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-main); }
-        .rich-text p { margin-bottom: 1.5rem; text-align: justify; }
-        .rich-text strong { color: var(--accent); font-weight: 600; }
-        .rich-text ul { margin-bottom: 1.5rem; padding-left: 2rem; }
-        .rich-text li { margin-bottom: 0.8rem; }
-        
-        .bible-link {
-            color: var(--accent);
-            text-decoration: none;
-            border-bottom: 1px dashed var(--accent);
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        .bible-link:hover {
-            background: var(--accent);
-            color: #fff;
-            border-bottom-style: solid;
-        }
+    /* Content area */
+    .p1-content { display: flex; flex-direction: column; gap: 2rem; }
 
-        /* Loading State */
-        .loading-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 4rem 0;
-            color: var(--text-muted);
-            text-align: center;
-        }
-        .spinner {
-            width: 40px; height: 40px;
-            border: 3px solid var(--accent-light);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1.5rem;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text {
-            font-family: var(--font-serif);
-            font-style: italic;
-            font-size: 1.1rem;
-        }
+    /* Context Selector */
+    .ctx-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    }
+    @media (max-width: 600px) { .ctx-card { grid-template-columns: 1fr; } }
+    .select-group label {
+      display: block; font-size: .78rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: var(--text-3); margin-bottom: .7rem;
+    }
+    .select-custom {
+      width: 100%; padding: .85rem 1rem;
+      background: var(--bg-subtle); border: 1px solid var(--border-md);
+      border-radius: var(--r-sm); color: var(--text-1);
+      font-size: .95rem; font-family: var(--font-serif);
+      cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239595A4'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right .9rem center; background-size: 1.1em;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .select-custom:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.08); }
+    .select-custom:disabled { opacity: .45; cursor: not-allowed; }
 
-        /* Search Box in Dictionary Tab */
-        .search-box {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .search-input {
-            flex: 1;
-            padding: 1rem 1.5rem;
-            border: 1px solid rgba(128,128,128,0.1);
-            border-radius: 12px;
-            background: var(--bg-site);
-            color: var(--text-main);
-            font-size: 1rem;
-            font-family: var(--font-sans);
-        }
-        .search-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.05);
-        }
-        .btn-search {
-            padding: 1rem 2rem;
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-search:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(27, 42, 74, 0.2); }
+    /* Tabs */
+    .tabs-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .tabs-nav {
+      display: flex; border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .tab-nav-btn {
+      flex: 1; padding: 1.1rem 1.25rem;
+      border: none; background: transparent;
+      color: var(--text-2); font-family: var(--font-serif);
+      font-size: 1rem; font-weight: 500; cursor: pointer;
+      white-space: nowrap; position: relative;
+      transition: color .25s, background .25s;
+    }
+    .tab-nav-btn:hover { color: var(--text-1); background: rgba(var(--accent-rgb),.03); }
+    .tab-nav-btn.active { color: var(--accent); font-weight: 600; background: var(--accent-lt); }
+    .tab-nav-btn.active::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 2px; background: var(--accent);
+    }
+    .tab-pane { display: none; padding: 2.5rem; animation: pgIn .35s var(--ease); }
+    .tab-pane.active { display: block; }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .timer-display-wrapper { width: 200px; height: 200px; }
-            .timer-text { font-size: 2.5rem; }
-            .tab-content { padding: 1.5rem; }
-            .search-box { flex-direction: column; }
-        }
-    </style>
+    /* Rich text */
+    .rich-text { font-size: 1.05rem; line-height: 1.85; color: var(--text-1); max-width: 760px; margin: 0 auto; }
+    .rich-text h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: .6rem; margin: 2rem 0 1rem; }
+    .rich-text h2 { font-size: 1.6rem; margin: 1.75rem 0 .75rem; color: var(--accent); }
+    .rich-text h3 { font-size: 1.3rem; margin: 1.5rem 0 .6rem; }
+    .rich-text h4 { font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; margin: 1.25rem 0 .5rem; }
+    .rich-text p { margin-bottom: 1.4rem; }
+    .rich-text strong { color: var(--accent); font-weight: 600; }
+    .rich-text ul { margin-bottom: 1.4rem; padding-left: 1.5rem; }
+    .rich-text li { margin-bottom: .65rem; }
+    .bible-link {
+      color: var(--accent); text-decoration: none;
+      border-bottom: 1px dashed var(--accent); font-weight: 600;
+      transition: all .2s;
+    }
+    .bible-link:hover { background: var(--accent); color: #fff; padding: 0 2px; border-radius: 3px; }
+
+    /* Loading state */
+    .loading-state {
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 4rem 1rem; color: var(--text-2); text-align: center;
+    }
+    .loading-state.show { display: flex; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--accent-lt);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1.25rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-msg { font-family: var(--font-serif); font-style: italic; font-size: 1rem; }
+
+    /* Gen button */
+    .gen-wrap { margin-top: 2rem; text-align: center; }
+    .btn-gen {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .85rem 2.2rem;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: var(--r-md);
+      font-size: .95rem; font-weight: 600; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(var(--accent-rgb),.25);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-gen:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(var(--accent-rgb),.35); }
+
+    /* Search */
+    .search-row { display: flex; gap: .75rem; margin-bottom: 2rem; }
+    .search-input {
+      flex: 1; padding: .85rem 1.1rem;
+      background: var(--bg-subtle); border: 1px solid var(--border-md);
+      border-radius: var(--r-md); color: var(--text-1);
+      font-size: .95rem;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.08); }
+    .btn-search {
+      padding: .85rem 1.6rem;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: var(--r-md);
+      font-weight: 600; cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-search:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(var(--accent-rgb),.3); }
+
+    /* ══════════════════════════════════════════════
+       PAGE 2 — LECTIO DIVINA
+    ══════════════════════════════════════════════ */
+    .p2-wrap {
+      max-width: 780px; margin: 0 auto;
+      padding: 2.5rem 5% 5rem;
+    }
+    .p2-header {
+      text-align: center; margin-bottom: 2.5rem;
+    }
+    .p2-logo {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700; color: var(--text-1);
+      letter-spacing: -.03em; margin-bottom: .3rem;
+    }
+    .p2-logo .accent { color: var(--gold); }
+    .p2-sub {
+      font-size: .8rem; color: var(--text-3);
+      letter-spacing: .12em; text-transform: uppercase;
+    }
+
+    /* Lectio screens */
+    .l-screen { display: none; }
+    .l-screen.active { display: block; animation: pgIn .3s var(--ease); }
+
+    /* Home screen */
+    .mode-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: .75rem; margin-bottom: 1.5rem;
+    }
+    .mode-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 1.5rem .75rem;
+      cursor: pointer; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s;
+      box-shadow: var(--shadow-sm);
+    }
+    .mode-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .mode-card:active { transform: scale(.97); }
+    .mode-card.selected { border-color: var(--gold-bd); border-width: 2px; }
+    .mc-time { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 700; color: var(--text-1); line-height: 1; }
+    .mc-unit { font-size: .8rem; color: var(--text-2); }
+    .mc-name { font-size: .7rem; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
+    .mc-name-gold { color: var(--gold); }
+
+    .verse-preview-card {
+      background: linear-gradient(135deg, var(--gold-bg), rgba(253,251,247,.4));
+      border: 1px solid var(--gold-bd);
+      border-radius: var(--r-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .vp-label { font-size: .7rem; font-weight: 600; color: var(--gold); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .6rem; }
+    .vp-text { font-family: var(--font-serif); font-size: 1.05rem; font-style: italic; line-height: 1.75; color: var(--text-1); }
+
+    .btn-start {
+      width: 100%; padding: 1.1rem;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: var(--r-lg);
+      font-size: 1rem; font-weight: 600; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(var(--accent-rgb),.25);
+      transition: transform .2s, box-shadow .2s;
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+    }
+    .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(var(--accent-rgb),.35); }
+
+    /* Reading screen */
+    .reading-top {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+    .btn-back {
+      display: flex; align-items: center; gap: 5px;
+      background: none; border: none; cursor: pointer;
+      color: var(--text-2); font-size: .85rem; padding: 0;
+      transition: color .2s;
+    }
+    .btn-back:hover { color: var(--text-1); }
+    .r-badge {
+      font-size: .8rem; font-weight: 600;
+      background: var(--gold-bg); color: var(--gold);
+      border: 1px solid var(--gold-bd);
+      padding: .35rem .9rem; border-radius: 20px;
+    }
+
+    /* Timer ring */
+    .timer-wrap { position: relative; width: 160px; height: 160px; margin: 0 auto 1.75rem; }
+    .ring-svg { transform: rotate(-90deg); }
+    .ring-bg-c { fill: none; stroke: var(--border-md); stroke-width: 6; }
+    .ring-fg { fill: none; stroke: var(--gold); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 440; stroke-dashoffset: 0; transition: stroke-dashoffset .85s linear; }
+    .timer-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+    .t-num { font-family: var(--font-serif); font-size: 2rem; font-weight: 700; color: var(--text-1); line-height: 1; }
+    .t-st { font-size: .7rem; color: var(--text-3); letter-spacing: .1em; text-transform: uppercase; }
+
+    /* Passage block */
+    .passage-block {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 1.75rem;
+      margin-bottom: 1.25rem; max-height: 300px; overflow-y: auto;
+      box-shadow: var(--shadow-sm);
+    }
+    .passage-block::-webkit-scrollbar { width: 4px; }
+    .passage-block::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 4px; }
+    .pb-ref { font-size: .75rem; color: var(--gold); letter-spacing: .12em; text-transform: uppercase; font-weight: 600; margin-bottom: .85rem; }
+    .pb-text { font-family: var(--font-serif); font-size: 1.15rem; line-height: 1.9; color: var(--text-1); white-space: pre-wrap; }
+
+    .r-controls { display: flex; gap: .75rem; }
+    .btn-ctrl {
+      flex: 1; padding: .8rem;
+      border-radius: var(--r-md); border: 1px solid var(--border-md);
+      background: var(--bg-subtle); cursor: pointer;
+      font-size: .9rem; color: var(--text-1);
+      transition: background .15s, transform .1s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-ctrl:hover { background: var(--bg-card); }
+    .btn-ctrl.gold { background: var(--gold-bg); border-color: var(--gold-bd); color: var(--gold); font-weight: 600; }
+    .btn-ctrl.gold:hover { filter: brightness(.96); }
+    .btn-ctrl.full { width: 100%; flex: none; margin-top: 1rem; }
+
+    /* Analysis screen */
+    .analysis-ref-bar {
+      display: flex; align-items: center; gap: .75rem;
+      background: var(--bg-subtle); border: 1px solid var(--border);
+      border-radius: var(--r-md); padding: .7rem 1rem; margin-bottom: 1.5rem;
+    }
+    .arb-ref { font-size: .75rem; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: .1em; flex-shrink: 0; }
+    .arb-txt { font-family: var(--font-serif); font-size: .9rem; color: var(--text-2); font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* 8-tab grid */
+    .l-tab-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 5px; margin-bottom: 1.25rem;
+    }
+    .l-tab {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 3px; padding: 8px 4px;
+      border-radius: var(--r-sm); border: 1px solid var(--border);
+      background: var(--bg-card); cursor: pointer;
+      font-size: .7rem; color: var(--text-3);
+      transition: all .15s; min-width: 0; line-height: 1.3;
+    }
+    .l-tab i { font-size: 16px; }
+    .l-tab span { text-align: center; }
+    .l-tab.active { background: var(--gold-bg); color: var(--gold); border-color: var(--gold-bd); font-weight: 600; }
+    .l-tab:hover:not(.active) { background: var(--bg-subtle); color: var(--text-2); }
+
+    .l-tab-panel { display: none; }
+    .l-tab-panel.active { display: block; animation: pgIn .25s var(--ease); }
+    .lp-hd { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
+    .lp-icon { width: 36px; height: 36px; background: var(--gold-bg); border: 1px solid var(--gold-bd); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .lp-icon i { font-size: 17px; color: var(--gold); }
+    .lp-title { font-size: .95rem; font-weight: 600; color: var(--text-1); }
+    .lp-text { font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.9; color: var(--text-1); }
+
+    /* Loading dots */
+    .dots-row { display: flex; align-items: center; gap: 6px; padding: 2rem 0; justify-content: center; color: var(--text-2); font-size: .85rem; }
+    .dot { animation: blink 1.4s infinite both; font-size: 1.2rem; color: var(--gold); }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
+
+    /* Reflection screen */
+    .refl-text { font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.9; color: var(--text-1); display: none; }
+
+    /* Complete screen */
+    .complete-block { text-align: center; padding: 2.5rem 0; }
+    .complete-ico { font-size: 3.5rem; color: var(--gold); margin-bottom: .75rem; }
+    .complete-title { font-family: var(--font-serif); font-size: 2rem; color: var(--text-1); margin-bottom: .4rem; }
+    .complete-sub { font-size: .9rem; color: var(--text-2); margin-bottom: 1.75rem; }
+    .streak-big { font-family: var(--font-serif); font-size: 3.5rem; font-weight: 700; color: var(--gold); line-height: 1; }
+    .streak-big-lbl { font-size: .75rem; color: var(--text-3); letter-spacing: .1em; text-transform: uppercase; margin: 4px 0 1.5rem; }
+    .complete-verse-card {
+      background: var(--gold-bg); border: 1px solid var(--gold-bd);
+      border-radius: var(--r-lg); padding: 1rem 1.25rem;
+      font-family: var(--font-serif); font-size: .95rem;
+      font-style: italic; color: var(--text-2); line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════ */
+    @media (max-width: 640px) {
+      .page-nav { display: none; }
+      .brand { font-size: 1.2rem; }
+      .p1-main, .p2-wrap { padding: 1.5rem 4% 4rem; }
+      .tab-pane { padding: 1.5rem; }
+      .search-row { flex-direction: column; }
+      .tabs-nav { flex-wrap: nowrap; }
+    }
+    @media (max-width: 480px) {
+      .mode-grid { grid-template-columns: repeat(3,1fr); }
+      .mc-time { font-size: 2rem; }
+    }
+
+    /* ══════════════════════════════════════════════
+       BIBLE LOUIS SEGOND 1910
+    ══════════════════════════════════════════════ */
+    .bible-ls-header { margin-bottom: 1.5rem; }
+    .bible-ls-title { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600; color: var(--text-1); margin-bottom: .35rem; }
+    .bible-ls-sub { font-size: .9rem; color: var(--text-2); line-height: 1.5; }
+
+    .bible-ls-controls {
+      display: grid; grid-template-columns: 1fr 1fr auto;
+      gap: 1rem; margin-bottom: 1.5rem; align-items: end;
+    }
+    @media (max-width: 600px) { .bible-ls-controls { grid-template-columns: 1fr 1fr; } }
+    .bls-ext-wrap { display: flex; align-items: flex-end; }
+    .btn-bls-ext {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .85rem 1.1rem;
+      background: var(--accent-lt); color: var(--accent);
+      border: 1px solid rgba(var(--accent-rgb),.15);
+      border-radius: var(--r-md); font-size: .85rem; font-weight: 500;
+      text-decoration: none; white-space: nowrap;
+      transition: all .2s var(--ease);
+    }
+    .btn-bls-ext:hover { background: var(--accent); color: #fff; }
+
+    .bls-placeholder {
+      text-align: center; padding: 4rem 1rem;
+      border: 2px dashed var(--border-md);
+      border-radius: var(--r-lg);
+      color: var(--text-3);
+    }
+    .bls-placeholder-icon { font-size: 2.5rem; margin-bottom: .75rem; }
+    .bls-placeholder-text { font-family: var(--font-serif); font-size: 1rem; line-height: 1.65; }
+
+    .bls-frame-wrap { border: 1px solid var(--border-md); border-radius: var(--r-lg); overflow: hidden; }
+    .bls-frame-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .75rem 1.1rem;
+      background: var(--bg-subtle); border-bottom: 1px solid var(--border);
+    }
+    .bls-frame-title { font-family: var(--font-serif); font-size: .95rem; font-weight: 600; color: var(--accent); }
+    .bls-nav-btn {
+      padding: .35rem .75rem; border: 1px solid var(--border-md);
+      background: var(--bg-card); color: var(--text-1);
+      border-radius: var(--r-sm); cursor: pointer; font-size: .9rem;
+      transition: all .15s;
+    }
+    .bls-nav-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .bls-iframe { width: 100%; height: 680px; border: none; display: block; }
+    .bls-iframe-fallback { padding: 2.5rem; text-align: center; }
+
+    /* ══════════════════════════════════════════════
+       RICH LP-TEXT (Lectio analysis 300+ words)
+    ══════════════════════════════════════════════ */
+    .lp-text p { margin-bottom: 1.1rem; }
+    .lp-text p:last-child { margin-bottom: 0; }
+    .lp-text strong { color: var(--accent); font-weight: 600; }
+    .lp-text em { font-style: italic; }
+    .lp-text h4 { font-family: var(--font-serif); font-size: 1rem; color: var(--accent); margin: 1rem 0 .4rem; text-transform: uppercase; letter-spacing: .05em; }
+    .lp-loading-detail {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 2rem 0; color: var(--text-2); font-size: .85rem; gap: .75rem;
+    }
+    .lp-progress-bar {
+      width: 200px; height: 3px; background: var(--border-md);
+      border-radius: 2px; overflow: hidden;
+    }
+    .lp-progress-inner {
+      height: 100%; background: var(--gold);
+      border-radius: 2px;
+      animation: lp-progress 18s ease-in-out forwards;
+    }
+    @keyframes lp-progress { 0%{width:0%} 80%{width:85%} 100%{width:95%} }
+    .mistral-badge {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .7rem; font-weight: 600; color: var(--text-3);
+      background: var(--bg-subtle); border: 1px solid var(--border);
+      padding: .25rem .65rem; border-radius: 20px;
+      letter-spacing: .05em; text-transform: uppercase;
+      margin-top: .4rem;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- 1. ÉCRAN DE VERROUILLAGE -->
-    <div id="lock-screen">
-        <div class="lock-content">
-            <h1 class="lock-title">Lectio Divina</h1>
-            <p class="lock-subtitle">Accès Privé — Étude Biblique Premium</p>
-            
-            <div class="lock-input-group">
-                <input type="password" id="access-code" class="lock-input" placeholder="Entrez le code d'accès" maxlength="20">
-            </div>
-            
-            <button class="lock-btn" onclick="checkAccess()">Entrer</button>
-            <div id="lock-error" class="lock-error">Code incorrect. Veuillez réessayer.</div>
+<!-- ═══════════════════════════════════════════════
+     LOCK SCREEN
+═══════════════════════════════════════════════ -->
+<div id="lock-screen">
+  <div style="text-align:center;">
+    <p style="font-size:1.5rem; margin-bottom:.25rem;">📖</p>
+    <h1 class="lock-logo">Lectio Divina</h1>
+    <p class="lock-sub">Accès Privé — Étude Biblique Premium</p>
+  </div>
+  <div class="lock-box">
+    <input type="password" id="access-code" class="lock-input" placeholder="Code d'accès" maxlength="20" />
+    <button class="lock-btn" onclick="checkAccess()">Entrer</button>
+    <div class="lock-divider"></div>
+    <p class="lock-hint">"Car c'est par la grâce que vous êtes sauvés, par le moyen de la foi." — Éph. 2:8</p>
+    <p id="lock-err" class="lock-err">Code incorrect. Veuillez réessayer.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     APP CONTAINER
+═══════════════════════════════════════════════ -->
+<div id="app-container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Lectio Divina
+      </div>
+
+      <nav class="page-nav" id="page-nav">
+        <button class="page-nav-btn active" onclick="showPage('study',this)">Étude Biblique</button>
+        <button class="page-nav-btn" onclick="showPage('lectio',this)">Lectio Divina</button>
+      </nav>
+
+      <div class="header-right">
+        <div class="streak-pill" id="streak-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3.3.9.8 1.8 1.5 2.8z"/></svg>
+          <span id="streak-count">0 jour</span>
         </div>
+        <button class="theme-btn" id="theme-btn" aria-label="Thème">
+          <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <!-- 2. APPLICATION PRINCIPALE (Cachée par défaut) -->
-    <div id="app-container">
-        <header>
-            <div class="brand">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                Lectio Divina
+  <!-- ═══ PAGE 1 : ÉTUDE BIBLIQUE ═══ -->
+  <div id="page-study" class="page active">
+    <main class="p1-main">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="card">
+          <p class="card-label">Passage du Jour</p>
+          <span class="verse-ref">Jean 3:16</span>
+          <p class="verse-text">"Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."</p>
+          <div class="tags-grid">
+            <div class="tag tag-1">Amour</div>
+            <div class="tag tag-2">Grâce</div>
+            <div class="tag tag-3">Salut</div>
+            <div class="tag tag-4">Foi</div>
+            <div class="tag tag-5">Sacrifice</div>
+            <div class="tag tag-6">Éternité</div>
+            <div class="tag tag-7">Rédemption</div>
+            <div class="tag tag-8">Espérance</div>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- CONTENT -->
+      <div class="p1-content">
+
+        <!-- Sélecteur Livre / Chapitre -->
+        <div class="ctx-card">
+          <div class="select-group">
+            <label for="book-select">Livre Biblique</label>
+            <select id="book-select" class="select-custom" onchange="loadChapters()">
+              <option value="">Sélectionner un livre...</option>
+            </select>
+          </div>
+          <div class="select-group">
+            <label for="chapter-select">Chapitre</label>
+            <select id="chapter-select" class="select-custom" disabled onchange="updateCtx()">
+              <option value="">Sélectionner un chapitre...</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Onglets d'analyse -->
+        <div class="tabs-card">
+          <div class="tabs-nav">
+            <button class="tab-nav-btn active" onclick="switchP1Tab('theological', event)">Analyse Théologique</button>
+            <button class="tab-nav-btn" onclick="switchP1Tab('meditative', event)">Méditation Guidée</button>
+            <button class="tab-nav-btn" onclick="switchP1Tab('biblical', event)">Contexte Biblique</button>
+            <button class="tab-nav-btn" onclick="switchP1Tab('dictionary', event)">Dictionnaire</button>
+            <button class="tab-nav-btn" onclick="switchP1Tab('bible-ls', event)">📖 Bible LS 1910</button>
+          </div>
+
+          <!-- Theological -->
+          <div id="tab-theological" class="tab-pane active">
+            <div id="load-theological" class="loading-state">
+              <div class="spinner"></div>
+              <p class="loading-msg">Analyse pour <span id="ctx-theo"></span>…</p>
             </div>
-            <div class="header-actions">
-                <div class="streak-badge">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3.3.9.8 1.8 1.5 2.8z"/></svg>
-                    <span id="streak-count">0 jour</span>
-                </div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème">
-                    <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <div id="content-theological" class="rich-text">
+              <p>Sélectionnez un Livre et un Chapitre, puis générez l'analyse théologique.</p>
+              <div class="gen-wrap">
+                <button class="btn-gen" onclick="generateContent('theological')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  Générer l'analyse
                 </button>
+              </div>
             </div>
-        </header>
+          </div>
 
-        <main>
-            <!-- Sidebar: Passage du Jour & Dimensions -->
-            <aside class="sidebar">
-                <div class="card">
-                    <h3 class="card-title">Passage du Jour</h3>
-                    <div id="daily-passage">
-                        <span class="verse-ref">Jean 3:16</span>
-                        <p class="verse-text">"Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."</p>
-                    </div>
-                    <div class="dimensions-grid">
-                        <div class="dim-tag dim-1">Amour</div>
-                        <div class="dim-tag dim-2">Grâce</div>
-                        <div class="dim-tag dim-3">Salut</div>
-                        <div class="dim-tag dim-4">Foi</div>
-                        <div class="dim-tag dim-5">Sacrifice</div>
-                        <div class="dim-tag dim-6">Éternité</div>
-                        <div class="dim-tag dim-7">Rédemption</div>
-                        <div class="dim-tag dim-8">Espérance</div>
-                    </div>
-                </div>
-                
-                <div class="card" style="flex:1; display:flex; align-items:center; justify-content:center; text-align:center; color:var(--text-muted); font-style:italic; font-family:var(--font-serif);">
-                    "Ta parole est une lampe à mes pieds, Et une lumière sur mon sentier." <br><span style="font-size:0.8rem; margin-top:1rem;">— Psaumes 119:105</span>
-                </div>
-            </aside>
-
-            <!-- Main Content -->
-            <div class="content-area">
-                
-                <!-- Timer Section -->
-                <section class="timer-section card">
-                    <h2 class="timer-title">Temps de Méditation</h2>
-                    
-                    <div class="mode-selector">
-                        <button class="mode-btn active" data-duration="120" onclick="setTimerMode(120, this)">2 min</button>
-                        <button class="mode-btn" data-duration="300" onclick="setTimerMode(300, this)">5 min</button>
-                        <button class="mode-btn" data-duration="600" onclick="setTimerMode(600, this)">10 min</button>
-                    </div>
-
-                    <div class="timer-display-wrapper">
-                        <svg class="timer-svg" viewBox="0 0 220 220">
-                            <circle class="timer-circle-bg" cx="110" cy="110" r="100"></circle>
-                            <circle class="timer-circle-progress" id="progress-ring" cx="110" cy="110" r="100"></circle>
-                        </svg>
-                        <div class="timer-text" id="timer-display">02:00</div>
-                    </div>
-
-                    <div class="timer-controls">
-                        <button class="btn-control btn-primary" id="start-btn" onclick="startTimer()">Démarrer</button>
-                        <button class="btn-control btn-secondary" id="pause-btn" onclick="pauseTimer()" disabled>Pause</button>
-                        <button class="btn-control btn-secondary" id="reset-btn" onclick="resetTimer()">Reset</button>
-                    </div>
-                </section>
-
-                <!-- Context Selector (Books & Chapters) -->
-                <section class="context-selector">
-                    <div class="select-group">
-                        <label for="book-select">Livre Biblique</label>
-                        <select id="book-select" class="select-custom" onchange="loadChapters()">
-                            <option value="">Sélectionner un livre...</option>
-                            <!-- Rempli par JS -->
-                        </select>
-                    </div>
-                    <div class="select-group">
-                        <label for="chapter-select">Chapitre</label>
-                        <select id="chapter-select" class="select-custom" disabled onchange="updateContext()">
-                            <option value="">Sélectionner un chapitre...</option>
-                            <!-- Rempli par JS -->
-                        </select>
-                    </div>
-                </section>
-
-                <!-- Analysis Tabs -->
-                <div class="tabs-wrapper">
-                    <div class="tabs-header">
-                        <button class="tab-btn active" onclick="switchTab('theological')">Analyse Théologique</button>
-                        <button class="tab-btn" onclick="switchTab('meditative')">Méditation Guidée</button>
-                        <button class="tab-btn" onclick="switchTab('biblical')">Contexte Biblique</button>
-                        <button class="tab-btn" onclick="switchTab('dictionary')">Recherche & Dictionnaire</button>
-                    </div>
-
-                    <!-- Tab: Theological -->
-                    <div id="tab-theological" class="tab-content active">
-                        <div id="loading-theological" class="loading-state" style="display:none;">
-                            <div class="spinner"></div>
-                            <p class="loading-text">L'IA rédige l'analyse pour <span id="ctx-theo"></span>...</p>
-                        </div>
-                        <div id="content-theological" class="rich-text">
-                            <p>Sélectionnez un livre et un chapitre, puis cliquez ci-dessous pour générer une analyse théologique approfondie adaptée à votre temps de méditation.</p>
-                            <div style="margin-top:2rem; text-align:center;">
-                                <button class="btn-control btn-primary" onclick="generateContent('theological')">Générer l'analyse</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tab: Meditative -->
-                    <div id="tab-meditative" class="tab-content">
-                        <div id="loading-meditative" class="loading-state" style="display:none;">
-                            <div class="spinner"></div>
-                            <p class="loading-text">Préparation de la méditation pour <span id="ctx-med"></span>...</p>
-                        </div>
-                        <div id="content-meditative" class="rich-text">
-                            <p>Obtenez un parcours de Lectio Divina structuré (Lectio, Meditatio, Oratio, Contemplatio) basé sur le passage choisi.</p>
-                            <div style="margin-top:2rem; text-align:center;">
-                                <button class="btn-control btn-primary" onclick="generateContent('meditative')">Générer la méditation</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tab: Biblical -->
-                    <div id="tab-biblical" class="tab-content">
-                        <div id="loading-biblical" class="loading-state" style="display:none;">
-                            <div class="spinner"></div>
-                            <p class="loading-text">Recherche du contexte pour <span id="ctx-bib"></span>...</p>
-                        </div>
-                        <div id="content-biblical" class="rich-text">
-                            <p>Découvrez les liens historiques, littéraires et les références croisées pour enrichir votre compréhension du texte.</p>
-                            <div style="margin-top:2rem; text-align:center;">
-                                <button class="btn-control btn-primary" onclick="generateContent('biblical')">Générer le contexte</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tab: Dictionary -->
-                    <div id="tab-dictionary" class="tab-content">
-                        <div class="search-box">
-                            <input type="text" id="dict-input" class="search-input" placeholder="Ex: Grâce, Rédemption, Alliance...">
-                            <button class="btn-search" onclick="searchDefinition()">Rechercher</button>
-                        </div>
-                        <div id="loading-dictionary" class="loading-state" style="display:none;">
-                            <div class="spinner"></div>
-                            <p class="loading-text">Recherche de la définition théologique...</p>
-                        </div>
-                        <div id="content-dictionary" class="rich-text">
-                            <p style="color:var(--text-muted); text-align:center;">Tapez un mot clé ci-dessus pour obtenir sa définition biblique et spirituelle.</p>
-                        </div>
-                    </div>
-                </div>
-
+          <!-- Meditative -->
+          <div id="tab-meditative" class="tab-pane">
+            <div id="load-meditative" class="loading-state">
+              <div class="spinner"></div>
+              <p class="loading-msg">Méditation pour <span id="ctx-med"></span>…</p>
             </div>
-        </main>
-    </div>
+            <div id="content-meditative" class="rich-text">
+              <p>Obtenez un parcours Lectio, Meditatio, Oratio, Contemplatio pour le passage choisi.</p>
+              <div class="gen-wrap"><button class="btn-gen" onclick="generateContent('meditative')">Générer la méditation</button></div>
+            </div>
+          </div>
 
-    <script>
-        // --- CONFIGURATION & DATA ---
-        const ACCESS_CODE = "2Zohvjdc51430@";
-        let currentDuration = 120;
-        let timeLeft = 120;
-        let timerInterval = null;
-        let isRunning = false;
-        
-        let selectedBook = "";
-        let selectedChapter = "";
+          <!-- Biblical -->
+          <div id="tab-biblical" class="tab-pane">
+            <div id="load-biblical" class="loading-state">
+              <div class="spinner"></div>
+              <p class="loading-msg">Contexte pour <span id="ctx-bib"></span>…</p>
+            </div>
+            <div id="content-biblical" class="rich-text">
+              <p>Liens historiques, littéraires et références croisées pour enrichir votre compréhension.</p>
+              <div class="gen-wrap"><button class="btn-gen" onclick="generateContent('biblical')">Générer le contexte</button></div>
+            </div>
+          </div>
 
-        const bibleBooks = [
-            { name: "Genèse", chapters: 50 }, { name: "Exode", chapters: 40 },
-            { name: "Lévitique", chapters: 27 }, { name: "Nombres", chapters: 36 },
-            { name: "Deutéronome", chapters: 34 }, { name: "Josué", chapters: 24 },
-            { name: "Juges", chapters: 21 }, { name: "Ruth", chapters: 4 },
-            { name: "1 Samuel", chapters: 31 }, { name: "2 Samuel", chapters: 24 },
-            { name: "1 Rois", chapters: 22 }, { name: "2 Rois", chapters: 25 },
-            { name: "1 Chroniques", chapters: 29 }, { name: "2 Chroniques", chapters: 36 },
-            { name: "Esdras", chapters: 10 }, { name: "Néhémie", chapters: 13 },
-            { name: "Esther", chapters: 10 }, { name: "Job", chapters: 42 },
-            { name: "Psaumes", chapters: 150 }, { name: "Proverbes", chapters: 31 },
-            { name: "Ecclésiaste", chapters: 12 }, { name: "Cantique", chapters: 8 },
-            { name: "Ésaïe", chapters: 66 }, { name: "Jérémie", chapters: 52 },
-            { name: "Lamentations", chapters: 5 }, { name: "Ézéchiel", chapters: 48 },
-            { name: "Daniel", chapters: 12 }, { name: "Osée", chapters: 14 },
-            { name: "Joël", chapters: 3 }, { name: "Amos", chapters: 9 },
-            { name: "Abdias", chapters: 1 }, { name: "Jonas", chapters: 4 },
-            { name: "Michée", chapters: 7 }, { name: "Nahum", chapters: 3 },
-            { name: "Habacuc", chapters: 3 }, { name: "Sophonie", chapters: 3 },
-            { name: "Aggée", chapters: 2 }, { name: "Zacharie", chapters: 14 },
-            { name: "Malachie", chapters: 4 },
-            { name: "Matthieu", chapters: 28 }, { name: "Marc", chapters: 16 },
-            { name: "Luc", chapters: 24 }, { name: "Jean", chapters: 21 },
-            { name: "Actes", chapters: 28 }, { name: "Romains", chapters: 16 },
-            { name: "1 Corinthiens", chapters: 16 }, { name: "2 Corinthiens", chapters: 13 },
-            { name: "Galates", chapters: 6 }, { name: "Éphésiens", chapters: 6 },
-            { name: "Philippiens", chapters: 4 }, { name: "Colossiens", chapters: 4 },
-            { name: "1 Thessaloniciens", chapters: 5 }, { name: "2 Thessaloniciens", chapters: 3 },
-            { name: "1 Timothée", chapters: 6 }, { name: "2 Timothée", chapters: 4 },
-            { name: "Tite", chapters: 3 }, { name: "Philémon", chapters: 1 },
-            { name: "Hébreux", chapters: 13 }, { name: "Jacques", chapters: 5 },
-            { name: "1 Pierre", chapters: 5 }, { name: "2 Pierre", chapters: 3 },
-            { name: "1 Jean", chapters: 5 }, { name: "2 Jean", chapters: 1 },
-            { name: "3 Jean", chapters: 1 }, { name: "Jude", chapters: 1 },
-            { name: "Apocalypse", chapters: 22 }
-        ];
+          <!-- Dictionary -->
+          <div id="tab-dictionary" class="tab-pane">
+            <div class="search-row">
+              <input type="text" id="dict-input" class="search-input" placeholder="Ex: Grâce, Rédemption, Alliance…" />
+              <button class="btn-search" onclick="searchDefinition()">Rechercher</button>
+            </div>
+            <div id="load-dictionary" class="loading-state">
+              <div class="spinner"></div>
+              <p class="loading-msg">Définition théologique…</p>
+            </div>
+            <div id="content-dictionary" class="rich-text">
+              <p style="color:var(--text-3);text-align:center;">Tapez un mot-clé pour obtenir sa définition biblique et spirituelle.</p>
+            </div>
+          </div>
 
-        const bookMap = {
-            "genèse": "genesis", "exode": "exodus", "lévitique": "leviticus", "nombres": "numbers",
-            "deutéronome": "deuteronomy", "josué": "joshua", "juges": "judges", "ruth": "ruth",
-            "1 samuel": "1samuel", "2 samuel": "2samuel", "1 rois": "1kings", "2 rois": "2kings",
-            "1 chroniques": "1chronicles", "2 chroniques": "2chronicles", "esdras": "ezra", "néhémie": "nehemiah",
-            "esther": "esther", "job": "job", "psaumes": "psalms", "proverbes": "proverbs",
-            "ecclésiaste": "ecclesiastes", "cantique": "songofsolomon", "ésaïe": "isaiah", "jérémie": "jeremiah",
-            "lamentations": "lamentations", "ézéchiel": "ezekiel", "daniel": "daniel", "osée": "hosea",
-            "joël": "joel", "amos": "amos", "abdias": "obadiah", "jonas": "jonah",
-            "michee": "micah", "nahum": "nahum", "habacuc": "habakkuk", "sophonie": "zephaniah",
-            "aggée": "haggai", "zacharie": "zechariah", "malachie": "malachi",
-            "matthieu": "matthew", "marc": "mark", "luc": "luke", "jean": "john",
-            "actes": "acts", "romains": "romans", "1 corinthiens": "1corinthians", "2 corinthiens": "2corinthians",
-            "galates": "galatians", "éphésiens": "ephesians", "philippiens": "philippians", "colossiens": "colossians",
-            "1 thessaloniciens": "1thessalonians", "2 thessaloniciens": "2thessalonians", "1 timothée": "1timothy", "2 timothée": "2timothy",
-            "tite": "titus", "philémon": "philemon", "hébreux": "hebrews", "jacques": "james",
-            "1 pierre": "1peter", "2 pierre": "2peter", "1 jean": "1john", "2 jean": "2john",
-            "3 jean": "3john", "jude": "jude", "apocalypse": "revelation"
-        };
+          <!-- Bible LS 1910 -->
+          <div id="tab-bible-ls" class="tab-pane">
+            <div class="bible-ls-header">
+              <p class="bible-ls-title">📖 Bible Louis Segond 1910</p>
+              <p class="bible-ls-sub">Sélectionnez un livre et un chapitre pour lire la Parole dans sa version originale française</p>
+            </div>
+            <div class="bible-ls-controls">
+              <div class="select-group">
+                <label for="bls-book">Livre</label>
+                <select id="bls-book" class="select-custom" onchange="blsLoadChapters()">
+                  <option value="">Choisir un livre...</option>
+                </select>
+              </div>
+              <div class="select-group">
+                <label for="bls-chap">Chapitre</label>
+                <select id="bls-chap" class="select-custom" disabled onchange="blsLoadPassage()">
+                  <option value="">Chapitre...</option>
+                </select>
+              </div>
+              <div class="bls-ext-wrap">
+                <a id="bls-ext-link" href="https://saintebible.com" target="_blank" rel="noopener" class="btn-bls-ext">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Ouvrir saintebible.com
+                </a>
+              </div>
+            </div>
+            <div id="bls-placeholder" class="bls-placeholder">
+              <div class="bls-placeholder-icon">📜</div>
+              <p class="bls-placeholder-text">Choisissez un livre et un chapitre<br>pour afficher le texte</p>
+            </div>
+            <div id="bls-frame-wrap" class="bls-frame-wrap" style="display:none;">
+              <div class="bls-frame-bar">
+                <span id="bls-frame-title" class="bls-frame-title">—</span>
+                <div style="display:flex;gap:.5rem;">
+                  <button onclick="blsPrev()" class="bls-nav-btn" title="Chapitre précédent">&#8592;</button>
+                  <button onclick="blsNext()" class="bls-nav-btn" title="Chapitre suivant">&#8594;</button>
+                </div>
+              </div>
+              <iframe id="bls-iframe" class="bls-iframe" src="about:blank" title="Bible Louis Segond 1910" onload="blsCheckFrame(this)"></iframe>
+              <div class="bls-iframe-fallback" id="bls-fallback" style="display:none;">
+                <p style="color:var(--text-2);margin-bottom:1rem;">Ce site bloque l'intégration directe. Cliquez ci-dessous pour lire le chapitre.</p>
+                <a id="bls-fallback-link" href="#" target="_blank" rel="noopener" class="btn-gen" style="display:inline-flex;">Lire ce chapitre sur saintebible.com →</a>
+              </div>
+            </div>
+          </div>
 
-        // --- INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-            checkLockStatus();
-            initTheme();
-            initBookSelector();
-            initTimerUI();
-            loadStreak();
-        });
+        </div><!-- /tabs-card -->
+      </div><!-- /p1-content -->
+    </main>
+  </div><!-- /page-study -->
 
-        // --- 1. LOCK SCREEN LOGIC ---
-        function checkLockStatus() {
-            const unlocked = localStorage.getItem('lectio_unlocked');
-            if (unlocked === 'true') {
-                unlockApp();
-            }
-        }
+  <!-- ═══ PAGE 2 : LECTIO DIVINA ═══ -->
+  <div id="page-lectio" class="page">
+    <div class="p2-wrap">
+      <div class="p2-header">
+        <h1 class="p2-logo">✦ Lectio <span class="accent">Divina</span></h1>
+        <p class="p2-sub">Lecture & méditation biblique quotidienne</p>
+      </div>
 
-        function checkAccess() {
-            const input = document.getElementById('access-code').value;
-            const errorMsg = document.getElementById('lock-error');
-            
-            if (input === ACCESS_CODE) {
-                localStorage.setItem('lectio_unlocked', 'true');
-                unlockApp();
-            } else {
-                errorMsg.classList.add('visible');
-                setTimeout(() => errorMsg.classList.remove('visible'), 3000);
-                document.getElementById('access-code').value = '';
-            }
-        }
+      <!-- HOME -->
+      <div id="l-home" class="l-screen active">
+        <div class="mode-grid">
+          <div class="mode-card selected" onclick="selectLectioMode(2,this)">
+            <span class="mc-time">2</span>
+            <span class="mc-unit">min</span>
+            <span class="mc-name">étincelle</span>
+          </div>
+          <div class="mode-card" onclick="selectLectioMode(5,this)">
+            <span class="mc-time">5</span>
+            <span class="mc-unit">min</span>
+            <span class="mc-name mc-name-gold">méditation</span>
+          </div>
+          <div class="mode-card" onclick="selectLectioMode(10,this)">
+            <span class="mc-time">10</span>
+            <span class="mc-unit">min</span>
+            <span class="mc-name">lectio</span>
+          </div>
+        </div>
 
-        function unlockApp() {
-            const lockScreen = document.getElementById('lock-screen');
-            const appContainer = document.getElementById('app-container');
-            
-            lockScreen.classList.add('hidden');
-            setTimeout(() => {
-                lockScreen.style.display = 'none';
-                appContainer.classList.add('visible');
-            }, 600);
-        }
+        <div class="verse-preview-card">
+          <p class="vp-label">Passage du jour</p>
+          <p class="vp-text" id="l-verse-prev">Chargement...</p>
+        </div>
 
-        // Allow Enter key on lock screen
-        document.getElementById('access-code').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkAccess();
-        });
+        <button class="btn-start" onclick="startLectio()">
+          <i class="ti ti-player-play"></i>
+          Commencer la lecture
+        </button>
+      </div>
 
-        // --- 2. THEME LOGIC ---
-        function initTheme() {
-            const toggle = document.getElementById('theme-toggle');
-            const sunIcon = document.getElementById('icon-sun');
-            const moonIcon = document.getElementById('icon-moon');
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            
-            if (savedTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
-            }
+      <!-- READING -->
+      <div id="l-reading" class="l-screen">
+        <div class="reading-top">
+          <button class="btn-back" onclick="goLectioHome()"><i class="ti ti-arrow-left"></i> retour</button>
+          <span class="r-badge" id="l-mode-badge">5 min</span>
+        </div>
+        <div class="timer-wrap">
+          <svg class="ring-svg" width="160" height="160" viewBox="0 0 140 140" aria-hidden="true">
+            <circle class="ring-bg-c" cx="70" cy="70" r="62"/>
+            <circle class="ring-fg" id="l-ring" cx="70" cy="70" r="62"/>
+          </svg>
+          <div class="timer-center">
+            <div class="t-num" id="l-timer">5:00</div>
+            <div class="t-st" id="l-st">en cours</div>
+          </div>
+        </div>
+        <div class="passage-block">
+          <div class="pb-ref" id="l-pb-ref">—</div>
+          <div class="pb-text" id="l-pb-text"></div>
+        </div>
+        <div class="r-controls">
+          <button class="btn-ctrl" id="l-pause-btn" onclick="toggleLectioPause()"><i class="ti ti-player-pause"></i> Pause</button>
+          <button class="btn-ctrl gold" onclick="finishLectioEarly()"><i class="ti ti-check"></i> Terminé</button>
+        </div>
+      </div>
 
-            toggle.addEventListener('click', () => {
-                const current = document.documentElement.getAttribute('data-theme');
-                if (current === 'dark') {
-                    document.documentElement.removeAttribute('data-theme');
-                    localStorage.setItem('theme', 'light');
-                    sunIcon.style.display = 'none';
-                    moonIcon.style.display = 'block';
-                } else {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('theme', 'dark');
-                    sunIcon.style.display = 'block';
-                    moonIcon.style.display = 'none';
-                }
-            });
-        }
+      <!-- ANALYSIS -->
+      <div id="l-analysis" class="l-screen">
+        <div class="reading-top">
+          <button class="btn-back" onclick="goLectioHome()"><i class="ti ti-arrow-left"></i> retour</button>
+          <span class="r-badge">Analyse</span>
+        </div>
+        <div class="analysis-ref-bar">
+          <span class="arb-ref" id="l-anal-ref">—</span>
+          <span class="arb-txt" id="l-anal-exc"></span>
+        </div>
 
-        // --- 3. TIMER LOGIC ---
-        function initTimerUI() {
-            const circumference = 2 * Math.PI * 100;
-            const progressRing = document.getElementById('progress-ring');
-            progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
-            updateTimerDisplay();
-        }
+        <div id="l-anal-loading" class="dots-row" style="display:none;">
+          <span class="dot">•</span><span class="dot">•</span><span class="dot">•</span>
+          <span style="margin-left:6px;font-size:.85rem;color:var(--text-2)">Analyse théologique en cours…</span>
+        </div>
 
-        function setTimerMode(seconds, btn) {
-            if (isRunning) return;
-            currentDuration = seconds;
-            timeLeft = seconds;
-            
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            updateTimerDisplay();
-            resetProgress();
-        }
+        <div id="l-anal-content" style="display:none;">
+          <div class="l-tab-grid">
+            <button class="l-tab active" data-ltab="contexte" onclick="switchLTab('contexte')"><i class="ti ti-map-2"></i><span>Contexte</span></button>
+            <button class="l-tab" data-ltab="qui_parle" onclick="switchLTab('qui_parle')"><i class="ti ti-user-circle"></i><span>Qui parle</span></button>
+            <button class="l-tab" data-ltab="pourquoi" onclick="switchLTab('pourquoi')"><i class="ti ti-help"></i><span>Pourquoi</span></button>
+            <button class="l-tab" data-ltab="sens" onclick="switchLTab('sens')"><i class="ti ti-book"></i><span>Sens</span></button>
+            <button class="l-tab" data-ltab="theme" onclick="switchLTab('theme')"><i class="ti ti-tag"></i><span>Thème</span></button>
+            <button class="l-tab" data-ltab="destinataires" onclick="switchLTab('destinataires')"><i class="ti ti-users"></i><span>À qui</span></button>
+            <button class="l-tab" data-ltab="theologiens" onclick="switchLTab('theologiens')"><i class="ti ti-certificate"></i><span>Théologiens</span></button>
+            <button class="l-tab" data-ltab="spirituel" onclick="switchLTab('spirituel')"><i class="ti ti-flame"></i><span>Spirituel</span></button>
+          </div>
 
-        function updateTimerDisplay() {
-            const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-            const s = (timeLeft % 60).toString().padStart(2, '0');
-            document.getElementById('timer-display').textContent = `${m}:${s}`;
-            
-            const percent = timeLeft / currentDuration;
-            const circumference = 2 * Math.PI * 100;
-            const offset = circumference - (percent * circumference);
-            document.getElementById('progress-ring').style.strokeDashoffset = offset;
-        }
+          <div id="ltab-contexte" class="l-tab-panel active"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-map-2"></i></div><div class="lp-title">Contexte historique</div></div><p class="lp-text" id="lc-contexte"></p></div>
+          <div id="ltab-qui_parle" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-user-circle"></i></div><div class="lp-title">Qui parle ?</div></div><p class="lp-text" id="lc-qui_parle"></p></div>
+          <div id="ltab-pourquoi" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-help"></i></div><div class="lp-title">Pourquoi ce message ?</div></div><p class="lp-text" id="lc-pourquoi"></p></div>
+          <div id="ltab-sens" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-book"></i></div><div class="lp-title">Sens du texte</div></div><p class="lp-text" id="lc-sens"></p></div>
+          <div id="ltab-theme" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-tag"></i></div><div class="lp-title">Thème principal</div></div><p class="lp-text" id="lc-theme"></p></div>
+          <div id="ltab-destinataires" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-users"></i></div><div class="lp-title">À qui s'adresse ce texte</div></div><p class="lp-text" id="lc-destinataires"></p></div>
+          <div id="ltab-theologiens" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-certificate"></i></div><div class="lp-title">Regard des théologiens</div></div><p class="lp-text" id="lc-theologiens"></p></div>
+          <div id="ltab-spirituel" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-flame"></i></div><div class="lp-title">Sens spirituel</div></div><p class="lp-text" id="lc-spirituel"></p></div>
 
-        function resetProgress() {
-            document.getElementById('progress-ring').style.strokeDashoffset = 0;
-        }
+          <button class="btn-ctrl gold full" onclick="goLectioReflection()"><i class="ti ti-heart"></i> Méditation personnelle</button>
+        </div>
+      </div>
 
-        function startTimer() {
-            if (isRunning) return;
-            isRunning = true;
-            document.getElementById('start-btn').disabled = true;
-            document.getElementById('start-btn').style.opacity = '0.5';
-            document.getElementById('pause-btn').disabled = false;
-            
-            timerInterval = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    updateTimerDisplay();
-                } else {
-                    clearInterval(timerInterval);
-                    isRunning = false;
-                    incrementStreak();
-                    alert("Temps de méditation terminé. Que la paix soit avec vous.");
-                    resetTimerUI();
-                }
-            }, 1000);
-        }
+      <!-- REFLECTION -->
+      <div id="l-reflection" class="l-screen">
+        <div class="reading-top">
+          <button class="btn-back" onclick="showLScreen('l-analysis')"><i class="ti ti-arrow-left"></i> analyse</button>
+          <span class="r-badge">méditation</span>
+        </div>
+        <div class="analysis-ref-bar">
+          <span class="arb-ref" id="l-refl-ref">—</span>
+          <span class="arb-txt" id="l-refl-exc"></span>
+        </div>
+        <div id="l-refl-loading" class="dots-row">
+          <span class="dot">•</span><span class="dot">•</span><span class="dot">•</span>
+          <span style="margin-left:6px;font-size:.85rem;color:var(--text-2)">Méditation en cours…</span>
+        </div>
+        <div class="refl-text" id="l-refl-body"></div>
+        <button class="btn-ctrl gold full" id="l-complete-btn" onclick="completeLectio()" style="display:none;"><i class="ti ti-check"></i> Marquer comme lu</button>
+      </div>
 
-        function pauseTimer() {
-            if (!isRunning) return;
-            clearInterval(timerInterval);
-            isRunning = false;
-            document.getElementById('start-btn').disabled = false;
-            document.getElementById('start-btn').style.opacity = '1';
-            document.getElementById('start-btn').textContent = "Reprendre";
-            document.getElementById('pause-btn').disabled = true;
-        }
+      <!-- COMPLETE -->
+      <div id="l-complete" class="l-screen">
+        <div class="complete-block">
+          <div class="complete-ico">✦</div>
+          <h2 class="complete-title">Bien joué</h2>
+          <p class="complete-sub">Tu as nourri ton âme aujourd'hui</p>
+          <div class="streak-big" id="l-comp-streak">1</div>
+          <p class="streak-big-lbl">jour(s) consécutifs</p>
+          <div class="complete-verse-card" id="l-comp-verse"></div>
+          <button class="btn-ctrl full" onclick="goLectioHome()" style="margin-top:0;">
+            <i class="ti ti-home"></i> Retour à l'accueil
+          </button>
+        </div>
+      </div>
 
-        function resetTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            timeLeft = currentDuration;
-            updateTimerDisplay();
-            resetProgress();
-            resetTimerUI();
-        }
+    </div><!-- /p2-wrap -->
+  </div><!-- /page-lectio -->
 
-        function resetTimerUI() {
-            document.getElementById('start-btn').disabled = false;
-            document.getElementById('start-btn').style.opacity = '1';
-            document.getElementById('start-btn').textContent = "Démarrer";
-            document.getElementById('pause-btn').disabled = true;
-        }
+</div><!-- /app-container -->
 
-        // --- 4. CONTEXT SELECTION (BOOKS & CHAPTERS) ---
-        function initBookSelector() {
-            const select = document.getElementById('book-select');
-            bibleBooks.forEach((book, idx) => {
-                const opt = document.createElement('option');
-                opt.value = idx;
-                opt.textContent = book.name;
-                select.appendChild(opt);
-            });
-        }
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONFIG ANTHROPIC API (Page 2)
+   Remplacez par votre clé : https://console.anthropic.com
+   ⚠️ Ne commitez pas la clé dans un repo public
+═══════════════════════════════════════════════════════════ */
+const CLAUDE = {
+  KEY:   'YOUR_ANTHROPIC_API_KEY',
+  MODEL: 'claude-sonnet-4-20250514',
+  URL:   'https://api.anthropic.com/v1/messages',
+};
 
-        function loadChapters() {
-            const bookIdx = document.getElementById('book-select').value;
-            const chapSelect = document.getElementById('chapter-select');
-            chapSelect.innerHTML = '<option value="">Sélectionner un chapitre...</option>';
-            
-            if (bookIdx === "") {
-                chapSelect.disabled = true;
-                selectedBook = "";
-                selectedChapter = "";
-                updateContextLabels();
-                return;
-            }
+/* ═══════════════════════════════════════════════════════════
+   CONFIG MISTRAL API (Page 2 — Analyse 8 onglets 300+ mots)
+   Obtenez une clé sur https://console.mistral.ai
+═══════════════════════════════════════════════════════════ */
+const MISTRAL = {
+  KEY:   'YOUR_MISTRAL_API_KEY',
+  MODEL: 'mistral-large-latest',
+  URL:   'https://api.mistral.ai/v1/chat/completions',
+};
 
-            const book = bibleBooks[bookIdx];
-            selectedBook = book.name;
-            
-            for (let i = 1; i <= book.chapters; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = i;
-                chapSelect.appendChild(opt);
-            }
-            chapSelect.disabled = false;
-            updateContextLabels();
-        }
+/* ═══════════════════════════════════════════════════════════
+   DONNÉES
+═══════════════════════════════════════════════════════════ */
+const ACCESS_CODE = "2Zohvjdc51430@";
 
-        function updateContext() {
-            selectedChapter = document.getElementById('chapter-select').value;
-            updateContextLabels();
-        }
+const bibleBooks = [
+  { name:"Genèse",chapters:50 },{ name:"Exode",chapters:40 },
+  { name:"Lévitique",chapters:27 },{ name:"Nombres",chapters:36 },
+  { name:"Deutéronome",chapters:34 },{ name:"Josué",chapters:24 },
+  { name:"Juges",chapters:21 },{ name:"Ruth",chapters:4 },
+  { name:"1 Samuel",chapters:31 },{ name:"2 Samuel",chapters:24 },
+  { name:"1 Rois",chapters:22 },{ name:"2 Rois",chapters:25 },
+  { name:"1 Chroniques",chapters:29 },{ name:"2 Chroniques",chapters:36 },
+  { name:"Esdras",chapters:10 },{ name:"Néhémie",chapters:13 },
+  { name:"Esther",chapters:10 },{ name:"Job",chapters:42 },
+  { name:"Psaumes",chapters:150 },{ name:"Proverbes",chapters:31 },
+  { name:"Ecclésiaste",chapters:12 },{ name:"Cantique",chapters:8 },
+  { name:"Ésaïe",chapters:66 },{ name:"Jérémie",chapters:52 },
+  { name:"Lamentations",chapters:5 },{ name:"Ézéchiel",chapters:48 },
+  { name:"Daniel",chapters:12 },{ name:"Osée",chapters:14 },
+  { name:"Joël",chapters:3 },{ name:"Amos",chapters:9 },
+  { name:"Abdias",chapters:1 },{ name:"Jonas",chapters:4 },
+  { name:"Michée",chapters:7 },{ name:"Nahum",chapters:3 },
+  { name:"Habacuc",chapters:3 },{ name:"Sophonie",chapters:3 },
+  { name:"Aggée",chapters:2 },{ name:"Zacharie",chapters:14 },
+  { name:"Malachie",chapters:4 },
+  { name:"Matthieu",chapters:28 },{ name:"Marc",chapters:16 },
+  { name:"Luc",chapters:24 },{ name:"Jean",chapters:21 },
+  { name:"Actes",chapters:28 },{ name:"Romains",chapters:16 },
+  { name:"1 Corinthiens",chapters:16 },{ name:"2 Corinthiens",chapters:13 },
+  { name:"Galates",chapters:6 },{ name:"Éphésiens",chapters:6 },
+  { name:"Philippiens",chapters:4 },{ name:"Colossiens",chapters:4 },
+  { name:"1 Thessaloniciens",chapters:5 },{ name:"2 Thessaloniciens",chapters:3 },
+  { name:"1 Timothée",chapters:6 },{ name:"2 Timothée",chapters:4 },
+  { name:"Tite",chapters:3 },{ name:"Philémon",chapters:1 },
+  { name:"Hébreux",chapters:13 },{ name:"Jacques",chapters:5 },
+  { name:"1 Pierre",chapters:5 },{ name:"2 Pierre",chapters:3 },
+  { name:"1 Jean",chapters:5 },{ name:"2 Jean",chapters:1 },
+  { name:"3 Jean",chapters:1 },{ name:"Jude",chapters:1 },
+  { name:"Apocalypse",chapters:22 },
+];
 
-        function updateContextLabels() {
-            const ctx = selectedBook && selectedChapter ? `${selectedBook} ${selectedChapter}` : "ce passage";
-            document.getElementById('ctx-theo').textContent = ctx;
-            document.getElementById('ctx-med').textContent = ctx;
-            document.getElementById('ctx-bib').textContent = ctx;
-        }
+const bookMap = {
+  "genèse":"genesis","exode":"exodus","lévitique":"leviticus","nombres":"numbers",
+  "deutéronome":"deuteronomy","josué":"joshua","juges":"judges","ruth":"ruth",
+  "1 samuel":"1samuel","2 samuel":"2samuel","1 rois":"1kings","2 rois":"2kings",
+  "1 chroniques":"1chronicles","2 chroniques":"2chronicles","esdras":"ezra","néhémie":"nehemiah",
+  "esther":"esther","job":"job","psaumes":"psalms","proverbes":"proverbs",
+  "ecclésiaste":"ecclesiastes","cantique":"songofsolomon","ésaïe":"isaiah","jérémie":"jeremiah",
+  "lamentations":"lamentations","ézéchiel":"ezekiel","daniel":"daniel","osée":"hosea",
+  "joël":"joel","amos":"amos","abdias":"obadiah","jonas":"jonah",
+  "michée":"micah","nahum":"nahum","habacuc":"habakkuk","sophonie":"zephaniah",
+  "aggée":"haggai","zacharie":"zechariah","malachie":"malachi",
+  "matthieu":"matthew","marc":"mark","luc":"luke","jean":"john",
+  "actes":"acts","romains":"romans","1 corinthiens":"1corinthians","2 corinthiens":"2corinthians",
+  "galates":"galatians","éphésiens":"ephesians","philippiens":"philippians","colossiens":"colossians",
+  "1 thessaloniciens":"1thessalonians","2 thessaloniciens":"2thessalonians","1 timothée":"1timothy","2 timothée":"2timothy",
+  "tite":"titus","philémon":"philemon","hébreux":"hebrews","jacques":"james",
+  "1 pierre":"1peter","2 pierre":"2peter","1 jean":"1john","2 jean":"2john",
+  "3 jean":"3john","jude":"jude","apocalypse":"revelation",
+};
 
-        // --- 5. TABS & CONTENT GENERATION ---
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-        }
+/* 30 passages Lectio */
+const PASSAGES = {
+  2:[
+    {ref:"Jean 3:16",text:"Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse pas, mais qu'il ait la vie éternelle."},
+    {ref:"Psaume 23:1-2",text:"L'Éternel est mon berger : je ne manquerai de rien. Il me fait reposer dans de verts pâturages, il me dirige vers des eaux paisibles."},
+    {ref:"Philippiens 4:13",text:"Je puis tout par celui qui me fortifie."},
+    {ref:"Romains 8:28",text:"Nous savons que toutes choses concourent au bien de ceux qui aiment Dieu, de ceux qui sont appelés selon son dessein."},
+    {ref:"Ésaïe 41:10",text:"Ne crains rien, car je suis avec toi ; je suis ton Dieu ; je te fortifie, je viens à ton secours, je te soutiens de ma droite triomphante."},
+    {ref:"Proverbes 3:5-6",text:"Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse ; reconnais-le dans toutes tes voies, et il aplanira tes sentiers."},
+    {ref:"Matthieu 6:33",text:"Cherchez premièrement le royaume et la justice de Dieu ; et toutes ces choses vous seront données par-dessus."},
+    {ref:"Lamentations 3:22-23",text:"Les bontés de l'Éternel ne sont pas épuisées, ses compassions ne sont pas à leur terme. Elles se renouvellent chaque matin. Ta fidélité est grande !"},
+    {ref:"Josué 1:9",text:"Sois fort et courageux. Ne tremble pas et ne te laisse pas décourager, car l'Éternel, ton Dieu, est avec toi partout où tu iras."},
+    {ref:"Jérémie 29:11",text:"Car je connais les projets que j'ai formés sur vous, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance."},
+  ],
+  5:[
+    {ref:"Psaume 23",text:"L'Éternel est mon berger : je ne manquerai de rien. Il me fait reposer dans de verts pâturages, il me dirige vers des eaux paisibles. Il restaure mon âme, il me conduit dans les sentiers de la justice, à cause de son nom.\n\nQuand je marche dans la vallée de l'ombre de la mort, je ne crains aucun mal, car tu es avec moi : ta houlette et ton bâton me rassurent. Tu dresses une table devant moi, en face de mes adversaires ; tu oins d'huile ma tête, et ma coupe déborde.\n\nOui, le bonheur et la grâce m'accompagneront tous les jours de ma vie, et j'habiterai dans la maison de l'Éternel jusqu'à la fin de mes jours."},
+    {ref:"Matthieu 5:3-10 — Les Béatitudes",text:"Heureux les pauvres en esprit, car le royaume des cieux est à eux.\nHeureux ceux qui pleurent, car ils seront consolés.\nHeureux les débonnaires, car ils hériteront la terre.\nHeureux ceux qui ont faim et soif de la justice, car ils seront rassasiés.\nHeureux les miséricordieux, car ils obtiendront miséricorde.\nHeureux ceux qui ont le cœur pur, car ils verront Dieu.\nHeureux ceux qui procurent la paix, car ils seront appelés fils de Dieu.\nHeureux ceux qui sont persécutés pour la justice, car le royaume des cieux est à eux."},
+    {ref:"Jean 15:1-5",text:"Je suis le vrai cep, et mon Père est le vigneron. Tout sarment qui est en moi et qui ne porte pas de fruit, il le retranche ; et tout sarment qui porte du fruit, il l'émonde, afin qu'il en porte davantage.\n\nVous êtes déjà purs, à cause de la parole que je vous ai annoncée. Demeurez en moi, et je demeurerai en vous. Comme le sarment ne peut de lui-même porter du fruit, s'il ne demeure attaché au cep, ainsi vous ne le pouvez pas non plus, si vous ne demeurez en moi.\n\nJe suis le cep, vous êtes les sarments. Celui qui demeure en moi et en qui je demeure porte beaucoup de fruit, car sans moi vous ne pouvez rien faire."},
+    {ref:"Romains 8:35, 37-39",text:"Qui nous séparera de l'amour de Christ ? Sera-ce la tribulation, ou l'angoisse, ou la persécution, ou la faim, ou la nudité, ou le péril, ou l'épée ?\n\nMais dans toutes ces choses nous sommes plus que vainqueurs par celui qui nous a aimés. Car je suis persuadé que ni la mort ni la vie, ni les anges ni les dominations, ni les choses présentes ni les choses à venir, ni les puissances, ni la hauteur, ni la profondeur, ni aucune autre créature ne pourra nous séparer de l'amour de Dieu manifesté en Jésus-Christ notre Seigneur."},
+    {ref:"1 Corinthiens 13:4-8",text:"L'amour est patient, l'amour est plein de bonté ; l'amour n'est pas envieux ; l'amour ne se vante point, il ne s'enfle point d'orgueil, il ne fait rien de malhonnête, il ne cherche point son intérêt, il ne s'irrite point, il ne soupçonne point le mal, il ne se réjouit point de l'injustice, mais il se réjouit de la vérité.\n\nIl excuse tout, il croit tout, il espère tout, il supporte tout. L'amour ne périt jamais."},
+    {ref:"Philippiens 4:4-8",text:"Réjouissez-vous toujours dans le Seigneur ; je le dis encore, réjouissez-vous. Que votre douceur soit connue de tous les hommes. Le Seigneur est proche.\n\nNe vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces. Et la paix de Dieu, qui surpasse toute intelligence, gardera vos cœurs et vos pensées en Jésus-Christ.\n\nAu reste, frères, que tout ce qui est vrai, tout ce qui est honorable, tout ce qui est juste, tout ce qui est pur, tout ce qui est aimable, soit l'objet de vos pensées."},
+    {ref:"Ésaïe 40:28-31",text:"Ne le sais-tu pas ? Ne l'as-tu pas appris ? C'est le Dieu d'éternité, l'Éternel, qui a créé les extrémités de la terre. Il ne se fatigue point, il ne se lasse point ; sa sagesse est insondable.\n\nIl donne de la force à celui qui est fatigué, et il augmente la vigueur de celui qui est sans force. Les jeunes gens se fatiguent et se lassent, les plus vigoureux fléchissent et tombent ; mais ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles ; ils courent, et ne se lassent point ; ils marchent, et ne se fatiguent point."},
+    {ref:"Galates 5:22-25",text:"Mais le fruit de l'Esprit, c'est l'amour, la joie, la paix, la patience, la bonté, la bénignité, la fidélité, la douceur, la tempérance.\n\nContre de tels actes, il n'y a pas de loi. Ceux qui appartiennent à Jésus-Christ ont crucifié la chair avec ses passions et ses désirs. Si nous vivons par l'Esprit, marchons aussi selon l'Esprit."},
+    {ref:"Matthieu 6:25-29",text:"C'est pourquoi je vous dis : Ne vous inquiétez pas pour votre vie de ce que vous mangerez, ni pour votre corps, de quoi vous serez vêtus. La vie n'est-elle pas plus que la nourriture, et le corps plus que le vêtement ?\n\nRegardez les oiseaux du ciel : ils ne sèment ni ne moissonnent, et ils n'amassent rien dans des greniers ; et votre Père céleste les nourrit. Ne valez-vous pas beaucoup plus qu'eux ?\n\nEt pourquoi vous inquiéter au sujet du vêtement ? Considérez comment croissent les lis des champs : ils ne travaillent ni ne filent ; cependant Salomon même n'a pas été vêtu comme l'un d'eux."},
+    {ref:"Psaume 91:1-6",text:"Celui qui demeure sous l'abri du Très-Haut repose à l'ombre du Tout-Puissant. Je dis à l'Éternel : Mon refuge et ma forteresse, mon Dieu en qui je me confie !\n\nC'est lui qui te délivre du filet de l'oiseleur, de la peste et de ses ravages. Il te couvrira de ses ailes, et tu trouveras un refuge sous ses ailes ; sa fidélité est un bouclier et une armure.\n\nTu ne craindras ni les terreurs de la nuit, ni la flèche qui vole de jour, ni la peste qui marche dans les ténèbres, ni la contagion qui frappe en plein midi."},
+  ],
+  10:[
+    {ref:"Psaume 139:1-14",text:"Éternel, tu me sondes et tu me connais. Que je sois assis ou debout, tu le sais ; de loin, tu pénètres ma pensée. Que je marche ou que je me couche, tu l'observes ; tu es instruit de toutes mes voies.\n\nCar la parole n'est pas encore sur ma langue, que déjà, Éternel, tu la connais entièrement. Tu m'entoures par derrière et par devant, et tu mets ta main sur moi. Une telle connaissance est trop merveilleuse pour moi, trop élevée pour que je puisse la saisir.\n\nOù irais-je loin de ton Esprit, et où fuirais-je loin de ta face ? Si je monte aux cieux, tu y es ; si je me couche au séjour des morts, t'y voilà. Si je prends les ailes de l'aurore, si je vais habiter à l'extrémité de la mer, là aussi ta main me conduira, et ta droite me saisira.\n\nC'est toi qui as formé mes reins, qui m'as tissu dans le sein de ma mère. Je te loue de ce que je suis une créature si merveilleuse."},
+    {ref:"Jean 1:1-14",text:"Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu. Elle était au commencement avec Dieu. Toutes choses ont été faites par elle, et rien de ce qui a été fait n'a été fait sans elle.\n\nEn elle était la vie, et la vie était la lumière des hommes. La lumière luit dans les ténèbres, et les ténèbres ne l'ont point reçue.\n\nElle est venue chez les siens, et les siens ne l'ont pas reçue. Mais à tous ceux qui l'ont reçue, à ceux qui croient en son nom, elle a donné le pouvoir de devenir enfants de Dieu.\n\nEt la Parole a été faite chair, et elle a habité parmi nous, pleine de grâce et de vérité ; et nous avons contemplé sa gloire, une gloire comme la gloire du Fils unique venu du Père."},
+    {ref:"Romains 12:1-8",text:"Je vous exhorte donc, frères, par les compassions de Dieu, à offrir vos corps comme un sacrifice vivant, saint, agréable à Dieu, ce qui sera de votre part un culte raisonnable.\nNe vous conformez pas au siècle présent, mais soyez transformés par le renouvellement de l'intelligence, afin que vous discerniez quelle est la volonté de Dieu, ce qui est bon, agréable et parfait.\n\nCar, comme nous avons plusieurs membres dans un seul corps, et que tous les membres n'ont pas la même fonction, ainsi, nous qui sommes plusieurs, nous formons un seul corps en Christ, et nous sommes tous membres les uns des autres."},
+    {ref:"Hébreux 11:1-10",text:"Or la foi est une ferme assurance des choses qu'on espère, une démonstration de celles qu'on ne voit pas. C'est pour l'avoir eue que les anciens ont obtenu un témoignage favorable.\n\nC'est par la foi que nous reconnaissons que le monde a été formé par la parole de Dieu, en sorte que ce qu'on voit n'a pas été fait de choses visibles.\n\nOr, sans la foi il est impossible de lui être agréable ; car il faut que celui qui s'approche de Dieu croie que Dieu existe, et qu'il est le rémunérateur de ceux qui le cherchent.\n\nC'est par la foi qu'Abraham, lors de sa vocation, obéit et partit pour un lieu qu'il devait recevoir en héritage, et qu'il partit sans savoir où il allait."},
+    {ref:"Éphésiens 6:10-18",text:"Du reste, fortifiez-vous dans le Seigneur, et par sa force toute-puissante. Revêtez-vous de toutes les armes de Dieu, afin de pouvoir tenir ferme contre les ruses du diable.\n\nCar nous n'avons pas à lutter contre la chair et le sang, mais contre les dominations, contre les autorités, contre les princes des ténèbres de ce siècle.\n\nTenez donc ferme : ayez à vos reins la vérité pour ceinture, revêtez la cuirasse de la justice, mettez pour chaussure à vos pieds le zèle que donne l'Évangile de paix. Prenez le bouclier de la foi, avec lequel vous pourrez éteindre tous les traits enflammés du malin ; prenez aussi le casque du salut, et l'épée de l'Esprit, qui est la parole de Dieu."},
+    {ref:"Colossiens 3:12-17",text:"Ainsi donc, comme des élus de Dieu, saints et bien-aimés, revêtez-vous d'entrailles de miséricorde, de bonté, d'humilité, de douceur, de longanimité. Supportez-vous les uns les autres, et pardonnez-vous réciproquement.\n\nDe même que Christ vous a pardonné, pardonnez-vous aussi. Mais par-dessus toutes ces choses, revêtez-vous de la charité, qui est le lien de la perfection.\n\nEt que la paix de Christ règne dans vos cœurs. Que la parole de Christ habite parmi vous abondamment ; instruisez-vous et exhortez-vous les uns les autres en toute sagesse, chantant à Dieu dans vos cœurs avec reconnaissance."},
+    {ref:"1 Pierre 1:3-9",text:"Béni soit Dieu, le Père de notre Seigneur Jésus-Christ, qui, selon sa grande miséricorde, nous a régénérés, pour une espérance vivante, par la résurrection de Jésus-Christ d'entre les morts, pour un héritage qui ne peut ni se corrompre, ni se souiller, ni se faner.\n\nVous êtes gardés par la puissance de Dieu, par le moyen de la foi, pour le salut prêt à être révélé dans les derniers temps.\n\nVous vous en réjouissez, quoique maintenant vous soyez attristés pour un peu de temps par diverses épreuves, afin que l'épreuve de votre foi, plus précieuse que l'or périssable, ait pour résultat la louange, la gloire et l'honneur, lorsque Jésus-Christ apparaîtra."},
+    {ref:"Actes 2:42-47",text:"Ils persévéraient dans l'enseignement des apôtres, dans la communion fraternelle, dans la fraction du pain, et dans les prières. La crainte s'emparait de chacun, et il se faisait beaucoup de prodiges et de miracles par les apôtres.\n\nTous ceux qui croyaient étaient dans le même lieu, et ils avaient tout en commun. Ils vendaient leurs propriétés et leurs biens, et ils en partageaient le produit entre tous, selon les besoins de chacun.\n\nIls étaient chaque jour tous ensemble assidus au temple, ils rompaient le pain dans les maisons, et prenaient leur nourriture avec joie et simplicité de cœur, louant Dieu. Et le Seigneur ajoutait chaque jour à l'Église ceux qui étaient sauvés."},
+    {ref:"Psaume 119:105-112",text:"Ta parole est une lampe à mes pieds, et une lumière sur mon sentier. Je jure, et je tiendrai mon serment, d'observer tes justes ordonnances.\n\nJe suis dans une profonde détresse ; Éternel, donne-moi la vie selon ta parole ! Tes témoignages sont mon héritage pour toujours, car ils sont la joie de mon cœur.\n\nJe penche mon cœur à pratiquer tes statuts, toujours et perpétuellement."},
+    {ref:"Matthieu 5:13-16",text:"Vous êtes le sel de la terre. Mais si le sel perd sa saveur, avec quoi la lui rendra-t-on ? Il ne sert plus qu'à être jeté dehors, et foulé aux pieds par les hommes.\n\nVous êtes la lumière du monde. Une ville située sur une montagne ne peut être cachée. Et on n'allume pas une lampe pour la mettre sous le boisseau, mais on la met sur le chandelier, et elle éclaire tous ceux qui sont dans la maison.\n\nQue votre lumière luise ainsi devant les hommes, afin qu'ils voient vos bonnes œuvres, et qu'ils glorifient votre Père qui est dans les cieux."},
+  ],
+};
 
-        async function generateContent(type) {
-            if (!selectedBook || !selectedChapter) {
-                alert("Veuillez sélectionner un Livre et un Chapitre avant de générer une analyse.");
-                // Scroll to selector
-                document.querySelector('.context-selector').scrollIntoView({ behavior: 'smooth' });
-                return;
-            }
+/* ═══════════════════════════════════════════════════════════
+   ÉTAT GLOBAL
+═══════════════════════════════════════════════════════════ */
+let selectedBook='', selectedChapter='';
 
-            const contentDiv = document.getElementById(`content-${type}`);
-            const loadingDiv = document.getElementById(`loading-${type}`);
-            
-            contentDiv.style.display = 'none';
-            loadingDiv.style.display = 'flex';
+// Lectio state
+let lMode=2, lPassage=null, lInterval=null;
+let lTimeLeft=120, lTotalTime=120, lPaused=false;
+let lAnalysisData=null, lAnalysisPending=false;
+let lStreak=0, lDoneToday=false;
 
-            // Calcul du temps de lecture estimé en mots (approx 130 mots/min)
-            const wordsPerMin = 130;
-            const targetWords = Math.round((currentDuration / 60) * wordsPerMin);
-            const timeLabel = currentDuration === 120 ? "2 minutes" : (currentDuration === 300 ? "5 minutes" : "10 minutes");
+const CIRC = 2*Math.PI*62; // r=62
 
-            let prompt = "";
-            const passage = `${selectedBook} ${selectedChapter}`;
+/* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  checkLock();
+  initTheme();
+  initBooks();
+  initBibleReader();
+  loadStreakDisplay();
+  initLectioHome();
+  document.getElementById('access-code').addEventListener('keypress', e => { if(e.key==='Enter') checkAccess(); });
+  document.getElementById('l-ring').style.strokeDasharray = CIRC;
+});
 
-            if (type === 'theological') {
-                prompt = `Agis comme un théologien expert. Rédige une analyse théologique et doctrinale approfondie et structurée pour le chapitre complet suivant : ${passage}. 
-                L'analyse doit être calibrée très précisément pour un temps de lecture de ${timeLabel} (environ ${targetWords} mots). 
-                Utilise des titres clairs (##, ###) et mets en gras les concepts clés. Inclue les implications pour la foi contemporaine.`;
-            } else if (type === 'meditative') {
-                prompt = `Agis comme un guide spirituel expérimenté. Prépare une méditation guidée structurée (Lectio, Meditatio, Oratio, Contemplatio) basée sur le chapitre suivant : ${passage}.
-                Le contenu doit être calibré pour un temps de méditation de ${timeLabel} (environ ${targetWords} mots). 
-                Ton ton doit être doux, invitant et profond. Utilise des titres pour chaque étape.`;
-            } else if (type === 'biblical') {
-                prompt = `Agis comme un exégète biblique. Donne le contexte historique, littéraire et les liens avec le reste de la Bible pour : ${passage}.
-                Limite ta réponse pour un temps de lecture de ${timeLabel} (environ ${targetWords} mots). 
-                Explique les termes originaux importants et les références croisées. Structure avec des titres.`;
-            }
+/* ═══════════════════════════════════════════════════════════
+   LOCK
+═══════════════════════════════════════════════════════════ */
+function checkLock() {
+  if(localStorage.getItem('lectio_unlocked')==='true') unlockApp();
+}
+function checkAccess() {
+  const v = document.getElementById('access-code').value;
+  const err = document.getElementById('lock-err');
+  if(v===ACCESS_CODE) { localStorage.setItem('lectio_unlocked','true'); unlockApp(); }
+  else {
+    err.classList.add('show');
+    setTimeout(()=>err.classList.remove('show'),3000);
+    document.getElementById('access-code').value='';
+  }
+}
+function unlockApp() {
+  const ls=document.getElementById('lock-screen'), ap=document.getElementById('app-container');
+  ls.classList.add('hidden');
+  setTimeout(()=>{ ls.style.display='none'; ap.classList.add('visible'); },600);
+}
 
-            try {
-                const response = await fetch(`/api/analyze`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt, type: type })
-                });
+/* ═══════════════════════════════════════════════════════════
+   THEME
+═══════════════════════════════════════════════════════════ */
+function initTheme() {
+  const saved = localStorage.getItem('theme')||'light';
+  if(saved==='dark') applyDark();
+  document.getElementById('theme-btn').addEventListener('click',()=>{
+    const isDark = document.documentElement.getAttribute('data-theme')==='dark';
+    if(isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('theme','light'); applySun(); }
+    else { applyDark(); localStorage.setItem('theme','dark'); }
+  });
+}
+function applyDark() {
+  document.documentElement.setAttribute('data-theme','dark');
+  document.getElementById('icon-sun').style.display='block';
+  document.getElementById('icon-moon').style.display='none';
+}
+function applySun() {
+  document.getElementById('icon-sun').style.display='none';
+  document.getElementById('icon-moon').style.display='block';
+}
 
-                if (!response.ok) throw new Error('Erreur API');
-                const data = await response.json();
-                
-                let html = parseMarkdown(data.result);
-                html = makeBibleLinks(html);
-                
-                contentDiv.innerHTML = html;
-            } catch (error) {
-                contentDiv.innerHTML = `<p style="color:#ef4444; text-align:center;">Une erreur est survenue lors de la génération. Veuillez réessayer.</p>`;
-                console.error(error);
-            } finally {
-                loadingDiv.style.display = 'none';
-                contentDiv.style.display = 'block';
-            }
-        }
+/* ═══════════════════════════════════════════════════════════
+   PAGE NAVIGATION
+═══════════════════════════════════════════════════════════ */
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page-nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='study') {
+    // Mobile fallback nav
+    const nav = document.getElementById('page-nav');
+    if(nav) nav.querySelectorAll('.page-nav-btn').forEach((b,i)=>{ b.classList.toggle('active',i===0); });
+  }
+}
 
-        async function searchDefinition() {
-            const word = document.getElementById('dict-input').value.trim();
-            if (!word) return;
+/* ═══════════════════════════════════════════════════════════
+   PAGE 1 — ÉTUDE BIBLIQUE
+═══════════════════════════════════════════════════════════ */
+function initBooks() {
+  const sel = document.getElementById('book-select');
+  bibleBooks.forEach((b,i)=>{
+    const o=document.createElement('option'); o.value=i; o.textContent=b.name; sel.appendChild(o);
+  });
+}
+function loadChapters() {
+  const idx=document.getElementById('book-select').value;
+  const chapSel=document.getElementById('chapter-select');
+  chapSel.innerHTML='<option value="">Sélectionner un chapitre...</option>';
+  if(!idx) { chapSel.disabled=true; selectedBook=''; selectedChapter=''; updateCtxLabels(); return; }
+  const book=bibleBooks[idx]; selectedBook=book.name;
+  for(let i=1;i<=book.chapters;i++){const o=document.createElement('option');o.value=i;o.textContent=i;chapSel.appendChild(o);}
+  chapSel.disabled=false; updateCtxLabels();
+}
+function updateCtx() { selectedChapter=document.getElementById('chapter-select').value; updateCtxLabels(); }
+function updateCtxLabels() {
+  const ctx=selectedBook&&selectedChapter?`${selectedBook} ${selectedChapter}`:'ce passage';
+  ['theo','med','bib'].forEach(id=>{ const el=document.getElementById('ctx-'+id); if(el)el.textContent=ctx; });
+}
 
-            const contentDiv = document.getElementById('content-dictionary');
-            const loadingDiv = document.getElementById('loading-dictionary');
-            
-            contentDiv.style.display = 'none';
-            loadingDiv.style.display = 'flex';
+function switchP1Tab(id, evt) {
+  document.querySelectorAll('.tab-nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  evt.target.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
 
-            const prompt = `Agis comme un dictionnaire théologique et biblique expert. Donne une définition claire, le sens spirituel/théologique et un exemple d'usage dans la Bible pour le mot suivant : "${word}". Structure ta réponse avec des titres si nécessaire.`;
+async function generateContent(type) {
+  if(!selectedBook||!selectedChapter) {
+    alert('Veuillez sélectionner un Livre et un Chapitre avant de générer une analyse.');
+    document.querySelector('.ctx-card').scrollIntoView({behavior:'smooth'}); return;
+  }
+  const cDiv=document.getElementById('content-'+type);
+  const lDiv=document.getElementById('load-'+type);
+  cDiv.style.display='none'; lDiv.classList.add('show');
 
-            try {
-                const response = await fetch(`/api/analyze`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt, type: 'definition' })
-                });
+  const wpm=130, dur=120;
+  const targetWords=Math.round((dur/60)*wpm);
+  const tLabel='2 minutes';
+  const passage=`${selectedBook} ${selectedChapter}`;
+  let prompt='';
 
-                if (!response.ok) throw new Error('Erreur API');
-                const data = await response.json();
-                
-                let html = parseMarkdown(data.result);
-                html = makeBibleLinks(html);
-                
-                contentDiv.innerHTML = html;
-            } catch (error) {
-                contentDiv.innerHTML = `<p style="color:#ef4444; text-align:center;">Erreur lors de la recherche.</p>`;
-            } finally {
-                loadingDiv.style.display = 'none';
-                contentDiv.style.display = 'block';
-            }
-        }
+  if(type==='theological')
+    prompt=`Agis comme un théologien expert. Rédige une analyse théologique et doctrinale approfondie et structurée pour le chapitre complet suivant : ${passage}. L'analyse doit être calibrée pour un temps de lecture de ${tLabel} (environ ${targetWords} mots). Utilise des titres clairs (##, ###) et mets en gras les concepts clés. Inclue les implications pour la foi contemporaine.`;
+  else if(type==='meditative')
+    prompt=`Agis comme un guide spirituel expérimenté. Prépare une méditation guidée structurée (Lectio, Meditatio, Oratio, Contemplatio) basée sur le chapitre suivant : ${passage}. Le contenu doit être calibré pour ${tLabel} (environ ${targetWords} mots). Ton ton doit être doux, invitant et profond. Utilise des titres pour chaque étape.`;
+  else if(type==='biblical')
+    prompt=`Agis comme un exégète biblique. Donne le contexte historique, littéraire et les liens avec le reste de la Bible pour : ${passage}. Limite ta réponse pour ${tLabel} (environ ${targetWords} mots). Explique les termes originaux importants et les références croisées. Structure avec des titres.`;
 
-        // --- 6. UTILS (Markdown, Links, Streak) ---
-        function parseMarkdown(text) {
-            if (!text) return "";
-            let html = text
-                .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
-                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/^\- (.*$)/gim, '<li>$1</li>')
-                .replace(/\n\n/g, '</p><p>');
-            return `<p>${html}</p>`;
-        }
+  try {
+    const r=await fetch('/api/analyze',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompt,type}) });
+    if(!r.ok) throw new Error('Erreur API');
+    const d=await r.json();
+    cDiv.innerHTML=makeBibleLinks(parseMarkdown(d.result));
+  } catch(e) {
+    cDiv.innerHTML='<p style="color:#ef4444;text-align:center;">Une erreur est survenue. Veuillez réessayer.</p>';
+  } finally {
+    lDiv.classList.remove('show'); cDiv.style.display='block';
+  }
+}
 
-        function makeBibleLinks(html) {
-            const regex = /\b((?:1|2|3)\s)?([A-Za-zÀ-ÿ]+)\s(\d+):(\d+)\b/gi;
-            return html.replace(regex, (match, prefix, book, chapter, verse) => {
-                const fullName = (prefix ? prefix.trim() + " " : "") + book;
-                const key = fullName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                const urlSlug = bookMap[key] || key.replace(/\s+/g, '');
-                if (urlSlug) {
-                    return `<a href="https://saintebible.com/${urlSlug}/${chapter}-${verse}.htm" target="_blank" rel="noopener noreferrer" class="bible-link">${match}</a>`;
-                }
-                return match;
-            });
-        }
+async function searchDefinition() {
+  const word=document.getElementById('dict-input').value.trim();
+  if(!word) return;
+  const cDiv=document.getElementById('content-dictionary');
+  const lDiv=document.getElementById('load-dictionary');
+  cDiv.style.display='none'; lDiv.classList.add('show');
+  const prompt=`Agis comme un dictionnaire théologique et biblique expert. Donne une définition claire, le sens spirituel/théologique et un exemple d'usage dans la Bible pour le mot : "${word}". Structure ta réponse avec des titres si nécessaire.`;
+  try {
+    const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,type:'definition'})});
+    if(!r.ok) throw new Error();
+    const d=await r.json();
+    cDiv.innerHTML=makeBibleLinks(parseMarkdown(d.result));
+  } catch(e) { cDiv.innerHTML='<p style="color:#ef4444;text-align:center;">Erreur lors de la recherche.</p>'; }
+  finally { lDiv.classList.remove('show'); cDiv.style.display='block'; }
+}
 
-        function loadStreak() {
-            const streak = parseInt(localStorage.getItem('lectio_streak') || 0);
-            const label = streak === 1 ? "jour" : "jours";
-            document.getElementById('streak-count').textContent = `${streak} ${label}`;
-        }
+function parseMarkdown(text) {
+  if(!text) return '';
+  let h=text
+    .replace(/^#### (.*$)/gim,'<h4>$1</h4>')
+    .replace(/^### (.*$)/gim,'<h3>$1</h3>')
+    .replace(/^## (.*$)/gim,'<h2>$1</h2>')
+    .replace(/^# (.*$)/gim,'<h1>$1</h1>')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/^\- (.*$)/gim,'<li>$1</li>')
+    .replace(/\n\n/g,'</p><p>');
+  return `<p>${h}</p>`;
+}
+function makeBibleLinks(html) {
+  const rx=/\b((?:1|2|3)\s)?([A-Za-zÀ-ÿ]+)\s(\d+):(\d+)\b/gi;
+  return html.replace(rx,(m,pre,book,ch,vs)=>{
+    const full=(pre?pre.trim()+' ':'')+book;
+    const key=full.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const slug=bookMap[key]||key.replace(/\s+/g,'');
+    return slug?`<a href="https://saintebible.com/${slug}/${ch}-${vs}.htm" target="_blank" rel="noopener" class="bible-link">${m}</a>`:m;
+  });
+}
 
-        function incrementStreak() {
-            const today = new Date().toDateString();
-            const lastDate = localStorage.getItem('lectio_last_date');
-            if (lastDate !== today) {
-                let streak = parseInt(localStorage.getItem('lectio_streak') || 0);
-                streak++;
-                localStorage.setItem('lectio_streak', streak);
-                localStorage.setItem('lectio_last_date', today);
-                const label = streak === 1 ? "jour" : "jours";
-                document.getElementById('streak-count').textContent = `${streak} ${label}`;
-            }
-        }
-    </script>
+/* ═══════════════════════════════════════════════════════════
+   STREAK (partagé)
+═══════════════════════════════════════════════════════════ */
+function loadStreakDisplay() {
+  const s=parseInt(localStorage.getItem('lectio_streak')||'0');
+  lStreak=s;
+  const lbl=s===1?'jour':'jours';
+  document.getElementById('streak-count').textContent=`${s} ${lbl}`;
+}
+function incrementStreak() {
+  const today=new Date().toDateString();
+  const last=localStorage.getItem('lectio_last_date');
+  if(last!==today) {
+    lStreak++;
+    localStorage.setItem('lectio_streak',lStreak);
+    localStorage.setItem('lectio_last_date',today);
+    const lbl=lStreak===1?'jour':'jours';
+    document.getElementById('streak-count').textContent=`${lStreak} ${lbl}`;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE 2 — LECTIO DIVINA
+═══════════════════════════════════════════════════════════ */
+function initLectioHome() {
+  const idx=Math.floor(Date.now()/86400000)%PASSAGES[5].length;
+  const p=PASSAGES[5][idx];
+  document.getElementById('l-verse-prev').textContent='« '+p.text.substring(0,90).replace(/\n/g,' ')+'… » — '+p.ref;
+}
+
+function selectLectioMode(m, el) {
+  lMode=m;
+  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function startLectio() {
+  const idx=Math.floor(Date.now()/86400000)%PASSAGES[lMode].length;
+  lPassage=PASSAGES[lMode][idx];
+  lTimeLeft=lMode*60; lTotalTime=lMode*60; lPaused=false;
+  lAnalysisData=null; lAnalysisPending=false;
+
+  document.getElementById('l-mode-badge').textContent=lMode+' min';
+  document.getElementById('l-pb-ref').textContent=lPassage.ref;
+  document.getElementById('l-pb-text').textContent=lPassage.text;
+  document.getElementById('l-pause-btn').innerHTML='<i class="ti ti-player-pause"></i> Pause';
+
+  updateLTimer();
+  showLScreen('l-reading');
+  clearInterval(lInterval);
+  lInterval=setInterval(()=>{
+    if(!lPaused){ lTimeLeft--; updateLTimer(); if(lTimeLeft<=0){clearInterval(lInterval); goLectioAnalysis();} }
+  },1000);
+  fetchLectioAnalysis();
+}
+
+function updateLTimer() {
+  const m=Math.floor(lTimeLeft/60), s=lTimeLeft%60;
+  document.getElementById('l-timer').textContent=m+':'+(s<10?'0':'')+s;
+  const offset=CIRC*(1-lTimeLeft/lTotalTime);
+  document.getElementById('l-ring').style.strokeDashoffset=offset;
+  const st=document.getElementById('l-st');
+  if(lTimeLeft<=0) st.textContent='terminé';
+  else if(lPaused) st.textContent='en pause';
+  else st.textContent='en cours';
+}
+
+function toggleLectioPause() {
+  lPaused=!lPaused;
+  const btn=document.getElementById('l-pause-btn');
+  if(lPaused){btn.innerHTML='<i class="ti ti-player-play"></i> Reprendre';document.getElementById('l-st').textContent='en pause';}
+  else{btn.innerHTML='<i class="ti ti-player-pause"></i> Pause';document.getElementById('l-st').textContent='en cours';}
+}
+
+function finishLectioEarly() { clearInterval(lInterval); goLectioAnalysis(); }
+
+function goLectioHome() { clearInterval(lInterval); showLScreen('l-home'); }
+
+function goLectioAnalysis() {
+  document.getElementById('l-anal-ref').textContent=lPassage.ref;
+  document.getElementById('l-anal-exc').textContent=lPassage.text.replace(/\n/g,' ').substring(0,100)+'…';
+  if(lAnalysisData){
+    renderLAnalysis(lAnalysisData);
+    document.getElementById('l-anal-loading').style.display='none';
+    document.getElementById('l-anal-content').style.display='block';
+  } else {
+    document.getElementById('l-anal-loading').style.display='flex';
+    document.getElementById('l-anal-content').style.display='none';
+    lAnalysisPending=true;
+  }
+  switchLTab('contexte');
+  showLScreen('l-analysis');
+}
+
+function renderLAnalysis(d) {
+  ['contexte','qui_parle','pourquoi','sens','theme','destinataires','theologiens','spirituel'].forEach(k=>{
+    const el=document.getElementById('lc-'+k);
+    if(el&&d[k]){
+      // Render rich text: split paragraphs, support bold/italic
+      const html=d[k]
+        .split(/\n\n+/)
+        .filter(p=>p.trim())
+        .map(p=>{
+          const txt=p.trim()
+            .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g,'<em>$1</em>');
+          return `<p>${txt}</p>`;
+        })
+        .join('');
+      el.innerHTML=html||`<p>${d[k]}</p>`;
+    }
+  });
+  document.getElementById('l-anal-loading').style.display='none';
+  document.getElementById('l-anal-content').style.display='block';
+  lAnalysisPending=false;
+}
+
+async function fetchLectioAnalysis() {
+  // Show animated loading with Mistral badge
+  const loadingEl = document.getElementById('l-anal-loading');
+  loadingEl.innerHTML = `
+    <div class="lp-loading-detail">
+      <span class="dot">•</span><span class="dot" style="animation-delay:.2s">•</span><span class="dot" style="animation-delay:.4s">•</span>
+      <span style="margin-left:6px;font-size:.85rem;color:var(--text-2)">Analyse approfondie en cours (300+ mots par section)…</span>
+      <div class="lp-progress-bar"><div class="lp-progress-inner"></div></div>
+      <span class="mistral-badge">⚡ Propulsé par Mistral AI</span>
+    </div>`;
+
+  const systemPrompt = `Tu es un théologien exégète et bibliste francophone de haut niveau. Tu rédiges des analyses détaillées, riches et accessibles à un large public — croyants, chercheurs ou simples curieux. Pour CHAQUE section demandée, tu dois rédiger un minimum strict de 300 mots, avec des détails historiques précis, des références concrètes et un langage vivant. Tes réponses sont en français impeccable.`;
+
+  const userPrompt = `Analyse en profondeur ce passage biblique : "${lPassage.ref}"
+Texte intégral : "${lPassage.text}"
+
+⚠️ OBLIGATION : Chaque valeur du JSON doit contenir MINIMUM 300 MOTS. Sépare tes paragraphes par deux sauts de ligne (\\n\\n). N'utilise pas de guillemets doubles à l'intérieur des valeurs JSON — utilise des guillemets simples ou reformule.
+
+Réponds UNIQUEMENT avec ce JSON valide, sans markdown, sans backticks :
+{
+"contexte": "MINIMUM 300 MOTS. Décris avec précision : l'époque exacte avec les dates, l'empire dominant (Babylone, Rome, Perse...), la situation géopolitique, l'état spirituel et moral du peuple, les événements historiques qui précèdent et suivent ce texte, le genre littéraire du livre (poésie, prophétie, épître, récit...), la place de ce passage dans la structure du livre entier.",
+"qui_parle": "MINIMUM 300 MOTS. Présente en détail l'auteur humain : son nom, sa tribu ou nationalité, sa famille et ses origines, sa formation religieuse ou intellectuelle, sa personnalité et son tempérament, ses forces et ses fragilités humaines, les grandes épreuves de sa vie, ses relations avec Dieu, comment il a été appelé, ses autres écrits dans la Bible, son impact sur l'histoire de la foi, ce qui le rend unique parmi les auteurs bibliques.",
+"pourquoi": "MINIMUM 300 MOTS. Explique en profondeur les raisons de ce message : quelle crise spirituelle, politique ou sociale a provoqué l'écriture de ce texte, quelle était l'urgence du moment, quels faux prophètes, fausses doctrines ou péchés collectifs étaient en jeu, comment les destinataires vivaient-ils au quotidien, quel désespoir ou quelle confusion régnait, pourquoi ce message était vital et urgent pour eux, et en quoi sa nécessité traverse les siècles.",
+"sens": "MINIMUM 300 MOTS. Réalise une exégèse approfondie : explique le sens littéral verset par verset, les mots-clés en hébreu ou en grec avec leur signification précise (translittérés en français), les images et métaphores utilisées et ce qu'elles évoquent dans la culture biblique, la structure rhétorique du passage, le sens allégorique et typologique, comment ce passage s'inscrit dans la révélation progressive de Dieu, ce que le texte dit et ce qu'il ne dit pas.",
+"theme": "MINIMUM 300 MOTS. Développe les thèmes en profondeur : identifie le thème central et les thèmes secondaires, montre comment ils s'articulent entre eux, trace leur fil conducteur à travers toute la Bible (de la Genèse à l'Apocalypse), explique leur portée doctrinale, théologique et éthique, comment ce passage contribue à la révélation globale de Dieu, et quels débats théologiques ces thèmes ont suscité dans l'histoire de l'Église.",
+"destinataires": "MINIMUM 300 MOTS. Dresse un portrait complet des destinataires : qui ils étaient précisément (nom du peuple, de la communauté, de l'Église), leur culture, leur langue, leurs coutumes religieuses, leur situation économique, les persécutions ou bénédictions qu'ils vivaient, leurs doutes et leurs espoirs profonds, pourquoi ils en avaient besoin à ce moment précis, comment ce message a transformé leur vie et leur foi, et en quoi leur condition ressemble à celle des chrétiens d'aujourd'hui.",
+"theologiens": "MINIMUM 300 MOTS. Présente les perspectives théologiques contemporaines : cite et explique précisément ce que N.T. Wright, Timothy Keller, Henri Blocher, John Stott, Karl Barth, ou des théologiens francophones comme André Gounelle ou Gilbert Laporta disent de ce passage. Explique leurs arguments, leurs méthodes herméneutiques, les points de consensus entre elles, les zones de débat encore ouvertes, et comment leurs lectures enrichissent la compréhension du texte aujourd'hui.",
+"spirituel": "MINIMUM 300 MOTS. Développe le sens spirituel et l'application concrète : qu'est-ce que ce texte dit à l'âme humaine en 2025, quelles transformations intérieures invite-t-il, quels obstacles intérieurs doit-on surmonter pour vivre ce texte, des exemples concrets et quotidiens d'application (dans la famille, le travail, la prière, les relations), quelles promesses de Dieu ce passage contient, comment il change notre regard sur nos épreuves, et propose trois questions de réflexion personnelle pour approfondir la méditation."
+}`;
+
+  try {
+    const r = await fetch(MISTRAL.URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${MISTRAL.KEY}`,
+      },
+      body: JSON.stringify({
+        model: MISTRAL.MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt }
+        ],
+        max_tokens: 10000,
+        temperature: 0.65,
+        response_format: { type: 'json_object' },
+      })
+    });
+    const d = await r.json();
+    let txt = d.choices?.[0]?.message?.content ?? '{}';
+    txt = txt.replace(/```json|```/g, '').trim();
+    // Robust JSON parse
+    let json;
+    try { json = JSON.parse(txt); }
+    catch(parseErr) {
+      // Try to extract partial JSON
+      const fixed = txt.replace(/[\u0000-\u001F]+/g,' ');
+      json = JSON.parse(fixed);
+    }
+    lAnalysisData = json;
+    if(lAnalysisPending) renderLAnalysis(json);
+  } catch(e) {
+    console.error('Mistral API error:', e);
+    const fb = {
+      contexte: "Ce passage s'inscrit dans l'une des périodes les plus riches et les plus complexes de l'histoire biblique. L'auteur écrit dans un contexte de tension spirituelle profonde, où le peuple de Dieu traverse des épreuves qui ébranlent sa foi et son identité. L'empire dominant de l'époque exerce une pression constante sur les croyants, les poussant à l'assimilation culturelle et à l'abandon de leurs convictions. C'est dans ce creuset d'adversité que la Parole de Dieu émerge comme un phare. Le livre dans lequel s'inscrit ce passage appartient au canon des Écritures qui a traversé des siècles d'épreuves et de transmission fidèle. Sa place dans la Bible n'est pas accidentelle : il répond à un besoin précis du peuple de Dieu et s'articule avec l'ensemble de la révélation divine. Comprendre ce contexte, c'est déjà commencer à entendre ce que Dieu voulait dire à son peuple, et ce qu'il continue de dire aujourd'hui.",
+      qui_parle: "L'auteur de ce texte est une figure centrale de l'histoire de la foi. Choisi par Dieu non pas pour ses capacités humaines exceptionnelles, mais précisément dans ses limites et ses fragilités, il incarne le paradoxe de la grâce divine : Dieu utilise des hommes imparfaits pour transmettre une parole parfaite. Sa vie est marquée par des hauts et des bas spirituels, par des moments de doute et de certitude, par des relations humaines complexes et une relation avec Dieu qui se forge dans l'épreuve. Il a reçu sa vocation comme un appel inattendu, parfois même comme un fardeau, et pourtant il a choisi de demeurer fidèle à sa mission. Son écriture porte la marque de son époque, de sa culture, de sa personnalité — et pourtant, par l'action de l'Esprit Saint, elle transcende toutes ces limites pour parler à toutes les générations.",
+      pourquoi: "Ce message n'a pas été donné dans le vide. Il répond à une crise spirituelle et existentielle réelle, vécue par des hommes et des femmes qui se demandaient si Dieu les avait abandonnés. La situation était grave : les repères s'étaient effondrés, les certitudes avaient vacillé, et l'ennemi — qu'il soit extérieur ou intérieur — semblait avoir le dessus. C'est précisément dans ce moment de vulnérabilité maximale que Dieu choisit de parler. Son message n'est pas un discours abstrait : c'est une réponse directe à une douleur réelle. Il vient contredire les mensonges que les circonstances semblaient valider. Il vient rappeler une vérité fondamentale que la souffrance avait obscurcie. Et il vient rouvrir un avenir que le découragement avait semblé fermer. Ce passage est donc une parole de combat, une parole de résistance spirituelle, une parole qui refuse de laisser le dernier mot à la détresse.",
+      sens: "Ce texte dit, dans un langage à la fois simple et profond, que Dieu est présent dans toutes les circonstances de la vie humaine. Chaque mot a été choisi avec soin pour porter le maximum de réalité théologique dans le minimum de mots. Les images utilisées parlent au cœur avant de parler à l'intellect : elles viennent de la vie quotidienne, de la nature, des relations humaines, pour dire quelque chose d'éternel et de divin. Le texte refuse le sentimentalisme facile : il ne promet pas l'absence de souffrance, mais la présence de Dieu dans la souffrance. Il ne promet pas que tout sera facile, mais que tout concourt au bien de ceux qui aiment Dieu. C'est une promesse ancrée dans le caractère immuable de Dieu, pas dans la fluctuation de nos émotions ou de nos circonstances.",
+      theme: "Les thèmes centraux de ce passage traversent toute la Bible comme un fil d'or. On y trouve la fidélité de Dieu face à l'infidélité humaine, la grâce qui précède et surpasse tout mérite, l'espérance qui résiste à l'évidence contraire, et la puissance de la Parole divine qui accomplit ce qu'elle annonce. Ces thèmes ne sont pas isolés : ils résonnent avec la Genèse (la bonté originelle de Dieu), avec les Psaumes (la louange au cœur de l'épreuve), avec les Évangiles (l'incarnation comme confirmation ultime de l'amour de Dieu), et avec l'Apocalypse (la victoire finale). Comprendre ces thèmes, c'est comprendre le cœur même du message biblique.",
+      destinataires: "Ce texte s'adressait à des personnes réelles, avec des noms, des visages, des histoires. Ils n'étaient pas des héros de la foi : ils étaient épuisés, découragés, parfois en colère contre Dieu. Ils avaient prié sans voir de réponse, servi sans voir de fruit, souffert sans comprendre pourquoi. Et pourtant, c'est à eux — précisément à eux — que ce message était destiné. Dieu ne s'adresse pas aux forts qui n'ont pas besoin d'aide : il parle aux faibles qui ont besoin de lui entendre. Leurs questions sont nos questions. Leurs doutes sont nos doutes. Leurs espoirs sont nos espoirs. C'est pourquoi ce texte, écrit il y a des millénaires, continue de résonner avec une fraîcheur et une pertinence stupéfiantes.",
+      theologiens: "Les grands théologiens contemporains ont consacré une attention particulière à ce passage, y reconnaissant un condensé de la révélation biblique. N.T. Wright souligne que ce texte ne peut être compris qu'à la lumière de l'ensemble du récit biblique, de la création à la nouvelle création. Timothy Keller insiste sur le fait que la grâce de Dieu exprimée ici n'est pas une récompense méritée mais un don absolument gratuit, qui transforme radicalement notre rapport à Dieu et aux autres. Henri Blocher, de son côté, attire l'attention sur la précision théologique du texte et sur la manière dont il articule des vérités apparemment contradictoires — la souveraineté de Dieu et la responsabilité humaine — avec une subtilité remarquable. John Stott rappelle que ce passage a nourri des millions de croyants à travers les siècles, et qu'il continue de le faire parce qu'il touche aux questions fondamentales de l'existence humaine.",
+      spirituel: "Ce texte t'invite aujourd'hui à un acte de confiance radical. Non pas une confiance naïve qui ignorerait la douleur ou les contradictions de la vie, mais une confiance enracinée dans la connaissance de Dieu — de ce qu'il est, de ce qu'il a fait, de ce qu'il a promis. Il t'invite à relâcher ce que tu portes seul depuis trop longtemps. À cesser de te définir par tes échecs, tes peurs ou tes doutes. À te laisser regarder par un Dieu qui te connaît mieux que tu ne te connais toi-même, et qui t'aime malgré tout — ou plutôt, qui t'aime dans tout. La pratique concrète de ce texte, c'est peut-être simplement de te lever chaque matin avec cette conviction : Dieu est présent, Dieu est fidèle, Dieu suffit. Et de laisser cette conviction transformer, lentement mais sûrement, ta façon de traverser chaque heure de la journée."
+    };
+    lAnalysisData = fb;
+    if(lAnalysisPending) renderLAnalysis(fb);
+  }
+}
+
+function switchLTab(name) {
+  document.querySelectorAll('.l-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.l-tab-panel').forEach(p=>p.classList.remove('active'));
+  const btn=document.querySelector('[data-ltab="'+name+'"]');
+  if(btn) btn.classList.add('active');
+  const panel=document.getElementById('ltab-'+name);
+  if(panel) panel.classList.add('active');
+}
+
+function goLectioReflection() {
+  document.getElementById('l-refl-ref').textContent=lPassage.ref;
+  document.getElementById('l-refl-exc').textContent=lPassage.text.replace(/\n/g,' ').substring(0,100)+'…';
+  document.getElementById('l-refl-loading').style.display='flex';
+  document.getElementById('l-refl-body').style.display='none';
+  document.getElementById('l-complete-btn').style.display='none';
+  showLScreen('l-reflection');
+  fetchLectioReflection();
+}
+
+async function fetchLectioReflection() {
+  const prompt=`Tu es un guide spirituel bienveillant. L'utilisateur vient de lire et d'étudier en profondeur le passage "${lPassage.ref}". Il a exploré le contexte, qui a écrit ce texte, pourquoi il a été écrit, et son sens spirituel.\n\nRédige une méditation personnelle (3-4 phrases) en français, profonde et nourrissante. Tutoie la personne avec affection. Fais le lien entre ce qu'il vient d'apprendre et sa vie concrète d'aujourd'hui. Commence directement la méditation.`;
+  try {
+    const r=await fetch(CLAUDE.URL,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':CLAUDE.KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:CLAUDE.MODEL,max_tokens:600,messages:[{role:'user',content:prompt}]})});
+    const d=await r.json();
+    const txt=d.content?.[0]?.text??'Que cette Parole soit une graine plantée en toi aujourd\'hui.';
+    document.getElementById('l-refl-loading').style.display='none';
+    document.getElementById('l-refl-body').textContent=txt;
+    document.getElementById('l-refl-body').style.display='block';
+    document.getElementById('l-complete-btn').style.display='flex';
+  } catch(e) {
+    document.getElementById('l-refl-loading').style.display='none';
+    document.getElementById('l-refl-body').textContent='Que cette Parole soit une graine plantée en toi aujourd\'hui — elle portera du fruit dans les moments où tu t\'y attendras le moins.';
+    document.getElementById('l-refl-body').style.display='block';
+    document.getElementById('l-complete-btn').style.display='flex';
+  }
+}
+
+function completeLectio() {
+  if(!lDoneToday){ incrementStreak(); lDoneToday=true; }
+  document.getElementById('l-comp-streak').textContent=lStreak;
+  document.getElementById('l-comp-verse').textContent='« '+lPassage.text.replace(/\n/g,' ').substring(0,110)+'… » — '+lPassage.ref;
+  showLScreen('l-complete');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BIBLE LOUIS SEGOND 1910 — Lecteur intégré
+═══════════════════════════════════════════════════════════ */
+const blsSlugs = {
+  "Genèse":"genese","Exode":"exode","Lévitique":"levitique","Nombres":"nombres",
+  "Deutéronome":"deuteronome","Josué":"josue","Juges":"juges","Ruth":"ruth",
+  "1 Samuel":"1-samuel","2 Samuel":"2-samuel","1 Rois":"1-rois","2 Rois":"2-rois",
+  "1 Chroniques":"1-chroniques","2 Chroniques":"2-chroniques","Esdras":"esdras","Néhémie":"nehemie",
+  "Esther":"esther","Job":"job","Psaumes":"psaumes","Proverbes":"proverbes",
+  "Ecclésiaste":"ecclesiaste","Cantique":"cantique-des-cantiques","Ésaïe":"esaie","Jérémie":"jeremie",
+  "Lamentations":"lamentations","Ézéchiel":"ezechiel","Daniel":"daniel","Osée":"osee",
+  "Joël":"joel","Amos":"amos","Abdias":"abdias","Jonas":"jonas",
+  "Michée":"michee","Nahum":"nahum","Habacuc":"habacuc","Sophonie":"sophonie",
+  "Aggée":"aggee","Zacharie":"zacharie","Malachie":"malachie",
+  "Matthieu":"matthieu","Marc":"marc","Luc":"luc","Jean":"jean",
+  "Actes":"actes","Romains":"romains","1 Corinthiens":"1-corinthiens","2 Corinthiens":"2-corinthiens",
+  "Galates":"galates","Éphésiens":"ephesiens","Philippiens":"philippiens","Colossiens":"colossiens",
+  "1 Thessaloniciens":"1-thessaloniciens","2 Thessaloniciens":"2-thessaloniciens",
+  "1 Timothée":"1-timothee","2 Timothée":"2-timothee","Tite":"tite","Philémon":"philemon",
+  "Hébreux":"hebreux","Jacques":"jacques","1 Pierre":"1-pierre","2 Pierre":"2-pierre",
+  "1 Jean":"1-jean","2 Jean":"2-jean","3 Jean":"3-jean","Jude":"jude","Apocalypse":"apocalypse"
+};
+
+let blsCurrentBookIdx = null;
+let blsCurrentChap = null;
+
+function initBibleReader() {
+  const sel = document.getElementById('bls-book');
+  if(!sel) return;
+  bibleBooks.forEach((b,i) => {
+    const o = document.createElement('option');
+    o.value = i; o.textContent = b.name;
+    sel.appendChild(o);
+  });
+}
+
+function blsLoadChapters() {
+  const idx = document.getElementById('bls-book').value;
+  const chapSel = document.getElementById('bls-chap');
+  chapSel.innerHTML = '<option value="">Chapitre...</option>';
+  if(!idx){ chapSel.disabled=true; return; }
+  blsCurrentBookIdx = parseInt(idx);
+  const book = bibleBooks[blsCurrentBookIdx];
+  for(let i=1; i<=book.chapters; i++){
+    const o = document.createElement('option');
+    o.value = i; o.textContent = i;
+    chapSel.appendChild(o);
+  }
+  chapSel.disabled = false;
+  blsCurrentChap = null;
+}
+
+function blsLoadPassage() {
+  const idx = document.getElementById('bls-book').value;
+  const chap = document.getElementById('bls-chap').value;
+  if(!idx || !chap) return;
+  blsCurrentBookIdx = parseInt(idx);
+  blsCurrentChap = parseInt(chap);
+  blsRender();
+}
+
+function blsRender() {
+  if(blsCurrentBookIdx===null || !blsCurrentChap) return;
+  const book = bibleBooks[blsCurrentBookIdx];
+  const slug = blsSlugs[book.name] || book.name.toLowerCase().replace(/[éèê]/g,'e').replace(/[àâ]/g,'a').replace(/\s+/g,'-');
+  const url = `https://saintebible.com/${slug}/${blsCurrentChap}.htm`;
+
+  // Update selectors
+  document.getElementById('bls-book').value = blsCurrentBookIdx;
+  document.getElementById('bls-chap').value = blsCurrentChap;
+
+  // Update UI
+  document.getElementById('bls-frame-title').textContent = `${book.name} ${blsCurrentChap} — Louis Segond 1910`;
+  document.getElementById('bls-ext-link').href = url;
+  document.getElementById('bls-fallback-link').href = url;
+
+  // Show frame
+  document.getElementById('bls-placeholder').style.display = 'none';
+  document.getElementById('bls-frame-wrap').style.display = 'block';
+  document.getElementById('bls-fallback').style.display = 'none';
+  document.getElementById('bls-iframe').style.display = 'block';
+  document.getElementById('bls-iframe').src = url;
+}
+
+function blsCheckFrame(iframe) {
+  // If iframe is blocked, show fallback
+  try {
+    const loc = iframe.contentWindow.location.href;
+    if(!loc || loc === 'about:blank') return;
+  } catch(e) {
+    // Cross-origin block = site loaded but we can't read it (this is normal and means it worked)
+    return;
+  }
+}
+
+function blsPrev() {
+  if(blsCurrentChap && blsCurrentChap > 1){
+    blsCurrentChap--;
+    document.getElementById('bls-chap').value = blsCurrentChap;
+    blsRender();
+  }
+}
+
+function blsNext() {
+  if(blsCurrentBookIdx!==null && blsCurrentChap){
+    const maxChap = bibleBooks[blsCurrentBookIdx].chapters;
+    if(blsCurrentChap < maxChap){
+      blsCurrentChap++;
+      document.getElementById('bls-chap').value = blsCurrentChap;
+      blsRender();
+    }
+  }
+}
+
+function showLScreen(id) {
+  document.querySelectorAll('.l-screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+</script>
 </body>
 </html>
