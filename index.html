@@ -3,357 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lectio Divina - Étude Biblique Premium</title>
+    <title>Lectio Divina — Étude Sacrée</title>
+    
+    <!-- Google Fonts: Playfair Display (Titres) & Inter (Corps) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            /* Palette Premium - Mode Clair */
-            --bg-body: #FBFBFA;
-            --bg-card: #FFFFFF;
-            --text-main: #1A1A1A;
-            --text-muted: #525252;
-            --primary: #1E3A8A;
-            --primary-light: #3B82F6;
-            --accent: #475569;
-            --border: #E5E7EB;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-            --radius: 12px;
-            --font-stack: 'Inter', system-ui, -apple-system, sans-serif;
+            /* Palette Premium - Mode Clair (Style Papier Littéraire) */
+            --bg-site: #FDFBF7; /* Blanc Albâtre/Crème */
+            --bg-card: #FFFFFF; /* Blanc Pur pour contraste subtil */
+            --text-main: #1C1C1E; /* Noir doux Apple */
+            --text-muted: #6E6E73; /* Gris secondaire */
+            --accent: #1B2A4A; /* Bleu Indigo Profond */
+            --accent-light: #F0F4F8; /* Bleu-gris lavé */
+            --accent-text: #FFFFFF;
+            
+            --shadow-soft: 0 4px 20px rgba(27, 42, 74, 0.04);
+            --shadow-hover: 0 8px 30px rgba(27, 42, 74, 0.08);
+            
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+            
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         [data-theme="dark"] {
-            /* Palette Premium - Mode Sombre */
-            --bg-body: #0F172A;
-            --bg-card: #1E293B;
-            --text-main: #E2E8F0;
-            --text-muted: #94A3B8;
-            --primary: #60A5FA;
-            --primary-light: #93C5FD;
-            --accent: #CBD5E1;
-            --border: #334155;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            /* Palette Premium - Mode Sombre (Noir Mat & Lavande Douce) */
+            --bg-site: #0F0F11; /* Noir mat profond */
+            --bg-card: #161619; /* Gris anthracite très sombre */
+            --text-main: #E4E4E7; /* Blanc cassé zinc */
+            --text-muted: #A1A1AA;
+            --accent: #818CF8; /* Violet/Indigo pastel doux */
+            --accent-light: #1E1E24;
+            --accent-text: #0F0F11;
+            
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.6);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-stack); transition: background-color 0.3s ease, color 0.3s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-sans); transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease; }
         
         body { 
-            background: var(--bg-body); 
+            background: var(--bg-site); 
             color: var(--text-main); 
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
-            line-height: 1.6;
-            overflow-x: hidden;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- LOCK SCREEN STYLES --- */
+        h1, h2, h3, h4, .logo, .streak-counter { font-family: var(--font-serif); }
+
+        /* --- LOCK SCREEN --- */
         #lock-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-body);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-site);
             z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
         }
-        #lock-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        .lock-content {
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
-        .lock-logo {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        .lock-subtitle {
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
-        .lock-input-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
+        #lock-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        
+        .lock-content { text-align: center; max-width: 400px; padding: 2rem; }
+        .lock-title { font-size: 2.5rem; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 700; letter-spacing: -0.02em; }
+        .lock-subtitle { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; font-weight: 300; }
+        
+        .lock-input-group { position: relative; margin-bottom: 1.5rem; }
         .lock-input {
-            flex: 1;
-            padding: 0.8rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: var(--bg-card);
-            color: var(--text-main);
-            font-size: 1rem;
-            text-align: center;
-            letter-spacing: 2px;
-            outline: none;
+            width: 100%; padding: 1rem; text-align: center; font-size: 1.2rem; letter-spacing: 0.2em;
+            background: var(--bg-card); border: 1px solid transparent;
+            border-radius: var(--radius-md); color: var(--text-main);
+            box-shadow: var(--shadow-soft); outline: none;
+            font-family: var(--font-sans);
         }
-        .lock-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
-        .lock-error {
-            color: #ef4444;
-            font-size: 0.85rem;
-            height: 1.2rem;
-            margin-top: 0.5rem;
-            opacity: 0;
-            transition: opacity 0.2s;
+        .lock-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); }
+        
+        .lock-btn {
+            width: 100%; padding: 1rem; background: var(--accent); color: var(--accent-text);
+            border: none; border-radius: var(--radius-md); font-size: 1rem; font-weight: 600;
+            cursor: pointer; box-shadow: var(--shadow-soft);
+            font-family: var(--font-sans); letter-spacing: 0.02em;
         }
+        .lock-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+        .lock-error { color: #EF4444; font-size: 0.9rem; margin-top: 1rem; min-height: 1.2rem; opacity: 0; transition: opacity 0.3s; }
         .lock-error.visible { opacity: 1; }
 
-        /* --- APP CONTENT STYLES --- */
-        #app-content {
-            display: none; /* Hidden by default until unlocked */
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-        #app-content.visible {
-            display: block;
-            opacity: 1;
-        }
-
-        /* Header */
+        /* --- HEADER --- */
         header { 
-            background: var(--bg-card); 
-            padding: 1rem 2rem; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-            border-bottom: 1px solid var(--border);
+            background: rgba(var(--bg-site), 0.8); backdrop-filter: blur(12px);
+            padding: 1.5rem 2rem; 
+            position: sticky; top: 0; z-index: 100; 
+            border-bottom: 1px solid transparent;
         }
-        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.4rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.6rem; letter-spacing: -0.02em; }
+        .header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
         
-        .streak-counter { 
+        .logo { 
+            font-size: 1.8rem; font-weight: 700; color: var(--text-main); 
+            display: flex; align-items: center; gap: 0.8rem; 
+            letter-spacing: -0.03em; font-style: italic;
+        }
+        .logo svg { stroke: var(--accent); }
+
+        .streak-badge { 
             display: flex; align-items: center; gap: 0.6rem; 
-            background: rgba(79, 70, 229, 0.1); 
-            color: var(--primary); 
-            padding: 0.4rem 1rem; 
-            border-radius: 20px; 
-            font-weight: 600; 
-            font-size: 0.9rem;
+            background: var(--accent-light); 
+            color: var(--accent); 
+            padding: 0.5rem 1.2rem; 
+            border-radius: 50px; 
+            font-family: var(--font-sans);
+            font-weight: 500; font-size: 0.9rem;
         }
 
         .theme-toggle {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            margin-left: 1rem;
+            background: transparent; border: none; color: var(--text-muted);
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; margin-left: 1rem;
+            transition: transform 0.3s, color 0.3s;
         }
-        .theme-toggle:hover { background: var(--border); }
+        .theme-toggle:hover { color: var(--accent); background: var(--accent-light); transform: rotate(15deg); }
 
-        /* Main Content */
-        main { flex: 1; max-width: 1200px; margin: 2.5rem auto; padding: 0 1.5rem; width: 100%; }
-        .dashboard { display: grid; grid-template-columns: 1fr 340px; gap: 2.5rem; }
-        @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; } }
+        /* --- MAIN LAYOUT --- */
+        main { flex: 1; max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem; width: 100%; }
+        
+        .dashboard { display: grid; grid-template-columns: 1fr 320px; gap: 3rem; }
+        @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; gap: 2rem; } }
 
-        /* Cards */
+        /* --- CARDS --- */
         .card { 
             background: var(--bg-card); 
-            border-radius: var(--radius); 
-            padding: 2rem; 
-            box-shadow: var(--shadow); 
-            margin-bottom: 2rem; 
-            border: 1px solid var(--border);
+            border-radius: var(--radius-lg); 
+            padding: 2.5rem; 
+            box-shadow: var(--shadow-soft); 
+            margin-bottom: 2.5rem; 
+            border: none; /* No borders */
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-        .card-title { font-size: 1.25rem; font-weight: 600; color: var(--text-main); letter-spacing: -0.01em; }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+        
+        .card-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 2rem; padding-bottom: 1.5rem; 
+            border-bottom: 1px solid var(--accent-light); 
+        }
+        .card-title { font-size: 1.5rem; font-weight: 600; color: var(--text-main); letter-spacing: -0.02em; }
 
-        /* Context Selector (New Feature) */
+        /* --- CONTEXT SELECTOR (NEW) --- */
         .context-selector {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            background: var(--bg-body);
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
+            display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 2rem;
+            background: var(--accent-light); padding: 0.5rem; border-radius: var(--radius-md);
         }
         .context-select {
-            padding: 0.8rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: var(--bg-card);
-            color: var(--text-main);
-            font-size: 1rem;
-            cursor: pointer;
-            outline: none;
+            background: var(--bg-card); border: none; padding: 0.8rem 1.2rem;
+            border-radius: var(--radius-sm); color: var(--text-main);
+            font-family: var(--font-sans); font-size: 0.95rem; font-weight: 500;
+            cursor: pointer; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
-        .context-select:focus { border-color: var(--primary); }
-        @media (max-width: 600px) { .context-selector { grid-template-columns: 1fr; } }
+        .context-select:focus { box-shadow: 0 0 0 2px var(--accent); }
 
-        /* Tabs System */
-        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0; overflow-x: auto; }
+        /* --- TABS --- */
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2.5rem; border-bottom: 1px solid var(--accent-light); padding-bottom: 0; overflow-x: auto; }
         .tab-btn { 
-            padding: 0.8rem 1.2rem; 
-            border: none; 
-            background: transparent; 
-            color: var(--text-muted); 
-            font-weight: 500; 
-            cursor: pointer; 
-            border-radius: 8px 8px 0 0; 
-            transition: all 0.2s; 
-            white-space: nowrap;
-            font-size: 0.95rem;
+            padding: 0.8rem 1.5rem; border: none; background: transparent; 
+            color: var(--text-muted); font-family: var(--font-serif);
+            font-size: 1.1rem; font-style: italic; cursor: pointer; 
+            border-radius: var(--radius-md) var(--radius-md) 0 0; 
+            transition: all 0.3s; white-space: nowrap; opacity: 0.7;
         }
-        .tab-btn:hover { color: var(--primary); background: rgba(79, 70, 229, 0.05); }
-        .tab-btn.active { color: var(--primary); background: rgba(79, 70, 229, 0.08); font-weight: 600; border-bottom: 2px solid var(--primary); }
-        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-btn:hover { opacity: 1; color: var(--accent); background: rgba(0,0,0,0.02); }
+        .tab-btn.active { 
+            opacity: 1; color: var(--accent); 
+            background: var(--bg-card); 
+            font-weight: 600; font-style: normal;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .tab-content { display: none; animation: fadeIn 0.5s ease; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Timer Circular */
+        /* --- TIMER --- */
         .timer-container { display: flex; flex-direction: column; align-items: center; padding: 1rem; }
-        .timer-circle { width: 220px; height: 220px; position: relative; margin-bottom: 2rem; }
+        .timer-circle { width: 240px; height: 240px; position: relative; margin-bottom: 2.5rem; }
         .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-        .timer-bg { fill: none; stroke: var(--border); stroke-width: 6; }
-        .timer-progress { fill: none; stroke: var(--primary); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 628; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }
-        .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.8rem; font-weight: 700; color: var(--text-main); font-variant-numeric: tabular-nums; }
-        .timer-controls { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-        
-        .btn { 
-            padding: 0.8rem 1.6rem; 
-            border: none; 
-            border-radius: 10px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-            display: flex; 
-            align-items: center; 
-            gap: 0.6rem; 
-            font-size: 0.95rem;
+        .timer-bg { fill: none; stroke: var(--accent-light); stroke-width: 4; }
+        .timer-progress { fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 691; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }
+        .timer-text { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            font-size: 3.5rem; font-weight: 300; color: var(--text-main); 
+            font-variant-numeric: tabular-nums; font-family: var(--font-serif);
         }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(30, 58, 138, 0.3); }
-        .btn-secondary { background: transparent; color: var(--text-main); border: 1px solid var(--border); }
-        .btn-secondary:hover { background: var(--border); }
         
-        .mode-selector { display: flex; gap: 0.5rem; margin-bottom: 2rem; justify-content: center; background: var(--bg-body); padding: 0.3rem; border-radius: 12px; width: fit-content; margin-left: auto; margin-right: auto; }
-        .mode-btn { padding: 0.5rem 1.2rem; border: none; background: transparent; color: var(--text-muted); border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
-        .mode-btn.active { background: white; color: var(--primary); shadow: 0 2px 8px rgba(0,0,0,0.1); font-weight: 600; }
-        [data-theme="dark"] .mode-btn.active { background: var(--primary); color: white; }
+        .timer-controls { display: flex; gap: 1.5rem; }
+        .btn-timer {
+            padding: 0.8rem 2rem; border: none; border-radius: 50px;
+            font-weight: 500; cursor: pointer; font-size: 0.95rem;
+            transition: all 0.3s; font-family: var(--font-sans); letter-spacing: 0.02em;
+        }
+        .btn-timer-primary { background: var(--accent); color: var(--accent-text); box-shadow: 0 4px 15px rgba(27, 42, 74, 0.15); }
+        .btn-timer-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(27, 42, 74, 0.25); }
+        .btn-timer-secondary { background: transparent; color: var(--text-muted); }
+        .btn-timer-secondary:hover { color: var(--text-main); background: var(--accent-light); }
+        .btn-timer:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
-        /* Analysis Sections */
+        .mode-selector { display: flex; gap: 0.5rem; margin-bottom: 2rem; justify-content: center; }
+        .mode-btn { 
+            padding: 0.5rem 1.2rem; border: 1px solid transparent; background: transparent; 
+            color: var(--text-muted); border-radius: 20px; cursor: pointer; 
+            font-size: 0.85rem; font-weight: 500; transition: all 0.3s; 
+        }
+        .mode-btn.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+
+        /* --- CONTENT TYPOGRAPHY --- */
         .analysis-content { 
-            line-height: 1.7; 
-            color: var(--text-main); 
-            font-size: 17px; 
-            max-width: 720px; 
-            margin: 0 auto; 
-            text-align: justify;
+            line-height: 1.8; color: var(--text-main); font-size: 18px; 
+            max-width: 720px; margin: 0 auto; text-align: justify;
         }
         .analysis-content h1, .analysis-content h2, .analysis-content h3, .analysis-content h4 {
-            color: var(--primary);
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            line-height: 1.3;
+            color: var(--text-main); font-family: var(--font-serif);
+            margin-top: 2.5rem; margin-bottom: 1.2rem; font-weight: 700; line-height: 1.3;
         }
-        .analysis-content h1 { font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-        .analysis-content h2 { font-size: 1.5rem; }
-        .analysis-content h3 { font-size: 1.3rem; }
-        .analysis-content h4 { font-size: 1.1rem; font-weight: 600; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.05em; }
-        .analysis-content p { margin-bottom: 1.2rem; }
-        .analysis-content strong { color: var(--primary); font-weight: 600; }
-        .analysis-content ul { margin-bottom: 1.2rem; padding-left: 1.5rem; }
-        .analysis-content li { margin-bottom: 0.5rem; }
+        .analysis-content h1 { font-size: 2.2rem; border-bottom: 1px solid var(--accent-light); padding-bottom: 0.8rem; }
+        .analysis-content h2 { font-size: 1.8rem; font-style: italic; }
+        .analysis-content h3 { font-size: 1.4rem; }
+        .analysis-content h4 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-family: var(--font-sans); font-weight: 600; }
         
+        .analysis-content p { margin-bottom: 1.5rem; }
+        .analysis-content strong { color: var(--accent); font-weight: 600; }
+        .analysis-content ul { margin-bottom: 1.5rem; padding-left: 1.5rem; }
+        .analysis-content li { margin-bottom: 0.8rem; }
+
         .bible-link {
-            color: var(--primary-light);
-            text-decoration: none;
-            font-weight: 600;
-            border-bottom: 1px dashed var(--primary-light);
-            transition: all 0.2s;
+            color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent);
+            transition: all 0.2s; font-family: var(--font-serif); font-style: italic;
         }
-        .bible-link:hover {
-            color: var(--primary);
-            border-bottom-style: solid;
-            background: rgba(79, 70, 229, 0.1);
-        }
+        .bible-link:hover { color: var(--text-main); border-bottom-style: solid; background: var(--accent-light); }
 
-        .loading-state { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            padding: 3rem; color: var(--text-muted); text-align: center;
-        }
-        .spinner { 
-            width: 32px; height: 32px; 
-            border: 3px solid var(--border); 
-            border-top-color: var(--primary); 
-            border-radius: 50%; 
-            animation: spin 0.8s linear infinite; 
-            margin-bottom: 1rem; 
-        }
+        .loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem; color: var(--text-muted); text-align: center; }
+        .spinner { width: 32px; height: 32px; border: 2px solid var(--accent-light); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 1.5rem; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; }
 
-        /* Bible Search Section */
-        .bible-search-container { display: flex; flex-direction: column; gap: 1.5rem; max-width: 720px; margin: 0 auto; }
-        .search-box { display: flex; gap: 0.8rem; }
+        /* --- BIBLE SEARCH --- */
+        .bible-search-container { display: flex; flex-direction: column; gap: 2rem; max-width: 720px; margin: 0 auto; }
+        .search-box { display: flex; gap: 1rem; }
         .search-input { 
-            flex: 1; padding: 0.9rem 1.2rem; 
-            border: 1px solid var(--border); 
-            border-radius: 10px; 
-            font-size: 1rem; 
-            outline: none; 
-            background: var(--bg-body);
-            color: var(--text-main);
-            transition: border-color 0.2s;
+            flex: 1; padding: 1rem 1.2rem; border: 1px solid var(--accent-light); 
+            border-radius: var(--radius-md); font-size: 1rem; outline: none; 
+            background: var(--bg-card); color: var(--text-main);
+            font-family: var(--font-sans);
         }
-        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); }
         
-        .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 0.6rem; margin-top: 1rem; }
-        .chapter-btn { 
-            padding: 0.6rem; 
-            border: 1px solid var(--border); 
-            background: var(--bg-card); 
-            color: var(--text-main);
-            border-radius: 8px; 
-            cursor: pointer; 
-            text-align: center; 
-            font-size: 0.9rem;
-            transition: all 0.2s; 
+        .btn-search { 
+            padding: 0 1.5rem; background: var(--accent); color: var(--accent-text); 
+            border: none; border-radius: var(--radius-md); cursor: pointer; 
+            font-weight: 500; display: flex; align-items: center; gap: 0.5rem;
+            transition: all 0.3s;
         }
-        .chapter-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .chapter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-search:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+
+        .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 0.8rem; margin-top: 1.5rem; }
+        .chapter-btn { 
+            padding: 0.8rem; border: 1px solid var(--accent-light); background: var(--bg-card); 
+            color: var(--text-main); border-radius: var(--radius-sm); cursor: pointer; 
+            text-align: center; font-size: 0.95rem; transition: all 0.2s; font-family: var(--font-serif);
+        }
+        .chapter-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .chapter-btn.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
         
         .bible-text-display { 
-            margin-top: 2rem; padding: 2rem; 
-            background: var(--bg-body); 
-            border-radius: 12px; 
-            border-left: 4px solid var(--primary); 
-            white-space: pre-wrap; 
-            line-height: 1.7;
-            font-size: 17px;
-            color: var(--text-main);
+            margin-top: 2.5rem; padding: 2.5rem; background: var(--bg-site); 
+            border-radius: var(--radius-lg); border-left: 4px solid var(--accent); 
+            white-space: pre-wrap; line-height: 1.8; font-size: 18px; color: var(--text-main);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        /* --- SIDEBAR --- */
+        .daily-passage { font-style: italic; font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.6; color: var(--text-main); }
+        .dimension-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+        .dimension-tag { 
+            padding: 0.6rem 0.8rem; background: var(--accent-light); 
+            border-radius: var(--radius-sm); font-size: 0.85rem; 
+            color: var(--accent); font-weight: 500; text-align: center;
         }
 
         /* Responsive */
         @media (max-width: 600px) {
             .header-content { flex-direction: column; gap: 1rem; }
-            .timer-circle { width: 180px; height: 180px; }
-            .timer-text { font-size: 2.2rem; }
-            .tabs { gap: 0.2rem; }
-            .tab-btn { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
+            .timer-circle { width: 200px; height: 200px; }
+            .timer-text { font-size: 2.5rem; }
+            .context-selector { grid-template-columns: 1fr; }
             .search-box { flex-direction: column; }
-            .btn { width: 100%; justify-content: center; }
+            .btn-search { width: 100%; justify-content: center; }
+            .dashboard { gap: 2rem; }
         }
     </style>
 </head>
@@ -362,244 +314,230 @@
     <!-- LOCK SCREEN -->
     <div id="lock-screen">
         <div class="lock-content">
-            <div class="lock-logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-                Lectio Divina
-            </div>
-            <p class="lock-subtitle">Accès Privé — Étude Biblique</p>
+            <h1 class="lock-title">Lectio Divina</h1>
+            <p class="lock-subtitle">Accès Privé — En construction</p>
             
             <div class="lock-input-group">
-                <input type="password" id="access-code" class="lock-input" placeholder="Code d'accès" maxlength="4" inputmode="numeric">
-                <button class="btn btn-primary" onclick="checkAccess()">Entrer</button>
+                <input type="password" id="access-code" class="lock-input" placeholder="• • • •" maxlength="4" inputmode="numeric">
             </div>
-            <div id="lock-error" class="lock-error">Code incorrect. Veuillez réessayer.</div>
-            <p style="margin-top: 2rem; font-size: 0.8rem; color: var(--text-muted);">Conseil : Le code est 1234</p>
+            
+            <button class="lock-btn" onclick="checkAccess()">Entrer</button>
+            <div id="lock-error" class="lock-error">Code incorrect</div>
         </div>
     </div>
 
-    <!-- APP CONTENT -->
-    <div id="app-content">
-        <header>
-            <div class="header-content">
-                <div class="logo">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
-                    Lectio Divina
-                </div>
-                <div style="display:flex; align-items:center;">
-                    <div class="streak-counter">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3.3.9.8 1.8 1.5 2.8z"/>
-                        </svg>
-                        <span id="streak-count">0 jour</span>
-                    </div>
-                    <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le mode sombre">
-                        <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                        <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                    </button>
-                </div>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                Lectio Divina
             </div>
-        </header>
+            <div style="display:flex; align-items:center;">
+                <div class="streak-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3.3.9.8 1.8 1.5 2.8z"/>
+                    </svg>
+                    <span id="streak-count">0 jour</span>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème">
+                    <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
 
-        <main>
-            <div class="dashboard">
-                <div class="main-content">
-                    <!-- Timer Card -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">Temps de Méditation</h2>
+    <main>
+        <div class="dashboard">
+            <div class="main-content">
+                
+                <!-- Timer Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Temps de Méditation</h2>
+                    </div>
+                    
+                    <div class="mode-selector">
+                        <button class="mode-btn active" data-duration="120">2 min</button>
+                        <button class="mode-btn" data-duration="300">5 min</button>
+                        <button class="mode-btn" data-duration="600">10 min</button>
+                    </div>
+
+                    <div class="timer-container">
+                        <div class="timer-circle">
+                            <svg class="timer-svg" viewBox="0 0 240 240">
+                                <circle class="timer-bg" cx="120" cy="120" r="110"></circle>
+                                <circle class="timer-progress" id="progress-ring" cx="120" cy="120" r="110"></circle>
+                            </svg>
+                            <div class="timer-text" id="timer-display">02:00</div>
                         </div>
                         
-                        <div class="mode-selector">
-                            <button class="mode-btn active" data-duration="120">2 min</button>
-                            <button class="mode-btn" data-duration="300">5 min</button>
-                            <button class="mode-btn" data-duration="600">10 min</button>
-                        </div>
-
-                        <div class="timer-container">
-                            <div class="timer-circle">
-                                <svg class="timer-svg" viewBox="0 0 220 220">
-                                    <circle class="timer-bg" cx="110" cy="110" r="100"></circle>
-                                    <circle class="timer-progress" id="progress-ring" cx="110" cy="110" r="100"></circle>
-                                </svg>
-                                <div class="timer-text" id="timer-display">02:00</div>
-                            </div>
-                            
-                            <div class="timer-controls">
-                                <button class="btn btn-primary" id="start-btn">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                                    </svg>
-                                    Démarrer
-                                </button>
-                                <button class="btn btn-secondary" id="pause-btn" disabled>
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="6" y="4" width="4" height="16"></rect>
-                                        <rect x="14" y="4" width="4" height="16"></rect>
-                                    </svg>
-                                    Pause
-                                </button>
-                                <button class="btn btn-secondary" id="reset-btn">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M23 4v6h-6"></path>
-                                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                                    </svg>
-                                    Reset
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Analysis Tabs -->
-                    <div class="card">
-                        <!-- Context Selector (NEW) -->
-                        <div style="margin-bottom: 1.5rem;">
-                            <h3 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 500;">Sélectionner le passage d'étude</h3>
-                            <div class="context-selector">
-                                <select id="global-book-select" class="context-select" onchange="updateGlobalChapterSelect()">
-                                    <option value="">Choisir un livre...</option>
-                                    <!-- Filled by JS -->
-                                </select>
-                                <select id="global-chapter-select" class="context-select" disabled onchange="onContextChange()">
-                                    <option value="">Chapitre</option>
-                                    <!-- Filled by JS -->
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="tabs">
-                            <button class="tab-btn active" data-tab="theological">Analyse Théologique</button>
-                            <button class="tab-btn" data-tab="meditative">Méditation Guidée</button>
-                            <button class="tab-btn" data-tab="biblical">Contexte Biblique</button>
-                            <button class="tab-btn" data-tab="bible">Bible & Recherche</button>
-                        </div>
-
-                        <!-- Theological Tab -->
-                        <div class="tab-content active" id="theological">
-                            <div id="theological-loading" class="loading-state" style="display: none;">
-                                <div class="spinner"></div>
-                                <p id="theological-msg">L'intelligence artificielle étudie le passage...</p>
-                            </div>
-                            <div id="theological-content" class="analysis-content">
-                                <p>Sélectionnez un livre et un chapitre ci-dessus, puis cliquez sur "Générer" pour obtenir une analyse théologique approfondie.</p>
-                                <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('theological')">Générer l'analyse</button>
-                            </div>
-                        </div>
-
-                        <!-- Meditative Tab -->
-                        <div class="tab-content" id="meditative">
-                            <div id="meditative-loading" class="loading-state" style="display: none;">
-                                <div class="spinner"></div>
-                                <p id="meditative-msg">Préparation de la méditation guidée...</p>
-                            </div>
-                            <div id="meditative-content" class="analysis-content">
-                                <p>Sélectionnez un passage pour recevoir une guidance spirituelle structurée (Lectio Divina).</p>
-                                <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('meditative')">Générer la méditation</button>
-                            </div>
-                        </div>
-
-                        <!-- Biblical Tab -->
-                        <div class="tab-content" id="biblical">
-                            <div id="biblical-loading" class="loading-state" style="display: none;">
-                                <div class="spinner"></div>
-                                <p id="biblical-msg">Recherche du contexte biblique...</p>
-                            </div>
-                            <div id="biblical-content" class="analysis-content">
-                                <p>Explorez les liens historiques et littéraires du passage sélectionné.</p>
-                                <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('biblical')">Générer le contexte</button>
-                            </div>
-                        </div>
-
-                        <!-- Bible Search Tab -->
-                        <div class="tab-content" id="bible">
-                            <div class="bible-search-container">
-                                <!-- Definition Search -->
-                                <div style="background: var(--bg-body); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
-                                    <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.1rem;">Dictionnaire Théologique</h3>
-                                    <div class="search-box">
-                                        <input type="text" id="definition-input" class="search-input" placeholder="Ex: Grâce, Rédemption...">
-                                        <button class="btn btn-primary" onclick="searchDefinition()">
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <circle cx="11" cy="11" r="8"></circle>
-                                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                            </svg>
-                                            Chercher
-                                        </button>
-                                    </div>
-                                    <div id="definition-result" class="bible-text-display" style="display: none;"></div>
-                                    <div id="definition-loading" class="loading-state" style="display: none; padding: 1rem;">
-                                        <div class="spinner" style="width: 24px; height: 24px; border-width: 2px;"></div>
-                                        <span style="font-size: 0.9rem">Recherche en cours...</span>
-                                    </div>
-                                </div>
-
-                                <!-- Passage Reader -->
-                                <div style="margin-top: 1rem;">
-                                    <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.1rem;">Lire un passage spécifique</h3>
-                                    <div class="search-box">
-                                        <input type="text" id="bible-search-input" class="search-input" placeholder="Ex: Jean 3:16">
-                                        <button class="btn btn-primary" onclick="searchBiblePassage()">
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <circle cx="11" cy="11" r="8"></circle>
-                                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                            </svg>
-                                            Lire
-                                        </button>
-                                    </div>
-                                    <div id="bible-result" class="bible-text-display" style="display: none;">
-                                        <h4 id="result-reference" style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;"></h4>
-                                        <div id="result-loader" class="loading-state" style="padding: 1rem; display:none;">
-                                            <div class="spinner" style="width:24px; height:24px; border-width:2px;"></div>
-                                            <span style="font-size:0.9rem">Récupération du texte...</span>
-                                        </div>
-                                        <p id="result-text"></p>
-                                    </div>
-                                    <div id="bible-error" style="color: #ef4444; display: none; margin-top: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px;"></div>
-                                </div>
-                            </div>
+                        <div class="timer-controls">
+                            <button class="btn-timer btn-timer-primary" id="start-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                Démarrer
+                            </button>
+                            <button class="btn-timer btn-timer-secondary" id="pause-btn" disabled>Pause</button>
+                            <button class="btn-timer btn-timer-secondary" id="reset-btn">Reset</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sidebar -->
-                <div class="sidebar">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Passage du Jour</h3>
+                <!-- Analysis Tabs -->
+                <div class="card">
+                    <!-- Context Selector (Master Control) -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display:block; font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem; font-weight:500; text-transform:uppercase; letter-spacing:0.05em;">Contexte d'étude actuel</label>
+                        <div class="context-selector">
+                            <select id="book-select-master" class="context-select" onchange="loadChaptersMaster()">
+                                <option value="">Choisir un livre...</option>
+                                <!-- Rempli par JS -->
+                            </select>
+                            <select id="chapter-select-master" class="context-select" onchange="updateActiveContext()" disabled>
+                                <option value="">Chapitre</option>
+                                <!-- Rempli par JS -->
+                            </select>
                         </div>
-                        <div id="daily-passage" style="font-size: 1.05rem; line-height: 1.6;">
-                            <p style="font-style: italic; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 500;">Jean 3:16</p>
-                            <p>"Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."</p>
+                        <div id="active-context-display" style="font-family:var(--font-serif); font-style:italic; color:var(--accent); font-size:1.1rem; min-height:1.5rem;"></div>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="theological">Analyse Théologique</button>
+                        <button class="tab-btn" data-tab="meditative">Méditation Guidée</button>
+                        <button class="tab-btn" data-tab="biblical">Contexte Biblique</button>
+                        <button class="tab-btn" data-tab="bible">Recherche & Dictionnaire</button>
+                    </div>
+
+                    <!-- Theological Tab -->
+                    <div class="tab-content active" id="theological">
+                        <div id="theological-loading" class="loading-state" style="display: none;">
+                            <div class="spinner"></div>
+                            <p class="loading-text" id="theological-msg">L'intelligence artificielle étudie le texte...</p>
+                        </div>
+                        <div id="theological-content" class="analysis-content">
+                            <p>Sélectionnez un livre et un chapitre ci-dessus, puis cliquez sur "Générer" pour obtenir une analyse théologique approfondie.</p>
+                            <button class="btn-timer btn-timer-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('theological')">Générer l'analyse</button>
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Dimensions</h3>
+                    <!-- Meditative Tab -->
+                    <div class="tab-content" id="meditative">
+                        <div id="meditative-loading" class="loading-state" style="display: none;">
+                            <div class="spinner"></div>
+                            <p class="loading-text" id="meditative-msg">Préparation de la méditation...</p>
                         </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
-                            <div style="padding: 0.6rem; background: rgba(79, 70, 229, 0.08); border-radius: 8px; font-size: 0.85rem; color: var(--primary); font-weight: 500;">Amour divin</div>
-                            <div style="padding: 0.6rem; background: rgba(245, 158, 11, 0.08); border-radius: 8px; font-size: 0.85rem; color: #b45309; font-weight: 500;">Grâce</div>
-                            <div style="padding: 0.6rem; background: rgba(16, 185, 129, 0.08); border-radius: 8px; font-size: 0.85rem; color: #047857; font-weight: 500;">Salut</div>
-                            <div style="padding: 0.6rem; background: rgba(139, 92, 246, 0.08); border-radius: 8px; font-size: 0.85rem; color: #6d28d9; font-weight: 500;">Foi</div>
-                            <div style="padding: 0.6rem; background: rgba(239, 68, 68, 0.08); border-radius: 8px; font-size: 0.85rem; color: #b91c1c; font-weight: 500;">Sacrifice</div>
-                            <div style="padding: 0.6rem; background: rgba(107, 114, 128, 0.08); border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Éternité</div>
-                            <div style="padding: 0.6rem; background: rgba(249, 115, 22, 0.08); border-radius: 8px; font-size: 0.85rem; color: #c2410c; font-weight: 500;">Rédemption</div>
-                            <div style="padding: 0.6rem; background: rgba(59, 130, 246, 0.08); border-radius: 8px; font-size: 0.85rem; color: #1d4ed8; font-weight: 500;">Espérance</div>
+                        <div id="meditative-content" class="analysis-content">
+                            <p>Découvrez une guidance spirituelle pour approfondir votre prière personnelle sur le passage sélectionné.</p>
+                            <button class="btn-timer btn-timer-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('meditative')">Générer la méditation</button>
+                        </div>
+                    </div>
+
+                    <!-- Biblical Tab -->
+                    <div class="tab-content" id="biblical">
+                        <div id="biblical-loading" class="loading-state" style="display: none;">
+                            <div class="spinner"></div>
+                            <p class="loading-text" id="biblical-msg">Recherche du contexte historique...</p>
+                        </div>
+                        <div id="biblical-content" class="analysis-content">
+                            <p>Explorez les liens avec l'Ancien et le Nouveau Testament et les origines du texte.</p>
+                            <button class="btn-timer btn-timer-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('biblical')">Générer le contexte</button>
+                        </div>
+                    </div>
+
+                    <!-- Bible Search Tab -->
+                    <div class="tab-content" id="bible">
+                        <div class="bible-search-container">
+                            <!-- Definition Search -->
+                            <div style="background: var(--bg-site); padding: 2rem; border-radius: var(--radius-lg);">
+                                <h3 style="font-family:var(--font-serif); font-size:1.3rem; margin-bottom:1rem; color:var(--text-main);">Dictionnaire Théologique</h3>
+                                <div class="search-box">
+                                    <input type="text" id="definition-input" class="search-input" placeholder="Ex: Grâce, Rédemption, Alliance...">
+                                    <button class="btn-search" onclick="searchDefinition()">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                        Chercher
+                                    </button>
+                                </div>
+                                <div id="definition-result" class="bible-text-display" style="display: none;"></div>
+                                <div id="definition-loading" class="loading-state" style="display: none; padding: 2rem;">
+                                    <div class="spinner" style="width: 24px; height: 24px; border-width: 2px;"></div>
+                                    <span class="loading-text" style="font-size: 0.95rem;">Recherche en cours...</span>
+                                </div>
+                            </div>
+
+                            <!-- Passage Reader -->
+                            <div>
+                                <h3 style="font-family:var(--font-serif); font-size:1.3rem; margin-bottom:1rem; color:var(--text-main);">Lire un passage</h3>
+                                <div class="search-box">
+                                    <input type="text" id="bible-search-input" class="search-input" placeholder="Ex: Jean 3:16">
+                                    <button class="btn-search" onclick="searchBiblePassage()">Lire</button>
+                                </div>
+                                
+                                <div id="chapter-container-manual" style="display: none; margin-top: 1.5rem;">
+                                    <h4 style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">Chapitres</h4>
+                                    <div id="chapter-grid-manual" class="chapter-grid"></div>
+                                </div>
+
+                                <div id="bible-result" class="bible-text-display" style="display: none;">
+                                    <h4 id="result-reference" style="font-family:var(--font-serif); font-size:1.4rem; color:var(--accent); margin-bottom:1rem;"></h4>
+                                    <div id="result-loader" class="loading-state" style="padding: 2rem; display:none;">
+                                        <div class="spinner" style="width:24px; height:24px; border-width:2px;"></div>
+                                        <span class="loading-text" style="font-size:0.95rem;">Récupération du texte...</span>
+                                    </div>
+                                    <p id="result-text"></p>
+                                </div>
+                                
+                                <div id="bible-error" style="color: #EF4444; display: none; margin-top: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.05); border-radius: var(--radius-md); font-size: 0.95rem;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Passage du Jour</h3>
+                    </div>
+                    <div id="daily-passage" class="daily-passage">
+                        <p style="color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 500; font-size: 0.9rem; text-transform:uppercase; letter-spacing:0.05em;">Jean 3:16</p>
+                        <p>"Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Dimensions</h3>
+                    </div>
+                    <div class="dimension-grid">
+                        <div class="dimension-tag">Amour divin</div>
+                        <div class="dimension-tag">Grâce</div>
+                        <div class="dimension-tag">Salut</div>
+                        <div class="dimension-tag">Foi</div>
+                        <div class="dimension-tag">Sacrifice</div>
+                        <div class="dimension-tag">Éternité</div>
+                        <div class="dimension-tag">Rédemption</div>
+                        <div class="dimension-tag">Espérance</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <script>
         // --- CONFIGURATION ---
         const ACCESS_CODE = "1234"; // Code d'accès
+        let timerDuration = 120;
+        let timeLeft = 120;
+        let timerInterval = null;
+        let isRunning = false;
+        
+        // État du contexte actuel
+        let currentBook = "";
+        let currentChapter = "";
+
         const bibleBooks = [
             { name: "Genèse", chapters: 50 }, { name: "Exode", chapters: 40 },
             { name: "Lévitique", chapters: 27 }, { name: "Nombres", chapters: 36 },
@@ -657,57 +595,37 @@
             "3 jean": "3john", "jude": "jude", "apocalypse": "revelation"
         };
 
-        // State
-        let timerDuration = 120;
-        let timeLeft = 120;
-        let timerInterval = null;
-        let isRunning = false;
-        let currentContext = { book: null, chapter: null };
-
-        // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             checkLockStatus();
-            initTheme();
             initTimer();
             initTabs();
-            initGlobalSelector();
+            initMasterSelector();
             loadStreak();
+            initTheme();
         });
 
         // --- LOCK SCREEN LOGIC ---
         function checkLockStatus() {
-            const isUnlocked = localStorage.getItem('lectio_unlocked');
-            if (isUnlocked === 'true') {
-                unlockApp();
+            const unlocked = localStorage.getItem('lectio_unlocked');
+            if (unlocked === 'true') {
+                document.getElementById('lock-screen').classList.add('hidden');
             }
         }
 
         function checkAccess() {
-            const input = document.getElementById('access-code');
-            const error = document.getElementById('lock-error');
+            const input = document.getElementById('access-code').value;
+            const errorDiv = document.getElementById('lock-error');
             
-            if (input.value === ACCESS_CODE) {
+            if (input === ACCESS_CODE) {
                 localStorage.setItem('lectio_unlocked', 'true');
-                unlockApp();
+                document.getElementById('lock-screen').classList.add('hidden');
             } else {
-                error.classList.add('visible');
-                input.value = '';
-                input.focus();
-                setTimeout(() => error.classList.remove('visible'), 2000);
+                errorDiv.classList.add('visible');
+                document.getElementById('access-code').value = '';
+                setTimeout(() => errorDiv.classList.remove('visible'), 2000);
             }
         }
-
-        function unlockApp() {
-            const lockScreen = document.getElementById('lock-screen');
-            const appContent = document.getElementById('app-content');
-            
-            lockScreen.classList.add('hidden');
-            setTimeout(() => {
-                lockScreen.style.display = 'none';
-                appContent.classList.add('visible');
-            }, 500);
-        }
-
+        
         // Allow Enter key on lock screen
         document.getElementById('access-code').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') checkAccess();
@@ -745,46 +663,56 @@
             });
         }
 
-        // --- GLOBAL CONTEXT SELECTOR LOGIC ---
-        function initGlobalSelector() {
-            const bookSelect = document.getElementById('global-book-select');
+        // --- MASTER CONTEXT SELECTOR ---
+        function initMasterSelector() {
+            const select = document.getElementById('book-select-master');
             bibleBooks.forEach((book, index) => {
                 const option = document.createElement('option');
                 option.value = index;
                 option.textContent = book.name;
-                bookSelect.appendChild(option);
+                select.appendChild(option);
             });
         }
 
-        function updateGlobalChapterSelect() {
-            const bookSelect = document.getElementById('global-book-select');
-            const chapterSelect = document.getElementById('global-chapter-select');
+        function loadChaptersMaster() {
+            const select = document.getElementById('book-select-master');
+            const chapterSelect = document.getElementById('chapter-select-master');
+            const display = document.getElementById('active-context-display');
+            
+            if (select.value === "") {
+                chapterSelect.disabled = true;
+                chapterSelect.innerHTML = '<option value="">Chapitre</option>';
+                display.textContent = "";
+                currentBook = "";
+                currentChapter = "";
+                return;
+            }
+
+            const bookIndex = parseInt(select.value);
+            const book = bibleBooks[bookIndex];
+            currentBook = book.name;
             
             chapterSelect.innerHTML = '<option value="">Chapitre</option>';
-            chapterSelect.disabled = true;
-            currentContext.chapter = null;
-
-            if (bookSelect.value === "") return;
-
-            const bookIndex = parseInt(bookSelect.value);
-            const book = bibleBooks[bookIndex];
-            currentContext.book = book.name;
-
             for (let i = 1; i <= book.chapters; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                chapterSelect.appendChild(option);
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = i;
+                chapterSelect.appendChild(opt);
             }
             chapterSelect.disabled = false;
+            display.textContent = ""; // Wait for chapter selection
         }
 
-        function onContextChange() {
-            const chapterSelect = document.getElementById('global-chapter-select');
+        function updateActiveContext() {
+            const chapterSelect = document.getElementById('chapter-select-master');
+            const display = document.getElementById('active-context-display');
+            
             if (chapterSelect.value) {
-                currentContext.chapter = chapterSelect.value;
-                // Optional: Auto-trigger analysis or just notify user
-                console.log(`Context set to ${currentContext.book} ${currentContext.chapter}`);
+                currentChapter = chapterSelect.value;
+                display.textContent = `${currentBook} ${currentChapter}`;
+            } else {
+                currentChapter = "";
+                display.textContent = "";
             }
         }
 
@@ -795,7 +723,7 @@
             const pauseBtn = document.getElementById('pause-btn');
             const resetBtn = document.getElementById('reset-btn');
             const progressRing = document.getElementById('progress-ring');
-            const circumference = 2 * Math.PI * 100;
+            const circumference = 2 * Math.PI * 110;
 
             progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
             progressRing.style.strokeDashoffset = 0;
@@ -852,7 +780,7 @@
                 clearInterval(timerInterval);
                 isRunning = false;
                 startBtn.disabled = false;
-                startBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Reprendre`;
+                startBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Reprendre`;
                 pauseBtn.disabled = true;
             });
 
@@ -864,7 +792,7 @@
                 setProgress(100);
                 startBtn.disabled = false;
                 pauseBtn.disabled = true;
-                startBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Démarrer`;
+                startBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Démarrer`;
             });
         }
 
@@ -883,7 +811,7 @@
             });
         }
 
-        // --- MARKDOWN & LINK PARSER ---
+        // --- MARKDOWN & LINKS ---
         function parseMarkdown(text) {
             if (!text) return "";
             let html = text
@@ -897,6 +825,7 @@
                 .replace(/^\- (.*$)/gim, '<li>$1</li>')
                 .replace(/^\d+\. (.*$)/gim, '<li>$1</li>')
                 .replace(/\n\n/g, '</p><p>');
+            
             html = `<p>${html}</p>`;
             html = html.replace(/<p><\/p>/g, '');
             html = html.replace(/<p>(<h[1-4]>)/g, '$1');
@@ -921,10 +850,8 @@
 
         // --- ANALYSIS GENERATION (CONTEXT AWARE) ---
         async function generateAnalysis(type) {
-            // Check context
-            if (!currentContext.book || !currentContext.chapter) {
-                alert("Veuillez sélectionner un Livre et un Chapitre dans le menu supérieur avant de générer une analyse.");
-                document.querySelector('.context-selector').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (!currentBook || !currentChapter) {
+                alert("Veuillez sélectionner un livre et un chapitre dans le menu ci-dessus avant de générer une analyse.");
                 return;
             }
 
@@ -935,18 +862,19 @@
             contentDiv.style.display = 'none';
             loadingDiv.style.display = 'flex';
             
-            const passageRef = `${currentContext.book} ${currentContext.chapter}`;
-            if(type === 'theological') msgP.textContent = `Analyse de ${passageRef} en cours...`;
-            if(type === 'meditative') msgP.textContent = `Préparation de la méditation pour ${passageRef}...`;
-            if(type === 'biblical') msgP.textContent = `Recherche du contexte de ${passageRef}...`;
+            if(type === 'theological') msgP.textContent = `Analyse de ${currentBook} ${currentChapter} en cours...`;
+            if(type === 'meditative') msgP.textContent = `Préparation de la méditation pour ${currentBook} ${currentChapter}...`;
+            if(type === 'biblical') msgP.textContent = `Recherche du contexte de ${currentBook} ${currentChapter}...`;
 
             let prompt = "";
+            const context = `${currentBook} chapitre ${currentChapter}`;
+
             if (type === 'theological') {
-                prompt = `Agis comme un théologien expert. Donne une analyse théologique et doctrinale approfondie et structurée pour le chapitre complet suivant : ${passageRef}. Fournis environ 500 mots. Utilise des titres (#, ##) pour structurer.`;
+                prompt = `Agis comme un théologien expert. Donne une analyse théologique et doctrinale approfondie et structurée pour le chapitre complet suivant : ${context}. Fournis environ 500 mots. Utilise des titres clairs (#, ##).`;
             } else if (type === 'meditative') {
-                prompt = `Agis comme un guide spirituel. Prépare une méditation guidée structurée (Lectio, Meditatio, Oratio, Contemplatio) basée sur le chapitre suivant : ${passageRef}. Environ 500 mots. Ton doux et invitant.`;
+                prompt = `Agis comme un guide spirituel expérimenté. Prépare une méditation guidée structurée (Lectio, Meditatio, Oratio, Contemplatio) basée sur le chapitre suivant : ${context}. Le texte doit faire environ 500 mots. Ton ton doit être doux et invitant. Utilise des titres.`;
             } else if (type === 'biblical') {
-                prompt = `Agis comme un exégète biblique. Donne le contexte historique et littéraire de : ${passageRef}. Environ 500 mots. Liens avec le reste de la Bible.`;
+                prompt = `Agis comme un exégète biblique. Donne le contexte historique et littéraire de : ${context}. Limite ta réponse à environ 500 mots. Mentionne les liens avec le reste de la Bible. Utilise des titres.`;
             }
 
             try {
@@ -964,7 +892,7 @@
                 
                 contentDiv.innerHTML = finalHtml;
             } catch (error) {
-                contentDiv.innerHTML = `<p style="color: #ef4444;">Une erreur est survenue. Vérifiez votre connexion ou l'API.</p>`;
+                contentDiv.innerHTML = `<p style="color: #EF4444;">Une erreur est survenue. Vérifiez que l'API est déployée.</p>`;
                 console.error(error);
             } finally {
                 loadingDiv.style.display = 'none';
@@ -972,7 +900,7 @@
             }
         }
 
-        // --- DEFINITION SEARCH ---
+        // --- DICTIONARY SEARCH ---
         async function searchDefinition() {
             const input = document.getElementById('definition-input');
             const word = input.value.trim();
@@ -984,7 +912,7 @@
             resultDiv.style.display = 'none';
             loader.style.display = 'flex';
 
-            const prompt = `Agis comme un dictionnaire théologique. Définition, sens spirituel et exemple biblique pour : "${word}".`;
+            const prompt = `Agis comme un dictionnaire théologique et biblique expert. Donne une définition claire, le sens spirituel/théologique et un exemple d'usage dans la Bible pour le mot suivant : "${word}". Structure ta réponse.`;
 
             try {
                 const response = await fetch(`/api/analyze`, {
@@ -1002,7 +930,7 @@
                 resultDiv.innerHTML = finalHtml;
                 resultDiv.style.display = 'block';
             } catch (err) {
-                alert("Erreur : " + err.message);
+                alert("Erreur lors de la recherche : " + err.message);
             } finally {
                 loader.style.display = 'none';
             }
@@ -1064,14 +992,14 @@
                     loader.style.display = 'none';
                 }
             } else {
-                errorDiv.textContent = "Format invalide. Utilisez 'Livre Chapitre:Verset'.";
+                errorDiv.textContent = "Format invalide. Utilisez 'Livre Chapitre:Verset' (ex: Jean 3:16).";
                 errorDiv.style.display = 'block';
                 loader.style.display = 'none';
                 resultDiv.style.display = 'none';
             }
         }
 
-        // --- STREAK LOGIC ---
+        // --- STREAK ---
         function loadStreak() {
             const streak = parseInt(localStorage.getItem('lectio_streak') || 0);
             const label = streak === 1 ? "jour" : "jours";
