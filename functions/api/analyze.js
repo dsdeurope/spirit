@@ -1,128 +1,149 @@
 // functions/api/analyze.js
+// Version Blindée contre les erreurs 405 et problèmes CORS
 
 export async function onRequest(context) {
   const { request, env } = context;
-  
-  // Récupération sécurisée de la clé API
-  const MISTRAL_API_KEY = env.MISTRAL_API_KEY;
+  const url = new URL(request.url);
 
-  // En-têtes CORS obligatoires pour que le navigateur accepte la réponse
+  // 1. Configuration des en-têtes CORS (Critique pour éviter les blocages navigateur)
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
     "Content-Type": "application/json"
   };
 
-  // 1. Gestion impérative de la pré-vérification OPTIONS (évite l'erreur 405/403 navigateur)
+  // 2. Gestion explicite et immédiate du pré-vol OPTIONS
+  // Le navigateur envoie souvent OPTIONS avant POST. On doit répondre OK tout de suite.
   if (request.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { 
+      status: 204, // No Content est la réponse standard pour OPTIONS
+      headers: corsHeaders 
+    });
   }
 
-  // 2. Vérification de la méthode (Seul POST est autorisé pour l'analyse)
+  // 3. Vérification stricte : On n'accepte QUE POST pour le traitement
   if (request.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Méthode non autorisée. Utilisez POST." }), {
+    return new Response(JSON.stringify({ 
+      error: "Méthode non autorisée", 
+      detail: `La méthode ${request.method} n'est pas supportée. Utilisez POST.`,
+      received_method: request.method
+    }), {
       status: 405,
       headers: corsHeaders
     });
   }
 
-  // 3. Vérification de la clé API
+  // 4. Récupération de la clé API
+  const MISTRAL_API_KEY = env.MISTRAL_API_KEY;
   if (!MISTRAL_API_KEY) {
-    return new Response(JSON.stringify({ error: "Clé API Mistral manquante dans les variables Cloudflare." }), {
+    return new Response(JSON.stringify({ 
+      error: "Configuration manquante", 
+      detail: "La variable MISTRAL_API_KEY n'est pas définie dans Cloudflare." 
+    }), {
       status: 500,
       headers: corsHeaders
     });
   }
 
   try {
-    // 4. Parsing du corps de la requête
-    let dataInput = {};
+    // 5. Lecture du corps de la requête avec gestion d'erreur robuste
+    let requestData;
     try {
-      dataInput = await request.json();
-    } catch (e) {
-      return new Response(JSON.stringify({ error: "Format JSON invalide." }), {
+      requestData = await request.json();
+    } catch (jsonError) {
+      return new Response(JSON.stringify({ 
+        error: "JSON invalide", 
+        detail: "Le corps de la requête n'est pas un JSON valide." 
+      }), {
         status: 400,
         headers: corsHeaders
       });
     }
 
-    const { prompt, type, durationMinutes } = dataInput;
+    const { prompt, type, durationMinutes, book, chapter } = requestData;
 
     if (!prompt) {
-      return new Response(JSON.stringify({ error: "Le champ 'prompt' est requis." }), {
+      return new Response(JSON.stringify({ 
+        error: "Prompt manquant", 
+        detail: "Le champ 'prompt' est obligatoire dans la requête JSON." 
+      }), {
         status: 400,
         headers: corsHeaders
       });
     }
 
-    // 5. Construction du Prompt Système avec contrainte de longueur stricte
-    const systemInstruction = `Tu es un théologien exégète et bibliste francophone de haut niveau. 
-    Tu rédiges des analyses détaillées, riches, historiquement précises et accessibles.
+    // 6. Construction du Prompt Système Renforcé (Contrainte de 300+ mots)
+    const systemInstruction = `Tu es un théologien exégète expert, spécialisé dans l'analyse biblique profonde en français.
     
-    ⚠️ CONTRAINTE DE LONGUEUR ABSOLUE ET PRIORITAIRE :
-    Ta réponse doit être EXTÊMEMENT DÉTAILLÉE. Tu dois rédiger un MINIMUM absolu de 300 à 400 mots.
-    Ne fais JAMAIS de résumé court. Développe rigoureusement chaque point, chaque argument, chaque nuance historique et théologique.
-    Si le sujet semble court, creuse les implications pratiques, les racines hébraïques/grecques, et le contexte culturel pour atteindre cet objectif.
-    Le texte doit être dense, nourri et structuré avec des paragraphes clairs.`;
+    RÈGLE D'OR ABSOLUE : 
+    Ta réponse doit impérativement contenir entre 300 et 500 mots. 
+    Il est INTERDIT de faire un résumé court. Tu dois développer chaque argument, donner du contexte historique, expliquer les termes originaux (hébreu/grec), et tirer des applications pratiques détaillées.
+    Si tu sens que tu vas finir trop court, ajoute une section "Implications pour aujourd'hui" ou "Éclairage historique" pour atteindre l'objectif de longueur.
+    Structure ta réponse avec des paragraphes clairs.`;
 
-    let finalUserPrompt = prompt;
-    
-    // Ajout de la contrainte de temps si présente
+    // Ajout de la contrainte de temps au prompt utilisateur
+    let finalPrompt = prompt;
     if (durationMinutes) {
-      finalUserPrompt += ` \n\n[CONTRAINE DE FORMAT] : Ce contenu est destiné à une méditation profonde de ${durationMinutes} minute(s). 
-      Adapte la densité et la longueur du texte pour offrir une lecture riche et continue correspondant exactement à ce temps de parole (environ 130 mots par minute). 
-      Ne sois jamais superficiel.`;
+      finalPrompt += `\n\n[CONTRAINE DE TEMPS] : Ce texte sera lu pendant une méditation de ${durationMinutes} minutes. 
+      Adapte la longueur et la densité du contenu pour remplir exactement ce temps de lecture à voix haute (environ 130-140 mots par minute).`;
     }
 
-    // 6. Appel à l'API Mistral
-    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+    // 7. Appel à l'API Mistral
+    const mistralResponse = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${MISTRAL_API_KEY}`
       },
       body: JSON.stringify({
-        model: "mistral-large-latest", // Modèle performant pour le raisonnement théologique
+        model: "mistral-large-latest",
         messages: [
           { role: "system", content: systemInstruction },
-          { role: "user", content: finalUserPrompt }
+          { role: "user", content: finalPrompt }
         ],
-        temperature: 0.6, // Équilibre créativité/rigueur
-        max_tokens: 2500, // Augmenté pour permettre 300-400 mots sans coupure
+        temperature: 0.6,
+        max_tokens: 2500, // Espace suffisant pour 400+ mots
         top_p: 1
       })
     });
 
-    // 7. Gestion des erreurs de l'API externe
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error(`Erreur Mistral API : ${response.status}`, errText);
-      throw new Error(`Erreur API Mistral (${response.status}) : ${errText.substring(0, 150)}`);
+    // 8. Gestion des erreurs venant de Mistral
+    if (!mistralResponse.ok) {
+      const errorText = await mistralResponse.text();
+      console.error(`[Mistral Error ${mistralResponse.status}]:`, errorText);
+      throw new Error(`API Mistral a renvoyé ${mistralResponse.status}: ${errorText.substring(0, 100)}`);
     }
 
-    const data = await response.json();
+    const mistralData = await mistralResponse.json();
 
-    if (!data.choices || data.choices.length === 0 || !data.choices[0].message) {
-      throw new Error("Aucune réponse générée par l'IA (structure invalide).");
+    if (!mistralData.choices || mistralData.choices.length === 0) {
+      throw new Error("L'API Mistral n'a retourné aucun choix de réponse.");
     }
 
-    const analysisText = data.choices[0].message.content.trim();
+    const content = mistralData.choices[0].message.content;
 
-    // 8. Réponse réussie vers le frontend
-    return new Response(JSON.stringify({ 
-      success: true, 
-      result: analysisText,
+    // 9. Réponse finale réussie vers le frontend
+    return new Response(JSON.stringify({
+      success: true,
+      result: content,
       type: type,
-      wordCount: analysisText.split(/\s+/).length
+      wordCount: content.split(/\s+/).length,
+      debug: {
+        receivedBook: book,
+        receivedChapter: chapter,
+        duration: durationMinutes
+      }
     }), {
       headers: corsHeaders
     });
 
-  } catch (error) {
-    console.error("Erreur interne analyze.js:", error);
-    return new Response(JSON.stringify({ 
-      error: error.message || "Une erreur inattendue est survenue lors de l'analyse." 
+  } catch (err) {
+    console.error("[CRITICAL ERROR in analyze.js]:", err);
+    return new Response(JSON.stringify({
+      error: "Erreur Interne",
+      message: err.message,
+      stack: err.stack // Utile pour le débogage en dev
     }), {
       status: 500,
       headers: corsHeaders
