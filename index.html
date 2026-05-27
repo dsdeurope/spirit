@@ -3,39 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lectio Divina - Lecture Spirituelle Quotidienne</title>
+    <title>Lectio Divina - Étude Biblique Premium</title>
     <style>
         :root {
-            /* Light Mode (Défaut) */
-            --primary: #4f46e5;
-            --primary-dark: #4338ca;
-            --secondary: #ec4899;
-            --bg-body: #f8fafc;
-            --bg-surface: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --radius: 16px;
-            --font-size-base: 18px;
-            --line-height: 1.6;
-            --max-width-content: 700px;
+            /* Palette Premium - Mode Clair */
+            --bg-body: #FBFBFA; /* Blanc cassé littéraire */
+            --bg-card: #FFFFFF;
+            --text-main: #1A1A1A; /* Charcoal */
+            --text-muted: #525252;
+            --primary: #1E3A8A; /* Bleu Nuit Profond */
+            --primary-light: #3B82F6;
+            --accent: #475569; /* Ardoise doux */
+            --border: #E5E7EB;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            --radius: 12px;
+            --font-stack: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         [data-theme="dark"] {
-            /* Dark Mode (Bleu Nuit / Anthracite) */
-            --primary: #818cf8;
-            --primary-dark: #6366f1;
-            --secondary: #f472b6;
-            --bg-body: #0f172a; /* Bleu nuit très sombre */
-            --bg-surface: #1e293b; /* Anthracite */
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
+            /* Palette Premium - Mode Sombre */
+            --bg-body: #0F172A; /* Bleu nuit abyssal */
+            --bg-card: #1E293B; /* Gris bleuté légèrement plus clair */
+            --text-main: #E2E8F0; /* Blanc doux grisé */
+            --text-muted: #94A3B8;
+            --primary: #60A5FA; /* Bleu plus lumineux pour le contraste */
+            --primary-light: #93C5FD;
+            --accent: #CBD5E1;
             --border: #334155;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-stack); transition: background-color 0.3s ease, color 0.3s ease; }
         
         body { 
             background: var(--bg-body); 
@@ -43,33 +41,30 @@
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
+            line-height: 1.6;
         }
 
         /* Header */
         header { 
-            background: var(--bg-surface); 
+            background: var(--bg-card); 
             padding: 1rem 2rem; 
-            box-shadow: var(--shadow); 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
             position: sticky; 
             top: 0; 
             z-index: 100; 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-bottom: 1px solid var(--border);
         }
-        
-        .header-left { display: flex; align-items: center; gap: 1.5rem; }
-        .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.4rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.6rem; letter-spacing: -0.02em; }
         
         .streak-counter { 
-            display: flex; align-items: center; gap: 0.5rem; 
-            background: rgba(254, 243, 199, 0.2); 
-            color: var(--text-main); 
+            display: flex; align-items: center; gap: 0.6rem; 
+            background: rgba(79, 70, 229, 0.1); 
+            color: var(--primary); 
             padding: 0.4rem 1rem; 
             border-radius: 20px; 
             font-weight: 600; 
             font-size: 0.9rem;
-            border: 1px solid var(--border);
         }
 
         /* Theme Toggle */
@@ -80,65 +75,58 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
+            cursor: pointer;
+            margin-left: 1rem;
         }
         .theme-toggle:hover { background: var(--border); }
 
         /* Main Content */
-        main { flex: 1; max-width: 1200px; margin: 2rem auto; padding: 0 1rem; width: 100%; }
-        .dashboard { display: grid; grid-template-columns: 1fr 350px; gap: 2rem; }
-        
-        @media (max-width: 900px) { 
-            .dashboard { grid-template-columns: 1fr; } 
-            header { flex-direction: column; gap: 1rem; }
-            .header-left { flex-direction: column; gap: 1rem; width: 100%; }
-            .theme-toggle { position: absolute; top: 1rem; right: 1rem; }
-        }
+        main { flex: 1; max-width: 1200px; margin: 2.5rem auto; padding: 0 1.5rem; width: 100%; }
+        .dashboard { display: grid; grid-template-columns: 1fr 340px; gap: 2.5rem; }
+        @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; } }
 
         /* Cards */
         .card { 
-            background: var(--bg-surface); 
+            background: var(--bg-card); 
             border-radius: var(--radius); 
             padding: 2rem; 
             box-shadow: var(--shadow); 
-            margin-bottom: 1.5rem; 
-            transition: transform 0.2s; 
+            margin-bottom: 2rem; 
+            border: 1px solid var(--border);
         }
-        .card:hover { transform: translateY(-2px); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
-        .card-title { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .card-title { font-size: 1.25rem; font-weight: 600; color: var(--text-main); letter-spacing: -0.01em; }
 
         /* Tabs System */
-        .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; overflow-x: auto; }
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0; overflow-x: auto; }
         .tab-btn { 
-            padding: 0.75rem 1.25rem; 
+            padding: 0.8rem 1.2rem; 
             border: none; 
             background: transparent; 
             color: var(--text-muted); 
-            font-weight: 600; 
+            font-weight: 500; 
             cursor: pointer; 
             border-radius: 8px 8px 0 0; 
             transition: all 0.2s; 
-            white-space: nowrap; 
+            white-space: nowrap;
             font-size: 0.95rem;
         }
         .tab-btn:hover { color: var(--primary); background: rgba(79, 70, 229, 0.05); }
-        .tab-btn.active { background: var(--primary); color: white; }
+        .tab-btn.active { color: var(--primary); background: rgba(79, 70, 229, 0.08); font-weight: 600; border-bottom: 2px solid var(--primary); }
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Timer Circular */
         .timer-container { display: flex; flex-direction: column; align-items: center; padding: 1rem; }
         .timer-circle { width: 220px; height: 220px; position: relative; margin-bottom: 2rem; }
         .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-        .timer-bg { fill: none; stroke: var(--border); stroke-width: 8; }
-        .timer-progress { fill: none; stroke: var(--primary); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 628; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }
-        .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; font-weight: 700; color: var(--text-main); font-variant-numeric: tabular-nums; }
+        .timer-bg { fill: none; stroke: var(--border); stroke-width: 6; }
+        .timer-progress { fill: none; stroke: var(--primary); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 628; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }
+        .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.8rem; font-weight: 700; color: var(--text-main); font-variant-numeric: tabular-nums; }
         .timer-controls { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
         
         .btn { 
@@ -150,125 +138,130 @@
             transition: all 0.2s; 
             display: flex; 
             align-items: center; 
-            gap: 0.5rem; 
-            font-size: 1rem;
+            gap: 0.6rem; 
+            font-size: 0.95rem;
         }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.39); }
-        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
-        .btn-secondary { background: var(--bg-surface); color: var(--text-main); border: 1px solid var(--border); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(30, 58, 138, 0.3); }
+        .btn-secondary { background: transparent; color: var(--text-main); border: 1px solid var(--border); }
         .btn-secondary:hover { background: var(--border); }
         
-        .mode-selector { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center; background: var(--bg-body); padding: 0.3rem; border-radius: 25px; width: fit-content; margin-left: auto; margin-right: auto; }
-        .mode-btn { padding: 0.5rem 1.2rem; border: none; background: transparent; color: var(--text-muted); border-radius: 20px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; font-weight: 600; }
-        .mode-btn.active { background: var(--bg-surface); color: var(--primary); shadow: var(--shadow); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .mode-selector { display: flex; gap: 0.5rem; margin-bottom: 2rem; justify-content: center; background: var(--bg-body); padding: 0.3rem; border-radius: 12px; width: fit-content; margin-left: auto; margin-right: auto; }
+        .mode-btn { padding: 0.5rem 1.2rem; border: none; background: transparent; color: var(--text-muted); border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; }
+        .mode-btn.active { background: white; color: var(--primary); shadow: 0 2px 8px rgba(0,0,0,0.1); font-weight: 600; }
+        [data-theme="dark"] .mode-btn.active { background: var(--primary); color: white; }
 
-        /* Analysis & Reading Typography Improvements */
+        /* Analysis Sections - Typographie Optimisée */
         .analysis-content { 
-            line-height: var(--line-height); 
+            line-height: 1.7; 
             color: var(--text-main); 
-            font-size: var(--font-size-base);
-            max-width: var(--max-width-content);
-            margin: 0 auto;
+            font-size: 17px; 
+            max-width: 720px; 
+            margin: 0 auto; 
             text-align: justify;
         }
-        
-        /* Markdown Styles Generated */
-        .analysis-content h1, .analysis-content h2, .analysis-content h3 { 
-            color: var(--primary); 
-            margin: 1.8rem 0 0.8rem; 
-            font-weight: 700; 
+        .analysis-content h1, .analysis-content h2, .analysis-content h3, .analysis-content h4 {
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
             line-height: 1.3;
         }
-        .analysis-content h1 { font-size: 1.6em; }
-        .analysis-content h2 { font-size: 1.4em; }
-        .analysis-content h3 { font-size: 1.2em; }
-        
+        .analysis-content h1 { font-size: 1.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        .analysis-content h2 { font-size: 1.5rem; }
+        .analysis-content h3 { font-size: 1.3rem; }
+        .analysis-content h4 { font-size: 1.1rem; font-weight: 600; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.05em; }
         .analysis-content p { margin-bottom: 1.2rem; }
-        .analysis-content strong { color: var(--primary-dark); font-weight: 700; }
-        .analysis-content ul, .analysis-content ol { margin-bottom: 1.2rem; padding-left: 1.5rem; }
+        .analysis-content strong { color: var(--primary); font-weight: 600; }
+        .analysis-content ul { margin-bottom: 1.2rem; padding-left: 1.5rem; }
         .analysis-content li { margin-bottom: 0.5rem; }
+        
+        /* Liens bibliques dynamiques */
+        .bible-link {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px dashed var(--primary-light);
+            transition: all 0.2s;
+        }
+        .bible-link:hover {
+            color: var(--primary);
+            border-bottom-style: solid;
+            background: rgba(79, 70, 229, 0.1);
+        }
 
-        /* Loading Spinner & States */
-        .loading-container { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 3rem 1rem; 
-            color: var(--text-muted); 
-            text-align: center;
+        .loading-state { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            padding: 3rem; color: var(--text-muted); text-align: center;
         }
         .spinner { 
-            width: 45px; 
-            height: 45px; 
-            border: 4px solid var(--border); 
+            width: 32px; height: 32px; 
+            border: 3px solid var(--border); 
             border-top-color: var(--primary); 
             border-radius: 50%; 
-            animation: spin 1s linear infinite; 
-            margin-bottom: 1.5rem; 
+            animation: spin 0.8s linear infinite; 
+            margin-bottom: 1rem; 
         }
-        .loading-text { font-size: 1.1rem; font-style: italic; animation: pulse 1.5s infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
         /* Bible Search Section */
-        .bible-search-container { display: flex; flex-direction: column; gap: 1rem; max-width: var(--max-width-content); margin: 0 auto; }
-        .search-box { display: flex; gap: 0.5rem; }
+        .bible-search-container { display: flex; flex-direction: column; gap: 1.5rem; max-width: 720px; margin: 0 auto; }
+        .search-box { display: flex; gap: 0.8rem; }
         .search-input { 
-            flex: 1; 
-            padding: 0.8rem 1.2rem; 
+            flex: 1; padding: 0.9rem 1.2rem; 
             border: 1px solid var(--border); 
             border-radius: 10px; 
             font-size: 1rem; 
             outline: none; 
             background: var(--bg-body);
             color: var(--text-main);
-            transition: border-color 0.2s; 
+            transition: border-color 0.2s;
         }
-        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
         
         .book-selector { 
-            padding: 0.8rem; 
+            padding: 0.9rem; 
             border: 1px solid var(--border); 
             border-radius: 10px; 
-            background: var(--bg-surface); 
+            background: var(--bg-body); 
             color: var(--text-main);
             font-size: 1rem; 
             width: 100%; 
-            margin-bottom: 1rem; 
+            cursor: pointer;
         }
-        
-        .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 0.6rem; margin-top: 1rem; }
+        .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 0.6rem; margin-top: 1rem; }
         .chapter-btn { 
             padding: 0.6rem; 
             border: 1px solid var(--border); 
-            background: var(--bg-surface); 
+            background: var(--bg-card); 
             color: var(--text-main);
             border-radius: 8px; 
             cursor: pointer; 
             text-align: center; 
+            font-size: 0.9rem;
             transition: all 0.2s; 
-            font-weight: 500;
         }
-        .chapter-btn:hover, .chapter-btn.active { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); }
+        .chapter-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .chapter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         
         .bible-text-display { 
-            margin-top: 1.5rem; 
-            padding: 2rem; 
+            margin-top: 2rem; padding: 2rem; 
             background: var(--bg-body); 
             border-radius: 12px; 
-            border-left: 5px solid var(--primary); 
+            border-left: 4px solid var(--primary); 
             white-space: pre-wrap; 
             line-height: 1.7;
-            font-size: 1.05rem;
+            font-size: 17px;
             color: var(--text-main);
         }
 
-        /* Responsive Text adjustments */
+        /* Responsive */
         @media (max-width: 600px) {
+            .header-content { flex-direction: column; gap: 1rem; }
             .timer-circle { width: 180px; height: 180px; }
             .timer-text { font-size: 2.2rem; }
-            .analysis-content { font-size: 16px; }
+            .tabs { gap: 0.2rem; }
+            .tab-btn { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
             .search-box { flex-direction: column; }
             .btn { width: 100%; justify-content: center; }
         }
@@ -276,25 +269,26 @@
 </head>
 <body>
     <header>
-        <div class="header-left">
+        <div class="header-content">
             <div class="logo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                 </svg>
                 Lectio Divina
             </div>
-            <div class="streak-counter">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3.3.9.8 1.8 1.5 2.8z"/>
-                </svg>
-                <span id="streak-count">0 jour</span>
+            <div style="display:flex; align-items:center;">
+                <div class="streak-counter">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3.3.9.8 1.8 1.5 2.8z"/>
+                    </svg>
+                    <span id="streak-count">0 jour</span>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le mode sombre">
+                    <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
             </div>
         </div>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le mode sombre">
-            <!-- Icon will be swapped by JS -->
-            <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-        </button>
     </header>
 
     <main>
@@ -323,20 +317,20 @@
                         
                         <div class="timer-controls">
                             <button class="btn btn-primary" id="start-btn">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                                 </svg>
                                 Démarrer
                             </button>
                             <button class="btn btn-secondary" id="pause-btn" disabled>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="6" y="4" width="4" height="16"></rect>
                                     <rect x="14" y="4" width="4" height="16"></rect>
                                 </svg>
                                 Pause
                             </button>
                             <button class="btn btn-secondary" id="reset-btn">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M23 4v6h-6"></path>
                                     <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
                                 </svg>
@@ -357,68 +351,97 @@
 
                     <!-- Theological Tab -->
                     <div class="tab-content active" id="theological">
+                        <div id="theological-loading" class="loading-state" style="display: none;">
+                            <div class="spinner"></div>
+                            <p id="theological-msg">L'intelligence artificielle étudie le verset...</p>
+                        </div>
                         <div id="theological-content" class="analysis-content">
-                            <p>Bienvenue dans votre espace d'étude. Cliquez ci-dessous pour générer une analyse approfondie.</p>
-                            <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('theological')">
-                                Générer l'analyse
-                            </button>
+                            <p>Cliquez sur "Générer" pour obtenir une analyse théologique approfondie du passage du jour.</p>
+                            <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('theological')">Générer l'analyse</button>
                         </div>
                     </div>
 
                     <!-- Meditative Tab -->
                     <div class="tab-content" id="meditative">
+                        <div id="meditative-loading" class="loading-state" style="display: none;">
+                            <div class="spinner"></div>
+                            <p id="meditative-msg">Préparation de la méditation guidée...</p>
+                        </div>
                         <div id="meditative-content" class="analysis-content">
-                            <p>Prêt à approfondir votre prière ? Générez une méditation guidée personnalisée.</p>
-                            <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('meditative')">
-                                Générer la méditation
-                            </button>
+                            <p>Découvrez une guidance spirituelle pour approfondir votre prière personnelle.</p>
+                            <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('meditative')">Générer la méditation</button>
                         </div>
                     </div>
 
                     <!-- Biblical Tab -->
                     <div class="tab-content" id="biblical">
+                        <div id="biblical-loading" class="loading-state" style="display: none;">
+                            <div class="spinner"></div>
+                            <p id="biblical-msg">Recherche du contexte biblique...</p>
+                        </div>
                         <div id="biblical-content" class="analysis-content">
-                            <p>Découvrez les richesses historiques et littéraires du texte.</p>
-                            <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('biblical')">
-                                Générer le contexte
-                            </button>
+                            <p>Explorez les liens avec l'Ancien et le Nouveau Testament.</p>
+                            <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('biblical')">Générer le contexte</button>
                         </div>
                     </div>
 
                     <!-- Bible Search Tab -->
                     <div class="tab-content" id="bible">
                         <div class="bible-search-container">
-                            <div class="search-box">
-                                <input type="text" id="bible-search-input" class="search-input" placeholder="Référence (ex: Jean 3:16)...">
-                                <button class="btn btn-primary" onclick="searchBible()">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="11" cy="11" r="8"></circle>
-                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                    </svg>
-                                    Chercher
-                                </button>
-                            </div>
-
-                            <select id="book-select" class="book-selector" onchange="loadChapters()">
-                                <option value="">Sélectionner un livre...</option>
-                                <!-- Rempli par JS -->
-                            </select>
-
-                            <div id="chapter-container" style="display: none;">
-                                <h3 style="margin-bottom: 0.5rem; color: var(--primary); font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">Chapitres</h3>
-                                <div id="chapter-grid" class="chapter-grid"></div>
-                            </div>
-
-                            <div id="bible-result" class="bible-text-display" style="display: none;">
-                                <h4 id="result-reference" style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;"></h4>
-                                <div id="result-loader" class="loading-container" style="padding: 1rem; display:none;">
-                                    <div class="spinner" style="width:30px; height:30px; border-width:3px; margin-bottom:0.5rem;"></div>
-                                    <span class="loading-text">Récupération du texte sacré...</span>
+                            <!-- Recherche par mot clé (Définition) -->
+                            <div style="background: var(--bg-body); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                                <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.1rem;">Dictionnaire Théologique</h3>
+                                <div class="search-box">
+                                    <input type="text" id="definition-input" class="search-input" placeholder="Ex: Grâce, Rédemption, Amour...">
+                                    <button class="btn btn-primary" onclick="searchDefinition()">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
+                                        Chercher le sens
+                                    </button>
                                 </div>
-                                <p id="result-text" style="white-space: pre-wrap;"></p>
+                                <div id="definition-result" class="bible-text-display" style="display: none;"></div>
+                                <div id="definition-loading" class="loading-state" style="display: none; padding: 1rem;">
+                                    <div class="spinner" style="width: 24px; height: 24px; border-width: 2px;"></div>
+                                    <span style="font-size: 0.9rem">Recherche de la définition en cours...</span>
+                                </div>
                             </div>
-                            
-                            <div id="bible-error" style="color: #ef4444; display: none; margin-top: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2);"></div>
+
+                            <!-- Recherche par passage -->
+                            <div style="margin-top: 1rem;">
+                                <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.1rem;">Lire un passage</h3>
+                                <div class="search-box">
+                                    <input type="text" id="bible-search-input" class="search-input" placeholder="Ex: Jean 3:16">
+                                    <button class="btn btn-primary" onclick="searchBiblePassage()">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
+                                        Lire
+                                    </button>
+                                </div>
+
+                                <select id="book-select" class="book-selector" onchange="loadChapters()" style="margin-top: 1rem;">
+                                    <option value="">Sélectionner un livre...</option>
+                                </select>
+
+                                <div id="chapter-container" style="display: none;">
+                                    <h4 style="margin: 1rem 0 0.5rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">Chapitres</h4>
+                                    <div id="chapter-grid" class="chapter-grid"></div>
+                                </div>
+
+                                <div id="bible-result" class="bible-text-display" style="display: none;">
+                                    <h4 id="result-reference" style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;"></h4>
+                                    <div id="result-loader" class="loading-state" style="padding: 1rem; display:none;">
+                                        <div class="spinner" style="width:24px; height:24px; border-width:2px;"></div>
+                                        <span style="font-size:0.9rem">Récupération du texte via Mistral...</span>
+                                    </div>
+                                    <p id="result-text"></p>
+                                </div>
+                                
+                                <div id="bible-error" style="color: #ef4444; display: none; margin-top: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -431,7 +454,7 @@
                         <h3 class="card-title">Passage du Jour</h3>
                     </div>
                     <div id="daily-passage" style="font-size: 1.05rem; line-height: 1.6;">
-                        <p style="font-style: italic; color: var(--primary); margin-bottom: 0.5rem; font-weight: 600;">Jean 3:16</p>
+                        <p style="font-style: italic; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 500;">Jean 3:16</p>
                         <p>"Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."</p>
                     </div>
                 </div>
@@ -440,15 +463,15 @@
                     <div class="card-header">
                         <h3 class="card-title">Dimensions</h3>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-                        <div style="padding: 0.6rem; background: rgba(79, 70, 229, 0.1); border-radius: 8px; font-size: 0.85rem; color: var(--text-main);">Amour divin</div>
-                        <div style="padding: 0.6rem; background: rgba(236, 72, 153, 0.1); border-radius: 8px; font-size: 0.85rem; color: var(--text-main);">Grâce</div>
-                        <div style="padding: 0.6rem; background: rgba(34, 197, 94, 0.1); border-radius: 8px; font-size: 0.85rem; color: var(--text-main);">Salut</div>
-                        <div style="padding: 0.6rem; background: rgba(168, 85, 247, 0.1); border-radius: 8px; font-size: 0.85rem; color: var(--text-main);">Foi</div>
-                        <div style="padding: 0.6rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px; font-size: 0.85rem; color: var(--text-main);">Sacrifice</div>
-                        <div style="padding: 0.6rem; background: rgba(100, 116, 139, 0.1); border-radius: 8px; font-size: 0.85rem; color: var(--text-main);">Éternité</div>
-                        <div style="padding: 0.6rem; background: rgba(249, 115, 22, 0.1); border-radius: 8px; font-size: 0.85rem; color: var(--text-main);">Rédemption</div>
-                        <div style="padding: 0.6rem; background: rgba(59, 130, 246, 0.1); border-radius: 8px; font-size: 0.85rem; color: var(--text-main);">Espérance</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
+                        <div style="padding: 0.6rem; background: rgba(79, 70, 229, 0.08); border-radius: 8px; font-size: 0.85rem; color: var(--primary); font-weight: 500;">Amour divin</div>
+                        <div style="padding: 0.6rem; background: rgba(245, 158, 11, 0.08); border-radius: 8px; font-size: 0.85rem; color: #b45309; font-weight: 500;">Grâce</div>
+                        <div style="padding: 0.6rem; background: rgba(16, 185, 129, 0.08); border-radius: 8px; font-size: 0.85rem; color: #047857; font-weight: 500;">Salut</div>
+                        <div style="padding: 0.6rem; background: rgba(139, 92, 246, 0.08); border-radius: 8px; font-size: 0.85rem; color: #6d28d9; font-weight: 500;">Foi</div>
+                        <div style="padding: 0.6rem; background: rgba(239, 68, 68, 0.08); border-radius: 8px; font-size: 0.85rem; color: #b91c1c; font-weight: 500;">Sacrifice</div>
+                        <div style="padding: 0.6rem; background: rgba(107, 114, 128, 0.08); border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Éternité</div>
+                        <div style="padding: 0.6rem; background: rgba(249, 115, 22, 0.08); border-radius: 8px; font-size: 0.85rem; color: #c2410c; font-weight: 500;">Rédemption</div>
+                        <div style="padding: 0.6rem; background: rgba(59, 130, 246, 0.08); border-radius: 8px; font-size: 0.85rem; color: #1d4ed8; font-weight: 500;">Espérance</div>
                     </div>
                 </div>
             </div>
@@ -499,6 +522,27 @@
             { name: "Apocalypse", chapters: 22 }
         ];
 
+        // Mapping Français -> Anglais pour les URLs saintebible.com
+        const bookMap = {
+            "genèse": "genesis", "exode": "exodus", "lévitique": "leviticus", "nombres": "numbers",
+            "deutéronome": "deuteronomy", "josué": "joshua", "juges": "judges", "ruth": "ruth",
+            "1 samuel": "1samuel", "2 samuel": "2samuel", "1 rois": "1kings", "2 rois": "2kings",
+            "1 chroniques": "1chronicles", "2 chroniques": "2chronicles", "esdras": "ezra", "néhémie": "nehemiah",
+            "esther": "esther", "job": "job", "psaumes": "psalms", "proverbes": "proverbs",
+            "ecclésiaste": "ecclesiastes", "cantique": "songofsolomon", "ésaïe": "isaiah", "jérémie": "jeremiah",
+            "lamentations": "lamentations", "ézéchiel": "ezekiel", "daniel": "daniel", "osée": "hosea",
+            "joël": "joel", "amos": "amos", "abdias": "obadiah", "jonas": "jonah",
+            "michee": "micah", "nahum": "nahum", "habacuc": "habakkuk", "sophonie": "zephaniah",
+            "aggée": "haggai", "zacharie": "zechariah", "malachie": "malachi",
+            "matthieu": "matthew", "marc": "mark", "luc": "luke", "jean": "john",
+            "actes": "acts", "romains": "romans", "1 corinthiens": "1corinthians", "2 corinthiens": "2corinthians",
+            "galates": "galatians", "éphésiens": "ephesians", "philippiens": "philippians", "colossiens": "colossians",
+            "1 thessaloniciens": "1thessalonians", "2 thessaloniciens": "2thessalonians", "1 timothée": "1timothy", "2 timothée": "2timothy",
+            "tite": "titus", "philémon": "philemon", "hébreux": "hebrews", "jacques": "james",
+            "1 pierre": "1peter", "2 pierre": "2peter", "1 jean": "1john", "2 jean": "2john",
+            "3 jean": "3john", "jude": "jude", "apocalypse": "revelation"
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
             initTimer();
             initTabs();
@@ -507,35 +551,34 @@
             initTheme();
         });
 
-        // --- Theme Logic (Dark/Light) ---
+        // --- Theme Logic ---
         function initTheme() {
-            const toggleBtn = document.getElementById('theme-toggle');
-            const iconMoon = document.getElementById('icon-moon');
-            const iconSun = document.getElementById('icon-sun');
-            const html = document.documentElement;
+            const toggle = document.getElementById('theme-toggle');
+            const sunIcon = document.getElementById('icon-sun');
+            const moonIcon = document.getElementById('icon-moon');
+            const savedTheme = localStorage.getItem('theme') || 'light';
             
-            // Check local storage or system preference
-            const savedTheme = localStorage.getItem('theme');
-            const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            
-            if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
-                html.setAttribute('data-theme', 'dark');
-                iconMoon.style.display = 'none';
-                iconSun.style.display = 'block';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            } else {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
             }
 
-            toggleBtn.addEventListener('click', () => {
-                const currentTheme = html.getAttribute('data-theme');
-                if (currentTheme === 'dark') {
-                    html.removeAttribute('data-theme');
+            toggle.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                if (current === 'dark') {
+                    document.documentElement.removeAttribute('data-theme');
                     localStorage.setItem('theme', 'light');
-                    iconMoon.style.display = 'block';
-                    iconSun.style.display = 'none';
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
                 } else {
-                    html.setAttribute('data-theme', 'dark');
+                    document.documentElement.setAttribute('data-theme', 'dark');
                     localStorage.setItem('theme', 'dark');
-                    iconMoon.style.display = 'none';
-                    iconSun.style.display = 'block';
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
                 }
             });
         }
@@ -593,9 +636,7 @@
                         isRunning = false;
                         startBtn.disabled = false;
                         pauseBtn.disabled = true;
-                        // Simple notification
-                        if(Notification.permission === "granted") new Notification("Temps écoulé");
-                        else alert("Temps de méditation terminé !");
+                        alert("Temps de méditation terminé !");
                         incrementStreak();
                     }
                 }, 1000);
@@ -606,7 +647,7 @@
                 clearInterval(timerInterval);
                 isRunning = false;
                 startBtn.disabled = false;
-                startBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Reprendre`;
+                startBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Reprendre`;
                 pauseBtn.disabled = true;
             });
 
@@ -618,7 +659,7 @@
                 setProgress(100);
                 startBtn.disabled = false;
                 pauseBtn.disabled = true;
-                startBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Démarrer`;
+                startBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Démarrer`;
             });
         }
 
@@ -637,54 +678,75 @@
             });
         }
 
-        // --- Markdown Parser (Lightweight) ---
+        // --- Markdown Parser & Link Converter ---
         function parseMarkdown(text) {
             if (!text) return "";
+            
             let html = text
-                // Headers
+                // Échapper le HTML de base pour éviter les injections
+                .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                // Titres
+                .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
                 .replace(/^### (.*$)/gim, '<h3>$1</h3>')
                 .replace(/^## (.*$)/gim, '<h2>$1</h2>')
                 .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-                // Bold
-                .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-                // Italic
-                .replace(/\*(.*)\*/gim, '<em>$1</em>')
-                // Line breaks
-                .replace(/\n$/gim, '<br />')
-                // Lists (simple ul)
-                .replace(/^\s*[-*]\s+(.*)/gim, '<li>$1</li>');
+                // Gras et Italique
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                // Listes
+                .replace(/^\- (.*$)/gim, '<li>$1</li>')
+                .replace(/^\d+\. (.*$)/gim, '<li>$1</li>')
+                // Paragraphes (double saut de ligne)
+                .replace(/\n\n/g, '</p><p>');
             
-            // Wrap consecutive lis in ul
-            html = html.replace(/(<li>.*<\/li>)/gim, '<ul>$1</ul>');
-            // Clean up multiple ul tags if they got split
-            html = html.replace(/<\/ul>\s*<ul>/gim, '');
+            html = `<p>${html}</p>`;
             
-            // Paragraphs (double newline)
-            html = html.replace(/\n\n/gim, '</p><p>');
-            if (!html.startsWith('<')) html = '<p>' + html;
-            if (!html.endsWith('</p>')) html = html + '</p>';
-            
+            // Nettoyage des balises vides créées par les sauts de ligne
+            html = html.replace(/<p><\/p>/g, '');
+            html = html.replace(/<p>(<h[1-4]>)/g, '$1');
+            html = html.replace(/(<\/h[1-4]>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<li>)/g, '<ul>$1');
+            html = html.replace(/(<\/li>)<\/p>/g, '$1</ul>');
+
             return html;
         }
 
-        // --- Analysis Generation Logic ---
+        function makeBibleLinks(html) {
+            // Regex pour détecter Livre Chapitre:Verset (ex: Jean 3:16, 1 Jean 2:1, Genèse 1:1)
+            const regex = /\b((?:1|2|3)\s)?([A-Za-zÀ-ÿ]+)\s(\d+):(\d+)\b/gi;
+            
+            return html.replace(regex, (match, prefix, book, chapter, verse) => {
+                const fullName = (prefix ? prefix.trim() + " " : "") + book;
+                const key = fullName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ""); // Normaliser accents
+                
+                const urlSlug = bookMap[key] || key.replace(/\s+/g, '');
+                
+                if (urlSlug) {
+                    return `<a href="https://saintebible.com/${urlSlug}/${chapter}-${verse}.htm" target="_blank" rel="noopener noreferrer" class="bible-link">${match}</a>`;
+                }
+                return match;
+            });
+        }
+
+        // --- Analysis Generation ---
         async function generateAnalysis(type) {
             const contentDiv = document.getElementById(`${type}-content`);
+            const loadingDiv = document.getElementById(`${type}-loading`);
+            const msgP = document.getElementById(`${type}-msg`);
             
-            // UI Update: Show Loading State
-            const loadingHTML = `
-                <div class="loading-container">
-                    <div class="spinner"></div>
-                    <p class="loading-text">L'intelligence artificielle étudie le verset...</p>
-                </div>
-            `;
-            contentDiv.innerHTML = loadingHTML;
+            contentDiv.style.display = 'none';
+            loadingDiv.style.display = 'flex';
+            
+            // Messages contextuels
+            if(type === 'theological') msgP.textContent = "L'intelligence artificielle étudie le verset...";
+            if(type === 'meditative') msgP.textContent = "Préparation de la méditation guidée...";
+            if(type === 'biblical') msgP.textContent = "Recherche du contexte biblique...";
 
             let prompt = "";
             const dailyVerse = "Jean 3:16"; 
 
             if (type === 'theological') {
-                prompt = `Agis comme un théologien expert. Analyse le passage suivant : "${dailyVerse}". Fournis une analyse détaillée d'environ 500 mots maximum. Couvre les aspects doctrinaux, les implications pour la foi chrétienne et les dimensions théologiques clés. Structure ta réponse avec des titres clairs (utilisez # pour les titres).`;
+                prompt = `Agis comme un théologien expert. Analyse le passage suivant : "${dailyVerse}". Fournis une analyse détaillée d'environ 500 mots maximum. Couvre les aspects doctrinaux, les implications pour la foi chrétienne et les dimensions théologiques clés. Structure ta réponse avec des titres clairs (#, ##, ###).`;
             } else if (type === 'meditative') {
                 prompt = `Agis comme un guide spirituel expérimenté. Propose une méditation guidée basée sur : "${dailyVerse}". Le texte doit faire environ 500 mots maximum. Inclus des questions de réflexion personnelle, des pistes de prière et des applications concrètes. Ton ton doit être doux et invitant. Utilise des titres pour structurer.`;
             } else if (type === 'biblical') {
@@ -701,16 +763,58 @@
                 if (!response.ok) throw new Error('Erreur API');
                 const data = await response.json();
                 
-                // Parse Markdown to HTML
-                const formattedText = parseMarkdown(data.result);
-                contentDiv.innerHTML = formattedText;
+                // Conversion Markdown + Liens Bibliques
+                let rawHtml = parseMarkdown(data.result);
+                let finalHtml = makeBibleLinks(rawHtml);
+                
+                contentDiv.innerHTML = finalHtml;
             } catch (error) {
-                contentDiv.innerHTML = `<p style="color: #ef4444; text-align:center;">Une erreur est survenue lors de la génération. Veuillez réessayer.</p>`;
+                contentDiv.innerHTML = `<p style="color: #ef4444;">Une erreur est survenue. Vérifiez que la fonction /api/analyze est déployée.</p>`;
                 console.error(error);
+            } finally {
+                loadingDiv.style.display = 'none';
+                contentDiv.style.display = 'block';
             }
         }
 
-        // --- Bible Logic ---
+        // --- Bible Definition Search (New Feature) ---
+        async function searchDefinition() {
+            const input = document.getElementById('definition-input');
+            const word = input.value.trim();
+            const resultDiv = document.getElementById('definition-result');
+            const loader = document.getElementById('definition-loading');
+            const errorDiv = document.getElementById('bible-error'); // Reuse error div or create specific one
+            
+            if (!word) return;
+
+            resultDiv.style.display = 'none';
+            loader.style.display = 'flex';
+
+            const prompt = `Agis comme un dictionnaire théologique et biblique expert. Donne une définition claire, le sens spirituel/théologique et un exemple d'usage dans la Bible pour le mot suivant : "${word}". Structure ta réponse avec des titres si nécessaire.`;
+
+            try {
+                const response = await fetch(`/api/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt, type: 'definition' })
+                });
+
+                if (!response.ok) throw new Error('Erreur API');
+                const data = await response.json();
+
+                let rawHtml = parseMarkdown(data.result);
+                let finalHtml = makeBibleLinks(rawHtml);
+
+                resultDiv.innerHTML = finalHtml;
+                resultDiv.style.display = 'block';
+            } catch (err) {
+                alert("Erreur lors de la recherche : " + err.message);
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        // --- Bible Passage Logic ---
         function initBibleSelector() {
             const select = document.getElementById('book-select');
             bibleBooks.forEach((book, index) => {
@@ -763,7 +867,7 @@
             resultDiv.style.display = 'block';
             errorDiv.style.display = 'none';
             textP.textContent = "";
-            loader.style.display = 'flex'; // Show spinner inside the box
+            loader.style.display = 'flex';
 
             try {
                 const response = await fetch(`/api/bible`, {
@@ -779,7 +883,9 @@
                 if(data.error) throw new Error(data.error);
 
                 refTitle.textContent = data.reference;
-                textP.textContent = data.text;
+                // Appliquer aussi les liens bibliques sur le texte brut si des références y apparaissent
+                let cleanText = data.text.replace(/\n/g, '<br>');
+                textP.innerHTML = makeBibleLinks(cleanText);
                 
             } catch (err) {
                 errorDiv.textContent = "Impossible de charger le texte : " + err.message;
@@ -791,7 +897,7 @@
             }
         }
 
-        async function searchBible() {
+        async function searchBiblePassage() {
             const input = document.getElementById('bible-search-input');
             const query = input.value.trim();
             const errorDiv = document.getElementById('bible-error');
@@ -831,7 +937,8 @@
                         if(data.error) throw new Error(data.error);
 
                         refTitle.textContent = data.reference;
-                        textP.textContent = data.text;
+                        let cleanText = data.text.replace(/\n/g, '<br>');
+                        textP.innerHTML = makeBibleLinks(cleanText);
                     } catch (err) {
                         errorDiv.textContent = "Erreur lors de la recherche : " + err.message;
                         errorDiv.style.display = 'block';
@@ -852,7 +959,7 @@
             }
         }
 
-        // --- Streak Logic (With Plural Fix) ---
+        // --- Streak Logic ---
         function loadStreak() {
             const streak = parseInt(localStorage.getItem('lectio_streak') || 0);
             const label = streak === 1 ? "jour" : "jours";
@@ -867,8 +974,6 @@
                 streak++;
                 localStorage.setItem('lectio_streak', streak);
                 localStorage.setItem('lectio_last_date', today);
-                
-                // Update UI immediately
                 const label = streak === 1 ? "jour" : "jours";
                 document.getElementById('streak-count').textContent = `${streak} ${label}`;
             }
