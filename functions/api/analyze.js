@@ -2,127 +2,112 @@
 
 export async function onRequest(context) {
   const { request, env } = context;
-  
-  // Récupération de la clé API depuis les variables d'environnement Cloudflare
-  const MISTRAL_API_KEY = env.MISTRAL_API_KEY;
+  const url = new URL(request.url);
 
-  // Définition des en-têtes CORS pour autoriser les requêtes depuis le navigateur
+  // 1. En-têtes CORS obligatoires pour TOUTES les réponses
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Custom-Header",
+    "Access-Control-Max-Age": "86400",
     "Content-Type": "application/json"
   };
 
-  // 1. GESTION IMPÉRATIVE DE LA PRÉ-VÉRIFICATION (OPTIONS)
-  // Le navigateur envoie cette requête avant le POST. Si on ne répond pas ici, erreur 405/403.
+  // 2. Gestion explicite de la pré-vérification OPTIONS
+  // C'est CE BLOC qui empêche l'erreur 405 du navigateur
   if (request.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, {
+      status: 204, // No Content est la réponse standard pour OPTIONS
+      headers: corsHeaders
+    });
   }
 
-  // 2. VÉRIFICATION DE LA MÉTHODE (Seul POST est autorisé pour l'analyse)
+  // 3. Refus strict de toute méthode autre que POST
   if (request.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Méthode non autorisée. Utilisez POST." }), {
+    return new Response(JSON.stringify({ 
+      error: "Method Not Allowed", 
+      message: "Cette endpoint accepte uniquement les requêtes POST.",
+      received_method: request.method 
+    }), {
       status: 405,
       headers: corsHeaders
     });
   }
 
-  // 3. VÉRIFICATION DE LA CLÉ API
+  // 4. Vérification de la clé API
+  const MISTRAL_API_KEY = env.MISTRAL_API_KEY;
   if (!MISTRAL_API_KEY) {
-    return new Response(JSON.stringify({ error: "Clé API Mistral manquante dans les variables Cloudflare (MISTRAL_API_KEY)." }), {
+    return new Response(JSON.stringify({ error: "Configuration manquante : MISTRAL_API_KEY non définie dans Cloudflare." }), {
       status: 500,
       headers: corsHeaders
     });
   }
 
   try {
-    // 4. PARSING DU CORPS DE LA REQUÊTE
-    let dataInput = {};
+    // 5. Parsing sécurisé du JSON
+    let body;
     try {
-      dataInput = await request.json();
+      body = await request.json();
     } catch (e) {
-      return new Response(JSON.stringify({ error: "Format JSON invalide dans la requête." }), {
+      return new Response(JSON.stringify({ error: "Corps de requête invalide (JSON attendu)." }), {
         status: 400,
         headers: corsHeaders
       });
     }
 
-    const { prompt, type, max_tokens: clientMaxTokens } = dataInput;
+    const { prompt, type, max_tokens: requestedMaxTokens } = body;
 
     if (!prompt) {
-      return new Response(JSON.stringify({ error: "Le champ 'prompt' est requis." }), {
+      return new Response(JSON.stringify({ error: "Le champ 'prompt' est obligatoire." }), {
         status: 400,
         headers: corsHeaders
       });
     }
 
-    // 5. CONSTRUCTION DU PROMPT SYSTÈME AVEC CONTRAINTE DE LONGUEUR FORTE
-    // C'est ici qu'on force les 300-400 mots minimum comme demandé.
-    const systemInstruction = `Tu es un théologien exégète et bibliste francophone de haut niveau. 
-    Tu rédiges des analyses détaillées, riches, historiquement précises et accessibles.
+    // 6. Construction du prompt système renforcé
+    const systemMsg = "Tu es un assistant théologique expert. Tes réponses sont structurées, profondes et bibliques. Tu rédiges un MINIMUM de 300 mots.";
     
-    ⚠️ CONTRAINTE DE LONGUEUR ABSOLUE ET PRIORITAIRE :
-    Ta réponse doit être EXTÊMEMENT DÉTAILLÉE. Tu dois rédiger un MINIMUM absolu de 300 à 400 mots.
-    Ne fais JAMAIS de résumé court. Développe rigoureusement chaque point, chaque argument, chaque nuance historique et théologique.
-    Si le sujet semble court, creuse les implications pratiques, les racines hébraïques/grecques, et le contexte culturel pour atteindre cet objectif.
-    Le texte doit être dense, nourri et structuré avec des paragraphes clairs.`;
-
-    // On ajoute une instruction utilisateur pour renforcer la contrainte si nécessaire
-    let finalUserPrompt = prompt;
-    if (!prompt.includes("MINIMUM")) {
-        finalUserPrompt += ` \n\n[CONTRAINE DE FORMAT OBLIGATOIRE] : Rédige un contenu très dense d'au moins 300 mots. Ne sois jamais superficiel.`;
-    }
-
-    // 6. APPEL À L'API MISTRAL
-    // Utilisation de max_tokens: 2500 pour laisser de la place au texte long
-    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+    // 7. Appel à Mistral
+    const mistralResponse = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${MISTRAL_API_KEY}`
+        "Authorization": `Bearer ${MISTRAL_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "mistral-large-latest", // Modèle performant pour le raisonnement théologique
+        model: "mistral-large-latest",
         messages: [
-          { role: "system", content: systemInstruction },
-          { role: "user", content: finalUserPrompt }
+          { role: "system", content: systemMsg },
+          { role: "user", content: prompt }
         ],
-        temperature: 0.6, // Équilibre créativité/rigueur
-        max_tokens: clientMaxTokens || 2500, // Priorité à la valeur du client, sinon 2500
-        top_p: 1
+        temperature: 0.6,
+        max_tokens: requestedMaxTokens || 2500
       })
     });
 
-    // 7. GESTION DES ERREURS DE L'API EXTERNE
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error(`Erreur Mistral API : ${response.status}`, errText);
-      throw new Error(`Erreur API Mistral (${response.status}) : ${errText.substring(0, 150)}`);
+    if (!mistralResponse.ok) {
+      const errText = await mistralResponse.text();
+      throw new Error(`Mistral API Error ${mistralResponse.status}: ${errText}`);
     }
 
-    const data = await response.json();
+    const data = await mistralResponse.json();
+    const content = data.choices?.[0]?.message?.content || "";
 
-    if (!data.choices || data.choices.length === 0 || !data.choices[0].message) {
-      throw new Error("Aucune réponse générée par l'IA (structure invalide).");
-    }
-
-    const analysisText = data.choices[0].message.content.trim();
-
-    // 8. RÉPONSE RÉUSSIE VERS LE FRONTEND
-    return new Response(JSON.stringify({ 
-      success: true, 
-      result: analysisText,
-      type: type,
-      wordCount: analysisText.split(/\s+/).length
+    // 8. Succès
+    return new Response(JSON.stringify({
+      success: true,
+      result: content,
+      type: type || "unknown"
     }), {
+      status: 200,
       headers: corsHeaders
     });
 
   } catch (error) {
-    console.error("Erreur interne analyze.js:", error);
-    return new Response(JSON.stringify({ 
-      error: error.message || "Une erreur inattendue est survenue lors de l'analyse." 
+    console.error("[analyze.js] Critical Error:", error);
+    return new Response(JSON.stringify({
+      error: "Internal Server Error",
+      details: error.message
     }), {
       status: 500,
       headers: corsHeaders
