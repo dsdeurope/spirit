@@ -14,13 +14,35 @@ export async function onRequestPost(context) {
   }
 
   try {
-    const { prompt, type } = await request.json();
+    const { prompt, type, durationMinutes } = await request.json();
 
     if (!prompt) {
       return new Response(JSON.stringify({ error: "Le prompt est requis" }), {
         status: 400,
         headers: { "Content-Type": "application/json" }
       });
+    }
+
+    // Calcul du nombre de mots cibles basé sur le temps (env. 130 mots/min)
+    // On ajoute un buffer pour s'assurer d'avoir assez de contenu dense
+    const targetWords = durationMinutes ? Math.max(350, Math.round(durationMinutes * 130)) : 400;
+    
+    // Construction du message système renforcé pour la longueur
+    const systemInstruction = `Tu es un assistant théologique et spirituel expert francophone. 
+    Tu réponds avec profondeur, clarté, bienveillance et une grande richesse de détails.
+    Tes analyses sont structurées, bibliques, historiques et pertinentes pour la vie chrétienne contemporaine.
+    
+    ⚠️ CONTRAINTE DE LONGUEUR ABSOLUE :
+    Ta réponse doit être extrêmement détaillée, approfondie et structurée. 
+    Tu dois rédiger un MINIMUM absolu de 300 à 400 mots pour ce contenu. 
+    Ne fais jamais de résumé court. Développe rigoureusement chaque point, chaque argument et chaque nuance.
+    Si le sujet semble court, creuse les implications théologiques, historiques et pratiques pour atteindre cet objectif.
+    Le texte doit être dense et nourri.`;
+
+    // Fusion du prompt utilisateur avec la contrainte de temps si présente
+    let finalUserPrompt = prompt;
+    if (durationMinutes) {
+      finalUserPrompt += ` \n\n(Note : Ce contenu est destiné à une méditation de ${durationMinutes} minute(s). Adapte la densité et la profondeur pour offrir une lecture riche correspondant à ce temps, sans jamais être superficiel.)`;
     }
 
     // Appel à l'API Mistral avec paramètres optimisés pour les longs textes
@@ -31,19 +53,19 @@ export async function onRequestPost(context) {
         "Authorization": `Bearer ${MISTRAL_API_KEY}`
       },
       body: JSON.stringify({
-        model: "mistral-small-latest", // Modèle équilibré pour la qualité et la longueur
+        model: "mistral-large-latest", // Modèle le plus capable pour suivre des instructions complexes de longueur
         messages: [
           {
             role: "system",
-            content: "Tu es un assistant théologique et spirituel expert. Tu réponds en français avec profondeur, clarté et bienveillance. Tes analyses sont structurées, bibliques et pertinentes pour la vie chrétienne contemporaine. Tu es capable de produire des contenus longs et détaillés sans te répéter."
+            content: systemInstruction
           },
           {
             role: "user",
-            content: prompt
+            content: finalUserPrompt
           }
         ],
-        temperature: 0.5, // Équilibre parfait entre créativité et stabilité structurelle
-        max_tokens: 3000, // Augmenté à 3000 pour permettre des analyses complètes de chapitres entiers sans coupure
+        temperature: 0.6, // Équilibre entre créativité et précision structurelle
+        max_tokens: 2500, // AUGMENTÉ : Espace suffisant pour 300-400 mots+ sans coupure
         top_p: 1
       })
     });
@@ -65,7 +87,8 @@ export async function onRequestPost(context) {
     return new Response(JSON.stringify({ 
       success: true, 
       result: analysisText,
-      type: type
+      type: type,
+      wordCountEstimate: analysisText.split(' ').length // Optionnel : retourne le compteur pour débogage
     }), {
       headers: { "Content-Type": "application/json" }
     });
