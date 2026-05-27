@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lectio Divina — Étude Sacrée</title>
+    <title>Lectio Divina — Étude Biblique Premium</title>
     
     <!-- Google Fonts: Playfair Display (Titres) & Inter (Corps) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,531 +12,389 @@
 
     <style>
         :root {
-            /* Palette Premium - Mode Clair (Style Papier Littéraire) */
-            --bg-site: #FDFBF7; /* Blanc Albâtre/Crème */
-            --bg-card: #FFFFFF; /* Blanc Pur pour contraste subtil */
-            --text-main: #1C1C1E; /* Noir doux Apple */
-            --text-muted: #6E6E73; /* Gris secondaire */
+            /* Palette Mode Clair - Style Éditorial */
+            --bg-site: #FDFBF7; /* Blanc crème/albâtre */
+            --bg-card: #FFFFFF;
+            --text-main: #1C1C1E;
+            --text-muted: #6E6E73;
             --accent: #1B2A4A; /* Bleu Indigo Profond */
-            --accent-light: #F0F4F8; /* Bleu-gris lavé */
-            --accent-text: #FFFFFF;
-            
+            --accent-light: #F0F4F8;
             --shadow-soft: 0 4px 20px rgba(27, 42, 74, 0.04);
-            --shadow-hover: 0 8px 30px rgba(27, 42, 74, 0.08);
-            
-            --radius-lg: 16px;
-            --radius-md: 10px;
-            --radius-sm: 6px;
-            
+            --radius: 16px;
             --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-            
-            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --font-sans: 'Inter', system-ui, sans-serif;
         }
 
         [data-theme="dark"] {
-            /* Palette Premium - Mode Sombre (Noir Mat & Lavande Douce) */
-            --bg-site: #0F0F11; /* Noir mat profond */
-            --bg-card: #161619; /* Gris anthracite très sombre */
-            --text-main: #E4E4E7; /* Blanc cassé zinc */
+            /* Palette Mode Sombre - Noir Mat */
+            --bg-site: #0F0F11;
+            --bg-card: #161619;
+            --text-main: #E4E4E7;
             --text-muted: #A1A1AA;
-            --accent: #818CF8; /* Violet/Indigo pastel doux */
-            --accent-light: #1E1E24;
-            --accent-text: #0F0F11;
-            
+            --accent: #818CF8; /* Violet/bleu pastel doux */
+            --accent-light: #27272A;
             --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.4);
-            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.6);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-sans); transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.4s ease, color 0.4s ease; }
         
         body { 
             background: var(--bg-site); 
             color: var(--text-main); 
             min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            line-height: 1.7;
+            font-family: var(--font-sans);
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
 
-        h1, h2, h3, h4, .logo, .streak-counter { font-family: var(--font-serif); }
+        h1, h2, h3, h4, .serif-font { font-family: var(--font-serif); }
 
-        /* --- LOCK SCREEN --- */
+        /* --- Écran de Verrouillage --- */
         #lock-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-site);
             z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            text-align: center; padding: 2rem;
         }
-        #lock-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        
-        .lock-content { text-align: center; max-width: 400px; padding: 2rem; }
-        .lock-title { font-size: 2.5rem; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 700; letter-spacing: -0.02em; }
-        .lock-subtitle { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; font-weight: 300; }
-        
-        .lock-input-group { position: relative; margin-bottom: 1.5rem; }
+        .lock-logo { font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem; }
+        .lock-title { font-size: 1.8rem; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 600; }
+        .lock-subtitle { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; }
         .lock-input {
-            width: 100%; padding: 1rem; text-align: center; font-size: 1.2rem; letter-spacing: 0.2em;
-            background: var(--bg-card); border: 1px solid transparent;
-            border-radius: var(--radius-md); color: var(--text-main);
-            box-shadow: var(--shadow-soft); outline: none;
+            padding: 1rem 1.5rem; font-size: 1.1rem; border: none; border-radius: var(--radius);
+            background: var(--bg-card); color: var(--text-main);
+            box-shadow: var(--shadow-soft); width: 100%; max-width: 320px; text-align: center;
+            outline: none; margin-bottom: 1.5rem;
             font-family: var(--font-sans);
         }
-        .lock-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); }
-        
+        .lock-input:focus { box-shadow: 0 0 0 2px var(--accent); }
         .lock-btn {
-            width: 100%; padding: 1rem; background: var(--accent); color: var(--accent-text);
-            border: none; border-radius: var(--radius-md); font-size: 1rem; font-weight: 600;
-            cursor: pointer; box-shadow: var(--shadow-soft);
-            font-family: var(--font-sans); letter-spacing: 0.02em;
+            padding: 1rem 2.5rem; font-size: 1rem; font-weight: 600; border: none; border-radius: var(--radius);
+            background: var(--accent); color: white; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(27, 42, 74, 0.2);
+            transition: transform 0.2s;
         }
-        .lock-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-        .lock-error { color: #EF4444; font-size: 0.9rem; margin-top: 1rem; min-height: 1.2rem; opacity: 0; transition: opacity 0.3s; }
-        .lock-error.visible { opacity: 1; }
+        .lock-btn:hover { transform: translateY(-2px); }
+        .lock-error { color: #EF4444; margin-top: 1rem; font-size: 0.9rem; display: none; }
 
-        /* --- HEADER --- */
+        /* --- Header --- */
         header { 
-            background: rgba(var(--bg-site), 0.8); backdrop-filter: blur(12px);
-            padding: 1.5rem 2rem; 
-            position: sticky; top: 0; z-index: 100; 
-            border-bottom: 1px solid transparent;
+            padding: 2rem 1.5rem; 
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        
-        .logo { 
-            font-size: 1.8rem; font-weight: 700; color: var(--text-main); 
-            display: flex; align-items: center; gap: 0.8rem; 
-            letter-spacing: -0.03em; font-style: italic;
-        }
-        .logo svg { stroke: var(--accent); }
-
-        .streak-badge { 
-            display: flex; align-items: center; gap: 0.6rem; 
-            background: var(--accent-light); 
-            color: var(--accent); 
-            padding: 0.5rem 1.2rem; 
-            border-radius: 50px; 
-            font-family: var(--font-sans);
-            font-weight: 500; font-size: 0.9rem;
-        }
-
+        .logo { font-size: 1.8rem; font-weight: 700; color: var(--accent); font-family: var(--font-serif); letter-spacing: -0.02em; }
         .theme-toggle {
-            background: transparent; border: none; color: var(--text-muted);
+            background: transparent; border: none; color: var(--text-main);
             width: 44px; height: 44px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; margin-left: 1rem;
-            transition: transform 0.3s, color 0.3s;
+            cursor: pointer; font-size: 1.2rem;
         }
-        .theme-toggle:hover { color: var(--accent); background: var(--accent-light); transform: rotate(15deg); }
+        .theme-toggle:hover { background: var(--accent-light); }
 
-        /* --- MAIN LAYOUT --- */
-        main { flex: 1; max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem; width: 100%; }
+        /* --- Main Layout --- */
+        main { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 4rem; }
         
-        .dashboard { display: grid; grid-template-columns: 1fr 320px; gap: 3rem; }
-        @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; gap: 2rem; } }
-
-        /* --- CARDS --- */
-        .card { 
-            background: var(--bg-card); 
-            border-radius: var(--radius-lg); 
-            padding: 2.5rem; 
-            box-shadow: var(--shadow-soft); 
-            margin-bottom: 2.5rem; 
-            border: none; /* No borders */
-            transition: transform 0.3s, box-shadow 0.3s;
+        .section-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 3rem; /* Augmenté de 20% */
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 2.5rem;
+            border: none;
         }
-        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+
+        .section-title {
+            font-size: 2rem; color: var(--text-main); margin-bottom: 2rem;
+            text-align: center; font-weight: 600;
+        }
+
+        /* --- Timer Section --- */
+        .timer-modes { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2.5rem; }
+        .mode-btn {
+            padding: 0.8rem 1.5rem; border: none; border-radius: var(--radius);
+            font-family: var(--font-sans); font-weight: 500; font-size: 0.95rem;
+            cursor: pointer; background: var(--accent-light); color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+        .mode-btn.active {
+            background: var(--accent); color: white;
+            box-shadow: 0 4px 12px rgba(27, 42, 74, 0.2);
+        }
+
+        .timer-display-container {
+            text-align: center; margin-bottom: 2.5rem; position: relative;
+        }
+        .timer-value {
+            font-size: 4.5rem; font-weight: 300; color: var(--text-main);
+            font-variant-numeric: tabular-nums; letter-spacing: -2px;
+            font-family: var(--font-serif);
+        }
+        .timer-controls { display: flex; justify-content: center; gap: 1.5rem; }
+        .control-btn {
+            padding: 0.8rem 2rem; border: none; border-radius: var(--radius);
+            font-weight: 600; font-size: 0.95rem; cursor: pointer;
+            background: transparent; color: var(--accent);
+            transition: all 0.2s;
+        }
+        .control-btn.primary {
+            background: var(--accent); color: white;
+            box-shadow: 0 4px 12px rgba(27, 42, 74, 0.2);
+        }
+        .control-btn:hover { transform: translateY(-2px); }
+        .control-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        /* --- Book Selector --- */
+        .book-selector-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;
+        }
+        @media (max-width: 600px) { .book-selector-grid { grid-template-columns: 1fr; } }
         
-        .card-header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 2rem; padding-bottom: 1.5rem; 
-            border-bottom: 1px solid var(--accent-light); 
+        .select-group label {
+            display: block; font-size: 0.85rem; color: var(--text-muted);
+            margin-bottom: 0.5rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;
         }
-        .card-title { font-size: 1.5rem; font-weight: 600; color: var(--text-main); letter-spacing: -0.02em; }
+        .custom-select {
+            width: 100%; padding: 1rem; border: none; border-radius: var(--radius);
+            background: var(--accent-light); color: var(--text-main);
+            font-size: 1rem; font-family: var(--font-sans); cursor: pointer;
+            outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236E6E73'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.2rem;
+        }
+        [data-theme="dark"] .custom-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23A1A1AA'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); }
 
-        /* --- CONTEXT SELECTOR (NEW) --- */
-        .context-selector {
-            display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 2rem;
-            background: var(--accent-light); padding: 0.5rem; border-radius: var(--radius-md);
-        }
-        .context-select {
-            background: var(--bg-card); border: none; padding: 0.8rem 1.2rem;
-            border-radius: var(--radius-sm); color: var(--text-main);
-            font-family: var(--font-sans); font-size: 0.95rem; font-weight: 500;
-            cursor: pointer; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        .context-select:focus { box-shadow: 0 0 0 2px var(--accent); }
-
-        /* --- TABS --- */
-        .tabs { display: flex; gap: 0.5rem; margin-bottom: 2.5rem; border-bottom: 1px solid var(--accent-light); padding-bottom: 0; overflow-x: auto; }
-        .tab-btn { 
-            padding: 0.8rem 1.5rem; border: none; background: transparent; 
+        /* --- Tabs --- */
+        .tabs { display: flex; gap: 2rem; border-bottom: 1px solid var(--accent-light); margin-bottom: 2.5rem; overflow-x: auto; }
+        .tab-btn {
+            padding: 1rem 0.5rem; border: none; background: transparent;
             color: var(--text-muted); font-family: var(--font-serif);
-            font-size: 1.1rem; font-style: italic; cursor: pointer; 
-            border-radius: var(--radius-md) var(--radius-md) 0 0; 
-            transition: all 0.3s; white-space: nowrap; opacity: 0.7;
+            font-size: 1.1rem; font-weight: 500; cursor: pointer;
+            position: relative; transition: color 0.3s;
+            white-space: nowrap;
         }
-        .tab-btn:hover { opacity: 1; color: var(--accent); background: rgba(0,0,0,0.02); }
-        .tab-btn.active { 
-            opacity: 1; color: var(--accent); 
-            background: var(--bg-card); 
-            font-weight: 600; font-style: normal;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
-            border-bottom: 2px solid var(--accent);
+        .tab-btn.active { color: var(--accent); font-weight: 700; }
+        .tab-btn.active::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; width: 100%;
+            height: 2px; background: var(--accent);
         }
-        
         .tab-content { display: none; animation: fadeIn 0.5s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- TIMER --- */
-        .timer-container { display: flex; flex-direction: column; align-items: center; padding: 1rem; }
-        .timer-circle { width: 240px; height: 240px; position: relative; margin-bottom: 2.5rem; }
-        .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-        .timer-bg { fill: none; stroke: var(--accent-light); stroke-width: 4; }
-        .timer-progress { fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 691; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }
-        .timer-text { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            font-size: 3.5rem; font-weight: 300; color: var(--text-main); 
-            font-variant-numeric: tabular-nums; font-family: var(--font-serif);
+        /* --- Content Area --- */
+        .content-area {
+            font-size: 1.05rem; line-height: 1.8; color: var(--text-main);
+            max-width: 720px; margin: 0 auto;
         }
-        
-        .timer-controls { display: flex; gap: 1.5rem; }
-        .btn-timer {
-            padding: 0.8rem 2rem; border: none; border-radius: 50px;
-            font-weight: 500; cursor: pointer; font-size: 0.95rem;
-            transition: all 0.3s; font-family: var(--font-sans); letter-spacing: 0.02em;
+        .content-area h1, .content-area h2, .content-area h3, .content-area h4 {
+            font-family: var(--font-serif); color: var(--accent); margin-top: 2.5rem; margin-bottom: 1rem;
+            font-weight: 700; line-height: 1.3;
         }
-        .btn-timer-primary { background: var(--accent); color: var(--accent-text); box-shadow: 0 4px 15px rgba(27, 42, 74, 0.15); }
-        .btn-timer-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(27, 42, 74, 0.25); }
-        .btn-timer-secondary { background: transparent; color: var(--text-muted); }
-        .btn-timer-secondary:hover { color: var(--text-main); background: var(--accent-light); }
-        .btn-timer:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
-
-        .mode-selector { display: flex; gap: 0.5rem; margin-bottom: 2rem; justify-content: center; }
-        .mode-btn { 
-            padding: 0.5rem 1.2rem; border: 1px solid transparent; background: transparent; 
-            color: var(--text-muted); border-radius: 20px; cursor: pointer; 
-            font-size: 0.85rem; font-weight: 500; transition: all 0.3s; 
-        }
-        .mode-btn.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
-
-        /* --- CONTENT TYPOGRAPHY --- */
-        .analysis-content { 
-            line-height: 1.8; color: var(--text-main); font-size: 18px; 
-            max-width: 720px; margin: 0 auto; text-align: justify;
-        }
-        .analysis-content h1, .analysis-content h2, .analysis-content h3, .analysis-content h4 {
-            color: var(--text-main); font-family: var(--font-serif);
-            margin-top: 2.5rem; margin-bottom: 1.2rem; font-weight: 700; line-height: 1.3;
-        }
-        .analysis-content h1 { font-size: 2.2rem; border-bottom: 1px solid var(--accent-light); padding-bottom: 0.8rem; }
-        .analysis-content h2 { font-size: 1.8rem; font-style: italic; }
-        .analysis-content h3 { font-size: 1.4rem; }
-        .analysis-content h4 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-family: var(--font-sans); font-weight: 600; }
-        
-        .analysis-content p { margin-bottom: 1.5rem; }
-        .analysis-content strong { color: var(--accent); font-weight: 600; }
-        .analysis-content ul { margin-bottom: 1.5rem; padding-left: 1.5rem; }
-        .analysis-content li { margin-bottom: 0.8rem; }
+        .content-area h1 { font-size: 2.2rem; }
+        .content-area h2 { font-size: 1.8rem; }
+        .content-area h3 { font-size: 1.4rem; }
+        .content-area h4 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-main); }
+        .content-area p { margin-bottom: 1.5rem; text-align: justify; }
+        .content-area strong { color: var(--accent); font-weight: 600; }
+        .content-area ul { margin-bottom: 1.5rem; padding-left: 1.5rem; }
+        .content-area li { margin-bottom: 0.8rem; }
 
         .bible-link {
-            color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent);
-            transition: all 0.2s; font-family: var(--font-serif); font-style: italic;
+            color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent);
+            font-weight: 500; transition: all 0.2s;
         }
         .bible-link:hover { color: var(--text-main); border-bottom-style: solid; background: var(--accent-light); }
 
-        .loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem; color: var(--text-muted); text-align: center; }
-        .spinner { width: 32px; height: 32px; border: 2px solid var(--accent-light); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 1.5rem; }
+        .action-btn {
+            display: block; margin: 2rem auto 0; padding: 1rem 3rem;
+            background: var(--accent); color: white; border: none; border-radius: var(--radius);
+            font-size: 1rem; font-weight: 600; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(27, 42, 74, 0.2);
+            transition: transform 0.2s;
+        }
+        .action-btn:hover { transform: translateY(-2px); }
+
+        /* --- Loading State --- */
+        .loading-state {
+            text-align: center; padding: 3rem; color: var(--text-muted);
+        }
+        .spinner {
+            width: 32px; height: 32px; border: 3px solid var(--accent-light);
+            border-top-color: var(--accent); border-radius: 50%;
+            animation: spin 0.8s linear infinite; margin: 0 auto 1.5rem;
+        }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; }
 
-        /* --- BIBLE SEARCH --- */
-        .bible-search-container { display: flex; flex-direction: column; gap: 2rem; max-width: 720px; margin: 0 auto; }
-        .search-box { display: flex; gap: 1rem; }
-        .search-input { 
-            flex: 1; padding: 1rem 1.2rem; border: 1px solid var(--accent-light); 
-            border-radius: var(--radius-md); font-size: 1rem; outline: none; 
-            background: var(--bg-card); color: var(--text-main);
-            font-family: var(--font-sans);
+        /* --- Search Box --- */
+        .search-box { display: flex; gap: 1rem; margin-bottom: 2rem; }
+        .search-input {
+            flex: 1; padding: 1rem; border: none; border-radius: var(--radius);
+            background: var(--accent-light); color: var(--text-main);
+            font-size: 1rem; outline: none;
         }
-        .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); }
-        
-        .btn-search { 
-            padding: 0 1.5rem; background: var(--accent); color: var(--accent-text); 
-            border: none; border-radius: var(--radius-md); cursor: pointer; 
-            font-weight: 500; display: flex; align-items: center; gap: 0.5rem;
-            transition: all 0.3s;
-        }
-        .btn-search:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-
-        .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 0.8rem; margin-top: 1.5rem; }
-        .chapter-btn { 
-            padding: 0.8rem; border: 1px solid var(--accent-light); background: var(--bg-card); 
-            color: var(--text-main); border-radius: var(--radius-sm); cursor: pointer; 
-            text-align: center; font-size: 0.95rem; transition: all 0.2s; font-family: var(--font-serif);
-        }
-        .chapter-btn:hover { border-color: var(--accent); color: var(--accent); }
-        .chapter-btn.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
-        
-        .bible-text-display { 
-            margin-top: 2.5rem; padding: 2.5rem; background: var(--bg-site); 
-            border-radius: var(--radius-lg); border-left: 4px solid var(--accent); 
-            white-space: pre-wrap; line-height: 1.8; font-size: 18px; color: var(--text-main);
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
-        }
-
-        /* --- SIDEBAR --- */
-        .daily-passage { font-style: italic; font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.6; color: var(--text-main); }
-        .dimension-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
-        .dimension-tag { 
-            padding: 0.6rem 0.8rem; background: var(--accent-light); 
-            border-radius: var(--radius-sm); font-size: 0.85rem; 
-            color: var(--accent); font-weight: 500; text-align: center;
+        .search-btn {
+            padding: 0 1.5rem; background: var(--accent); color: white;
+            border: none; border-radius: var(--radius); cursor: pointer;
+            font-weight: 600;
         }
 
         /* Responsive */
         @media (max-width: 600px) {
-            .header-content { flex-direction: column; gap: 1rem; }
-            .timer-circle { width: 200px; height: 200px; }
-            .timer-text { font-size: 2.5rem; }
-            .context-selector { grid-template-columns: 1fr; }
+            .section-card { padding: 2rem 1.5rem; }
+            .timer-value { font-size: 3.5rem; }
+            .tabs { gap: 1.5rem; }
             .search-box { flex-direction: column; }
-            .btn-search { width: 100%; justify-content: center; }
-            .dashboard { gap: 2rem; }
+            .search-btn { padding: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- LOCK SCREEN -->
+    <!-- Écran de Verrouillage -->
     <div id="lock-screen">
-        <div class="lock-content">
-            <h1 class="lock-title">Lectio Divina</h1>
-            <p class="lock-subtitle">Accès Privé — En construction</p>
-            
-            <div class="lock-input-group">
-                <input type="password" id="access-code" class="lock-input" placeholder="• • • •" maxlength="4" inputmode="numeric">
-            </div>
-            
-            <button class="lock-btn" onclick="checkAccess()">Entrer</button>
-            <div id="lock-error" class="lock-error">Code incorrect</div>
-        </div>
+        <div class="lock-logo">✝</div>
+        <h1 class="lock-title">Lectio Divina</h1>
+        <p class="lock-subtitle">Accès Privé — Étude Biblique Approfondie</p>
+        <input type="password" id="access-code" class="lock-input" placeholder="Code d'accès" autocomplete="off">
+        <button class="lock-btn" onclick="checkAccess()">Entrer</button>
+        <p id="lock-error" class="lock-error">Code incorrect. Veuillez réessayer.</p>
     </div>
 
-    <header>
-        <div class="header-content">
-            <div class="logo">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                </svg>
-                Lectio Divina
-            </div>
-            <div style="display:flex; align-items:center;">
-                <div class="streak-badge">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3.3.9.8 1.8 1.5 2.8z"/>
-                    </svg>
-                    <span id="streak-count">0 jour</span>
-                </div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème">
-                    <svg id="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- Application Principale (Masquée par défaut si non déverrouillée) -->
+    <div id="app-content" style="display: none;">
+        <header>
+            <div class="logo">Lectio Divina</div>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème">
+                <span id="icon-sun" style="display:none;">☀️</span>
+                <span id="icon-moon">🌙</span>
+            </button>
+        </header>
 
-    <main>
-        <div class="dashboard">
-            <div class="main-content">
+        <main>
+            <!-- Carte Principale -->
+            <div class="section-card">
                 
-                <!-- Timer Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Temps de Méditation</h2>
+                <!-- 1. Sélecteur de Temps de Méditation -->
+                <h2 class="section-title serif-font">Temps de Méditation</h2>
+                <div class="timer-modes">
+                    <button class="mode-btn active" data-duration="120">2 min</button>
+                    <button class="mode-btn" data-duration="300">5 min</button>
+                    <button class="mode-btn" data-duration="600">10 min</button>
+                </div>
+
+                <div class="timer-display-container">
+                    <div class="timer-value" id="timer-display">02:00</div>
+                </div>
+                <div class="timer-controls">
+                    <button class="control-btn primary" id="start-btn">Démarrer</button>
+                    <button class="control-btn" id="pause-btn" disabled>Pause</button>
+                    <button class="control-btn" id="reset-btn">Reset</button>
+                </div>
+
+                <hr style="border:0; border-top:1px solid var(--accent-light); margin: 3rem 0;">
+
+                <!-- 2. Sélecteur de Livre et Chapitre (Contexte) -->
+                <h2 class="section-title serif-font">Étude du Texte</h2>
+                <div class="book-selector-grid">
+                    <div class="select-group">
+                        <label>Livre Biblique</label>
+                        <select id="book-select" class="custom-select" onchange="loadChapters()">
+                            <option value="">Sélectionner un livre...</option>
+                            <!-- Rempli par JS -->
+                        </select>
                     </div>
+                    <div class="select-group">
+                        <label>Chapitre</label>
+                        <select id="chapter-select" class="custom-select" disabled onchange="setContext()">
+                            <option value="">Sélectionner un chapitre...</option>
+                            <!-- Rempli par JS -->
+                        </select>
+                    </div>
+                </div>
+                <p id="current-context" style="text-align:center; color:var(--accent); font-weight:600; font-family:var(--font-serif); font-size:1.2rem; min-height:1.5rem;"></p>
+
+                <hr style="border:0; border-top:1px solid var(--accent-light); margin: 3rem 0;">
+
+                <!-- 3. Onglets d'Analyse -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="theological">Analyse Théologique</button>
+                    <button class="tab-btn" data-tab="meditative">Méditation Guidée</button>
+                    <button class="tab-btn" data-tab="biblical">Contexte Biblique</button>
+                    <button class="tab-btn" data-tab="dictionary">Recherche & Dictionnaire</button>
+                </div>
+
+                <!-- Contenu : Analyse Théologique -->
+                <div class="tab-content active" id="theological">
+                    <div id="theo-loading" class="loading-state" style="display:none;">
+                        <div class="spinner"></div>
+                        <p>L'IA rédige une analyse adaptée à votre temps de méditation...</p>
+                    </div>
+                    <div id="theo-content" class="content-area">
+                        <p>Sélectionnez un livre et un chapitre ci-dessus, puis générez une analyse théologique approfondie.</p>
+                        <button class="action-btn" onclick="generateAnalysis('theological')">Générer l'analyse</button>
+                    </div>
+                </div>
+
+                <!-- Contenu : Méditation Guidée -->
+                <div class="tab-content" id="meditative">
+                    <div id="med-loading" class="loading-state" style="display:none;">
+                        <div class="spinner"></div>
+                        <p>Préparation de votre parcours spirituel...</p>
+                    </div>
+                    <div id="med-content" class="content-area">
+                        <p>Obtenez un guide de méditation structuré (Lectio, Meditatio, Oratio, Contemplatio).</p>
+                        <button class="action-btn" onclick="generateAnalysis('meditative')">Générer la méditation</button>
+                    </div>
+                </div>
+
+                <!-- Contenu : Contexte Biblique -->
+                <div class="tab-content" id="biblical">
+                    <div id="bib-loading" class="loading-state" style="display:none;">
+                        <div class="spinner"></div>
+                        <p>Recherche des liens historiques et scripturaires...</p>
+                    </div>
+                    <div id="bib-content" class="content-area">
+                        <p>Découvrez le contexte historique, les liens avec l'Ancien Testament et les originaux grecs/hébreux.</p>
+                        <button class="action-btn" onclick="generateAnalysis('biblical')">Générer le contexte</button>
+                    </div>
+                </div>
+
+                <!-- Contenu : Dictionnaire & Recherche -->
+                <div class="tab-content" id="dictionary">
+                    <div class="search-box">
+                        <input type="text" id="dict-input" class="search-input" placeholder="Ex: Grâce, Rédemption, Alliance...">
+                        <button class="search-btn" onclick="searchDefinition()">Rechercher</button>
+                    </div>
+                    <div id="dict-loading" class="loading-state" style="display:none;">
+                        <div class="spinner"></div>
+                        <p>Recherche dans le dictionnaire théologique...</p>
+                    </div>
+                    <div id="dict-content" class="content-area"></div>
                     
-                    <div class="mode-selector">
-                        <button class="mode-btn active" data-duration="120">2 min</button>
-                        <button class="mode-btn" data-duration="300">5 min</button>
-                        <button class="mode-btn" data-duration="600">10 min</button>
-                    </div>
-
-                    <div class="timer-container">
-                        <div class="timer-circle">
-                            <svg class="timer-svg" viewBox="0 0 240 240">
-                                <circle class="timer-bg" cx="120" cy="120" r="110"></circle>
-                                <circle class="timer-progress" id="progress-ring" cx="120" cy="120" r="110"></circle>
-                            </svg>
-                            <div class="timer-text" id="timer-display">02:00</div>
+                    <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--accent-light);">
+                        <h3 style="font-family:var(--font-serif); color:var(--text-main); margin-bottom:1rem;">Lire un passage spécifique</h3>
+                        <div class="search-box">
+                            <input type="text" id="bible-passage-input" class="search-input" placeholder="Ex: Jean 3:16">
+                            <button class="search-btn" onclick="fetchBiblePassage()">Lire</button>
                         </div>
-                        
-                        <div class="timer-controls">
-                            <button class="btn-timer btn-timer-primary" id="start-btn">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                Démarrer
-                            </button>
-                            <button class="btn-timer btn-timer-secondary" id="pause-btn" disabled>Pause</button>
-                            <button class="btn-timer btn-timer-secondary" id="reset-btn">Reset</button>
-                        </div>
+                        <div id="bible-text-result" class="content-area" style="background:var(--accent-light); padding:1.5rem; border-radius:var(--radius); display:none;"></div>
                     </div>
                 </div>
 
-                <!-- Analysis Tabs -->
-                <div class="card">
-                    <!-- Context Selector (Master Control) -->
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display:block; font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem; font-weight:500; text-transform:uppercase; letter-spacing:0.05em;">Contexte d'étude actuel</label>
-                        <div class="context-selector">
-                            <select id="book-select-master" class="context-select" onchange="loadChaptersMaster()">
-                                <option value="">Choisir un livre...</option>
-                                <!-- Rempli par JS -->
-                            </select>
-                            <select id="chapter-select-master" class="context-select" onchange="updateActiveContext()" disabled>
-                                <option value="">Chapitre</option>
-                                <!-- Rempli par JS -->
-                            </select>
-                        </div>
-                        <div id="active-context-display" style="font-family:var(--font-serif); font-style:italic; color:var(--accent); font-size:1.1rem; min-height:1.5rem;"></div>
-                    </div>
-
-                    <div class="tabs">
-                        <button class="tab-btn active" data-tab="theological">Analyse Théologique</button>
-                        <button class="tab-btn" data-tab="meditative">Méditation Guidée</button>
-                        <button class="tab-btn" data-tab="biblical">Contexte Biblique</button>
-                        <button class="tab-btn" data-tab="bible">Recherche & Dictionnaire</button>
-                    </div>
-
-                    <!-- Theological Tab -->
-                    <div class="tab-content active" id="theological">
-                        <div id="theological-loading" class="loading-state" style="display: none;">
-                            <div class="spinner"></div>
-                            <p class="loading-text" id="theological-msg">L'intelligence artificielle étudie le texte...</p>
-                        </div>
-                        <div id="theological-content" class="analysis-content">
-                            <p>Sélectionnez un livre et un chapitre ci-dessus, puis cliquez sur "Générer" pour obtenir une analyse théologique approfondie.</p>
-                            <button class="btn-timer btn-timer-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('theological')">Générer l'analyse</button>
-                        </div>
-                    </div>
-
-                    <!-- Meditative Tab -->
-                    <div class="tab-content" id="meditative">
-                        <div id="meditative-loading" class="loading-state" style="display: none;">
-                            <div class="spinner"></div>
-                            <p class="loading-text" id="meditative-msg">Préparation de la méditation...</p>
-                        </div>
-                        <div id="meditative-content" class="analysis-content">
-                            <p>Découvrez une guidance spirituelle pour approfondir votre prière personnelle sur le passage sélectionné.</p>
-                            <button class="btn-timer btn-timer-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('meditative')">Générer la méditation</button>
-                        </div>
-                    </div>
-
-                    <!-- Biblical Tab -->
-                    <div class="tab-content" id="biblical">
-                        <div id="biblical-loading" class="loading-state" style="display: none;">
-                            <div class="spinner"></div>
-                            <p class="loading-text" id="biblical-msg">Recherche du contexte historique...</p>
-                        </div>
-                        <div id="biblical-content" class="analysis-content">
-                            <p>Explorez les liens avec l'Ancien et le Nouveau Testament et les origines du texte.</p>
-                            <button class="btn-timer btn-timer-primary" style="margin-top: 1.5rem;" onclick="generateAnalysis('biblical')">Générer le contexte</button>
-                        </div>
-                    </div>
-
-                    <!-- Bible Search Tab -->
-                    <div class="tab-content" id="bible">
-                        <div class="bible-search-container">
-                            <!-- Definition Search -->
-                            <div style="background: var(--bg-site); padding: 2rem; border-radius: var(--radius-lg);">
-                                <h3 style="font-family:var(--font-serif); font-size:1.3rem; margin-bottom:1rem; color:var(--text-main);">Dictionnaire Théologique</h3>
-                                <div class="search-box">
-                                    <input type="text" id="definition-input" class="search-input" placeholder="Ex: Grâce, Rédemption, Alliance...">
-                                    <button class="btn-search" onclick="searchDefinition()">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                                        Chercher
-                                    </button>
-                                </div>
-                                <div id="definition-result" class="bible-text-display" style="display: none;"></div>
-                                <div id="definition-loading" class="loading-state" style="display: none; padding: 2rem;">
-                                    <div class="spinner" style="width: 24px; height: 24px; border-width: 2px;"></div>
-                                    <span class="loading-text" style="font-size: 0.95rem;">Recherche en cours...</span>
-                                </div>
-                            </div>
-
-                            <!-- Passage Reader -->
-                            <div>
-                                <h3 style="font-family:var(--font-serif); font-size:1.3rem; margin-bottom:1rem; color:var(--text-main);">Lire un passage</h3>
-                                <div class="search-box">
-                                    <input type="text" id="bible-search-input" class="search-input" placeholder="Ex: Jean 3:16">
-                                    <button class="btn-search" onclick="searchBiblePassage()">Lire</button>
-                                </div>
-                                
-                                <div id="chapter-container-manual" style="display: none; margin-top: 1.5rem;">
-                                    <h4 style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">Chapitres</h4>
-                                    <div id="chapter-grid-manual" class="chapter-grid"></div>
-                                </div>
-
-                                <div id="bible-result" class="bible-text-display" style="display: none;">
-                                    <h4 id="result-reference" style="font-family:var(--font-serif); font-size:1.4rem; color:var(--accent); margin-bottom:1rem;"></h4>
-                                    <div id="result-loader" class="loading-state" style="padding: 2rem; display:none;">
-                                        <div class="spinner" style="width:24px; height:24px; border-width:2px;"></div>
-                                        <span class="loading-text" style="font-size:0.95rem;">Récupération du texte...</span>
-                                    </div>
-                                    <p id="result-text"></p>
-                                </div>
-                                
-                                <div id="bible-error" style="color: #EF4444; display: none; margin-top: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.05); border-radius: var(--radius-md); font-size: 0.95rem;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Passage du Jour</h3>
-                    </div>
-                    <div id="daily-passage" class="daily-passage">
-                        <p style="color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 500; font-size: 0.9rem; text-transform:uppercase; letter-spacing:0.05em;">Jean 3:16</p>
-                        <p>"Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Dimensions</h3>
-                    </div>
-                    <div class="dimension-grid">
-                        <div class="dimension-tag">Amour divin</div>
-                        <div class="dimension-tag">Grâce</div>
-                        <div class="dimension-tag">Salut</div>
-                        <div class="dimension-tag">Foi</div>
-                        <div class="dimension-tag">Sacrifice</div>
-                        <div class="dimension-tag">Éternité</div>
-                        <div class="dimension-tag">Rédemption</div>
-                        <div class="dimension-tag">Espérance</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+        </main>
+    </div>
 
     <script>
-        // --- CONFIGURATION ---
-        const ACCESS_CODE = "1234"; // Code d'accès
-        let timerDuration = 120;
+        // --- CONFIGURATION & DATA ---
+        const ACCESS_CODE = "2Zohvjdc51430@";
+        let currentDuration = 120; // Défaut 2 min
         let timeLeft = 120;
         let timerInterval = null;
         let isRunning = false;
         
-        // État du contexte actuel
-        let currentBook = "";
-        let currentChapter = "";
+        let selectedBook = "";
+        let selectedChapter = "";
 
         const bibleBooks = [
             { name: "Genèse", chapters: 50 }, { name: "Exode", chapters: 40 },
@@ -595,125 +453,74 @@
             "3 jean": "3john", "jude": "jude", "apocalypse": "revelation"
         };
 
+        // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             checkLockStatus();
+            initTheme();
             initTimer();
             initTabs();
-            initMasterSelector();
-            loadStreak();
-            initTheme();
+            initBookSelector();
         });
 
         // --- LOCK SCREEN LOGIC ---
         function checkLockStatus() {
             const unlocked = localStorage.getItem('lectio_unlocked');
             if (unlocked === 'true') {
-                document.getElementById('lock-screen').classList.add('hidden');
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('app-content').style.display = 'block';
             }
         }
 
         function checkAccess() {
             const input = document.getElementById('access-code').value;
-            const errorDiv = document.getElementById('lock-error');
+            const errorMsg = document.getElementById('lock-error');
             
             if (input === ACCESS_CODE) {
                 localStorage.setItem('lectio_unlocked', 'true');
-                document.getElementById('lock-screen').classList.add('hidden');
+                document.getElementById('lock-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('lock-screen').style.display = 'none';
+                    document.getElementById('app-content').style.display = 'block';
+                }, 500);
             } else {
-                errorDiv.classList.add('visible');
-                document.getElementById('access-code').value = '';
-                setTimeout(() => errorDiv.classList.remove('visible'), 2000);
+                errorMsg.style.display = 'block';
+                // Animation de secousse
+                const inputEl = document.getElementById('access-code');
+                inputEl.style.transform = 'translateX(10px)';
+                setTimeout(() => inputEl.style.transform = 'translateX(-10px)', 100);
+                setTimeout(() => inputEl.style.transform = 'translateX(0)', 200);
             }
         }
-        
-        // Allow Enter key on lock screen
-        document.getElementById('access-code').addEventListener('keypress', function (e) {
+
+        // Allow Enter key
+        document.getElementById('access-code').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') checkAccess();
         });
 
         // --- THEME LOGIC ---
         function initTheme() {
             const toggle = document.getElementById('theme-toggle');
-            const sunIcon = document.getElementById('icon-sun');
-            const moonIcon = document.getElementById('icon-moon');
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const sun = document.getElementById('icon-sun');
+            const moon = document.getElementById('icon-moon');
+            const saved = localStorage.getItem('theme') || 'light';
             
-            if (savedTheme === 'dark') {
+            if (saved === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
-            } else {
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
+                sun.style.display = 'inline'; moon.style.display = 'none';
             }
-
+            
             toggle.addEventListener('click', () => {
-                const current = document.documentElement.getAttribute('data-theme');
-                if (current === 'dark') {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                if (isDark) {
                     document.documentElement.removeAttribute('data-theme');
                     localStorage.setItem('theme', 'light');
-                    sunIcon.style.display = 'none';
-                    moonIcon.style.display = 'block';
+                    sun.style.display = 'none'; moon.style.display = 'inline';
                 } else {
                     document.documentElement.setAttribute('data-theme', 'dark');
                     localStorage.setItem('theme', 'dark');
-                    sunIcon.style.display = 'block';
-                    moonIcon.style.display = 'none';
+                    sun.style.display = 'inline'; moon.style.display = 'none';
                 }
             });
-        }
-
-        // --- MASTER CONTEXT SELECTOR ---
-        function initMasterSelector() {
-            const select = document.getElementById('book-select-master');
-            bibleBooks.forEach((book, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = book.name;
-                select.appendChild(option);
-            });
-        }
-
-        function loadChaptersMaster() {
-            const select = document.getElementById('book-select-master');
-            const chapterSelect = document.getElementById('chapter-select-master');
-            const display = document.getElementById('active-context-display');
-            
-            if (select.value === "") {
-                chapterSelect.disabled = true;
-                chapterSelect.innerHTML = '<option value="">Chapitre</option>';
-                display.textContent = "";
-                currentBook = "";
-                currentChapter = "";
-                return;
-            }
-
-            const bookIndex = parseInt(select.value);
-            const book = bibleBooks[bookIndex];
-            currentBook = book.name;
-            
-            chapterSelect.innerHTML = '<option value="">Chapitre</option>';
-            for (let i = 1; i <= book.chapters; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = i;
-                chapterSelect.appendChild(opt);
-            }
-            chapterSelect.disabled = false;
-            display.textContent = ""; // Wait for chapter selection
-        }
-
-        function updateActiveContext() {
-            const chapterSelect = document.getElementById('chapter-select-master');
-            const display = document.getElementById('active-context-display');
-            
-            if (chapterSelect.value) {
-                currentChapter = chapterSelect.value;
-                display.textContent = `${currentBook} ${currentChapter}`;
-            } else {
-                currentChapter = "";
-                display.textContent = "";
-            }
         }
 
         // --- TIMER LOGIC ---
@@ -722,24 +529,12 @@
             const startBtn = document.getElementById('start-btn');
             const pauseBtn = document.getElementById('pause-btn');
             const resetBtn = document.getElementById('reset-btn');
-            const progressRing = document.getElementById('progress-ring');
-            const circumference = 2 * Math.PI * 110;
-
-            progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
-            progressRing.style.strokeDashoffset = 0;
-
-            function setProgress(percent) {
-                const offset = circumference - (percent / 100) * circumference;
-                progressRing.style.strokeDashoffset = offset;
-            }
+            const display = document.getElementById('timer-display');
 
             function updateDisplay() {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                document.getElementById('timer-display').textContent = 
-                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                const percent = (timeLeft / timerDuration) * 100;
-                setProgress(percent);
+                const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+                const s = (timeLeft % 60).toString().padStart(2, '0');
+                display.textContent = `${m}:${s}`;
             }
 
             modeBtns.forEach(btn => {
@@ -747,10 +542,9 @@
                     if (isRunning) return;
                     modeBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    timerDuration = parseInt(btn.dataset.duration);
-                    timeLeft = timerDuration;
+                    currentDuration = parseInt(btn.dataset.duration);
+                    timeLeft = currentDuration;
                     updateDisplay();
-                    setProgress(100);
                 });
             });
 
@@ -759,6 +553,7 @@
                 isRunning = true;
                 startBtn.disabled = true;
                 pauseBtn.disabled = false;
+                startBtn.textContent = "En cours...";
                 
                 timerInterval = setInterval(() => {
                     if (timeLeft > 0) {
@@ -769,8 +564,8 @@
                         isRunning = false;
                         startBtn.disabled = false;
                         pauseBtn.disabled = true;
-                        alert("Temps de méditation terminé !");
-                        incrementStreak();
+                        startBtn.textContent = "Démarrer";
+                        alert("Temps de méditation terminé.");
                     }
                 }, 1000);
             });
@@ -780,59 +575,97 @@
                 clearInterval(timerInterval);
                 isRunning = false;
                 startBtn.disabled = false;
-                startBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Reprendre`;
                 pauseBtn.disabled = true;
+                startBtn.textContent = "Reprendre";
             });
 
             resetBtn.addEventListener('click', () => {
                 clearInterval(timerInterval);
                 isRunning = false;
-                timeLeft = timerDuration;
+                timeLeft = currentDuration;
                 updateDisplay();
-                setProgress(100);
                 startBtn.disabled = false;
                 pauseBtn.disabled = true;
-                startBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:6px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Démarrer`;
+                startBtn.textContent = "Démarrer";
             });
+        }
+
+        // --- BOOK SELECTOR LOGIC ---
+        function initBookSelector() {
+            const bookSelect = document.getElementById('book-select');
+            bibleBooks.forEach((book, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = book.name;
+                bookSelect.appendChild(opt);
+            });
+        }
+
+        function loadChapters() {
+            const bookIdx = document.getElementById('book-select').value;
+            const chapSelect = document.getElementById('chapter-select');
+            const contextLabel = document.getElementById('current-context');
+            
+            chapSelect.innerHTML = '<option value="">Sélectionner un chapitre...</option>';
+            chapSelect.disabled = true;
+            contextLabel.textContent = "";
+            selectedBook = "";
+            selectedChapter = "";
+
+            if (bookIdx === "") return;
+
+            const book = bibleBooks[bookIdx];
+            selectedBook = book.name;
+
+            for (let i = 1; i <= book.chapters; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = i;
+                chapSelect.appendChild(opt);
+            }
+            chapSelect.disabled = false;
+        }
+
+        function setContext() {
+            const chap = document.getElementById('chapter-select').value;
+            const contextLabel = document.getElementById('current-context');
+            
+            if (chap) {
+                selectedChapter = chap;
+                contextLabel.textContent = `Texte actif : ${selectedBook} ${selectedChapter}`;
+            } else {
+                selectedChapter = "";
+                contextLabel.textContent = "";
+            }
         }
 
         // --- TABS LOGIC ---
         function initTabs() {
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const target = btn.dataset.tab;
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    btn.classList.add('active');
-                    document.getElementById(target).classList.add('active');
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab).classList.add('active');
                 });
             });
         }
 
-        // --- MARKDOWN & LINKS ---
+        // --- MARKDOWN & LINK PARSER ---
         function parseMarkdown(text) {
             if (!text) return "";
             let html = text
-                .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
                 .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
                 .replace(/^### (.*$)/gim, '<h3>$1</h3>')
                 .replace(/^## (.*$)/gim, '<h2>$1</h2>')
                 .replace(/^# (.*$)/gim, '<h1>$1</h1>')
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/^\- (.*$)/gim, '<li>$1</li>')
-                .replace(/^\d+\. (.*$)/gim, '<li>$1</li>')
                 .replace(/\n\n/g, '</p><p>');
-            
-            html = `<p>${html}</p>`;
-            html = html.replace(/<p><\/p>/g, '');
-            html = html.replace(/<p>(<h[1-4]>)/g, '$1');
-            html = html.replace(/(<\/h[1-4]>)<\/p>/g, '$1');
-            html = html.replace(/<p>(<li>)/g, '<ul>$1');
-            html = html.replace(/(<\/li>)<\/p>/g, '$1</ul>');
-            return html;
+            return `<p>${html}</p>`;
         }
 
         function makeBibleLinks(html) {
@@ -840,182 +673,129 @@
             return html.replace(regex, (match, prefix, book, chapter, verse) => {
                 const fullName = (prefix ? prefix.trim() + " " : "") + book;
                 const key = fullName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                const urlSlug = bookMap[key] || key.replace(/\s+/g, '');
-                if (urlSlug) {
-                    return `<a href="https://saintebible.com/${urlSlug}/${chapter}-${verse}.htm" target="_blank" rel="noopener noreferrer" class="bible-link">${match}</a>`;
+                const slug = bookMap[key] || key.replace(/\s+/g, '');
+                if (slug) {
+                    return `<a href="https://saintebible.com/${slug}/${chapter}-${verse}.htm" target="_blank" class="bible-link">${match}</a>`;
                 }
                 return match;
             });
         }
 
-        // --- ANALYSIS GENERATION (CONTEXT AWARE) ---
+        // --- API CALLS ---
         async function generateAnalysis(type) {
-            if (!currentBook || !currentChapter) {
-                alert("Veuillez sélectionner un livre et un chapitre dans le menu ci-dessus avant de générer une analyse.");
+            if (!selectedBook || !selectedChapter) {
+                alert("Veuillez sélectionner un livre et un chapitre avant de générer une analyse.");
                 return;
             }
 
-            const contentDiv = document.getElementById(`${type}-content`);
-            const loadingDiv = document.getElementById(`${type}-loading`);
-            const msgP = document.getElementById(`${type}-msg`);
+            const contentDiv = document.getElementById(`${type === 'theological' ? 'theo' : type === 'meditative' ? 'med' : 'bib'}-content`);
+            const loadingDiv = document.getElementById(`${type === 'theological' ? 'theo' : type === 'meditative' ? 'med' : 'bib'}-loading`);
             
             contentDiv.style.display = 'none';
-            loadingDiv.style.display = 'flex';
-            
-            if(type === 'theological') msgP.textContent = `Analyse de ${currentBook} ${currentChapter} en cours...`;
-            if(type === 'meditative') msgP.textContent = `Préparation de la méditation pour ${currentBook} ${currentChapter}...`;
-            if(type === 'biblical') msgP.textContent = `Recherche du contexte de ${currentBook} ${currentChapter}...`;
+            loadingDiv.style.display = 'block';
+
+            // Calcul du temps en minutes pour le prompt
+            const minutes = currentDuration / 60;
+            const timeText = minutes >= 1 ? `${minutes} minutes` : `${currentDuration} secondes`;
 
             let prompt = "";
-            const context = `${currentBook} chapitre ${currentChapter}`;
-
             if (type === 'theological') {
-                prompt = `Agis comme un théologien expert. Donne une analyse théologique et doctrinale approfondie et structurée pour le chapitre complet suivant : ${context}. Fournis environ 500 mots. Utilise des titres clairs (#, ##).`;
+                prompt = `Agis comme un théologien expert. Analyse le chapitre complet de ${selectedBook} ${selectedChapter}. Fournis une analyse structurée et approfondie. La longueur du texte doit être calibrée pour une lecture et une réflexion d'environ ${timeText}. Utilise des titres clairs.`;
             } else if (type === 'meditative') {
-                prompt = `Agis comme un guide spirituel expérimenté. Prépare une méditation guidée structurée (Lectio, Meditatio, Oratio, Contemplatio) basée sur le chapitre suivant : ${context}. Le texte doit faire environ 500 mots. Ton ton doit être doux et invitant. Utilise des titres.`;
+                prompt = `Agis comme un guide spirituel. Propose une méditation guidée (Lectio Divina) basée sur ${selectedBook} ${selectedChapter}. Structure ta réponse pour remplir un temps de prière d'environ ${timeText}. Inclus des pistes de réflexion et de prière.`;
             } else if (type === 'biblical') {
-                prompt = `Agis comme un exégète biblique. Donne le contexte historique et littéraire de : ${context}. Limite ta réponse à environ 500 mots. Mentionne les liens avec le reste de la Bible. Utilise des titres.`;
+                prompt = `Agis comme un exégète. Donne le contexte historique et littéraire de ${selectedBook} ${selectedChapter}. La réponse doit être détaillée et adaptée à une étude d'environ ${timeText}. Mentionne les liens inter-testamentaires.`;
             }
 
             try {
-                const response = await fetch(`/api/analyze`, {
+                const res = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt, type: type })
+                    body: JSON.stringify({ prompt, type })
                 });
-
-                if (!response.ok) throw new Error('Erreur API');
-                const data = await response.json();
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
                 
                 let rawHtml = parseMarkdown(data.result);
-                let finalHtml = makeBibleLinks(rawHtml);
-                
-                contentDiv.innerHTML = finalHtml;
-            } catch (error) {
-                contentDiv.innerHTML = `<p style="color: #EF4444;">Une erreur est survenue. Vérifiez que l'API est déployée.</p>`;
-                console.error(error);
+                contentDiv.innerHTML = makeBibleLinks(rawHtml);
+            } catch (err) {
+                contentDiv.innerHTML = `<p style="color:#EF4444">Erreur : ${err.message}</p>`;
             } finally {
                 loadingDiv.style.display = 'none';
                 contentDiv.style.display = 'block';
             }
         }
 
-        // --- DICTIONARY SEARCH ---
         async function searchDefinition() {
-            const input = document.getElementById('definition-input');
-            const word = input.value.trim();
-            const resultDiv = document.getElementById('definition-result');
-            const loader = document.getElementById('definition-loading');
-            
+            const word = document.getElementById('dict-input').value.trim();
             if (!word) return;
 
-            resultDiv.style.display = 'none';
-            loader.style.display = 'flex';
+            const contentDiv = document.getElementById('dict-content');
+            const loadingDiv = document.getElementById('dict-loading');
+            
+            contentDiv.innerHTML = '';
+            loadingDiv.style.display = 'block';
 
-            const prompt = `Agis comme un dictionnaire théologique et biblique expert. Donne une définition claire, le sens spirituel/théologique et un exemple d'usage dans la Bible pour le mot suivant : "${word}". Structure ta réponse.`;
+            const prompt = `Agis comme un dictionnaire théologique. Donne la définition, le sens spirituel et un exemple biblique pour le mot : "${word}".`;
 
             try {
-                const response = await fetch(`/api/analyze`, {
+                const res = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt, type: 'definition' })
+                    body: JSON.stringify({ prompt, type: 'dictionary' })
                 });
-
-                if (!response.ok) throw new Error('Erreur API');
-                const data = await response.json();
-
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
+                
                 let rawHtml = parseMarkdown(data.result);
-                let finalHtml = makeBibleLinks(rawHtml);
-
-                resultDiv.innerHTML = finalHtml;
-                resultDiv.style.display = 'block';
+                contentDiv.innerHTML = makeBibleLinks(rawHtml);
             } catch (err) {
-                alert("Erreur lors de la recherche : " + err.message);
+                contentDiv.innerHTML = `<p style="color:#EF4444">Erreur : ${err.message}</p>`;
             } finally {
-                loader.style.display = 'none';
+                loadingDiv.style.display = 'none';
             }
         }
 
-        // --- BIBLE PASSAGE READER ---
-        async function searchBiblePassage() {
-            const input = document.getElementById('bible-search-input');
-            const query = input.value.trim();
-            const errorDiv = document.getElementById('bible-error');
-            const resultDiv = document.getElementById('bible-result');
-            const loader = document.getElementById('result-loader');
-            const textP = document.getElementById('result-text');
-            const refTitle = document.getElementById('result-reference');
+        async function fetchBiblePassage() {
+            const input = document.getElementById('bible-passage-input').value.trim();
+            const resultDiv = document.getElementById('bible-text-result');
+            if (!input) return;
+
+            const regex = /^([a-zA-ZÀ-ÿ]+)\s?(\d+):(\d+)$/i;
+            const match = input.match(regex);
             
-            if (!query) return;
-
-            errorDiv.style.display = 'none';
-            resultDiv.style.display = 'block';
-            textP.textContent = "";
-            loader.style.display = 'flex';
-
-            const referenceRegex = /^([a-zA-ZÀ-ÿ]+)\s?(\d+):(\d+)$/i;
-            const match = query.match(referenceRegex);
-
-            if (match) {
-                let bookName = match[1];
-                const chapter = match[2];
-                const verse = match[3];
-                
-                const foundBook = bibleBooks.find(b => b.name.toLowerCase().startsWith(bookName.toLowerCase()));
-                
-                if (foundBook) {
-                    try {
-                        const response = await fetch(`/api/bible`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ book: foundBook.name, chapter: chapter, verse: verse })
-                        });
-                        
-                        if (!response.ok) throw new Error('Erreur API');
-                        const data = await response.json();
-                        
-                        if(data.error) throw new Error(data.error);
-
-                        refTitle.textContent = data.reference;
-                        let cleanText = data.text.replace(/\n/g, '<br>');
-                        textP.innerHTML = makeBibleLinks(cleanText);
-                    } catch (err) {
-                        errorDiv.textContent = "Erreur : " + err.message;
-                        errorDiv.style.display = 'block';
-                        resultDiv.style.display = 'none';
-                    } finally {
-                        loader.style.display = 'none';
-                    }
-                } else {
-                    errorDiv.textContent = "Livre non trouvé.";
-                    errorDiv.style.display = 'block';
-                    loader.style.display = 'none';
-                }
-            } else {
-                errorDiv.textContent = "Format invalide. Utilisez 'Livre Chapitre:Verset' (ex: Jean 3:16).";
-                errorDiv.style.display = 'block';
-                loader.style.display = 'none';
-                resultDiv.style.display = 'none';
+            if (!match) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = "<p>Format invalide. Utilisez 'Livre Chapitre:Verset' (ex: Jean 3:16).</p>";
+                return;
             }
-        }
 
-        // --- STREAK ---
-        function loadStreak() {
-            const streak = parseInt(localStorage.getItem('lectio_streak') || 0);
-            const label = streak === 1 ? "jour" : "jours";
-            document.getElementById('streak-count').textContent = `${streak} ${label}`;
-        }
+            const bookName = match[1];
+            const chapter = match[2];
+            const verse = match[3];
+            
+            const foundBook = bibleBooks.find(b => b.name.toLowerCase().startsWith(bookName.toLowerCase()));
+            if (!foundBook) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = "<p>Livre non trouvé.</p>";
+                return;
+            }
 
-        function incrementStreak() {
-            const today = new Date().toDateString();
-            const lastDate = localStorage.getItem('lectio_last_date');
-            if (lastDate !== today) {
-                let streak = parseInt(localStorage.getItem('lectio_streak') || 0);
-                streak++;
-                localStorage.setItem('lectio_streak', streak);
-                localStorage.setItem('lectio_last_date', today);
-                const label = streak === 1 ? "jour" : "jours";
-                document.getElementById('streak-count').textContent = `${streak} ${label}`;
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = "<p>Chargement du texte...</p>";
+
+            try {
+                const res = await fetch('/api/bible', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ book: foundBook.name, chapter, verse })
+                });
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
+                
+                resultDiv.innerHTML = `<h4 style="margin-bottom:1rem">${data.reference}</h4><p>${makeBibleLinks(data.text.replace(/\n/g, '<br>'))}</p>`;
+            } catch (err) {
+                resultDiv.innerHTML = `<p style="color:#EF4444">Erreur : ${err.message}</p>`;
             }
         }
     </script>
