@@ -23,7 +23,7 @@ export async function onRequestPost(context) {
       });
     }
 
-    // Appel à l'API Mistral
+    // Appel à l'API Mistral avec paramètres optimisés pour les longs textes
     const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -31,19 +31,20 @@ export async function onRequestPost(context) {
         "Authorization": `Bearer ${MISTRAL_API_KEY}`
       },
       body: JSON.stringify({
-        model: "mistral-small-latest", // Modèle équilibré pour l'analyse (ou mistral-tiny pour économiser)
+        model: "mistral-small-latest", // Modèle équilibré pour la qualité et la longueur
         messages: [
           {
             role: "system",
-            content: "Tu es un assistant théologique et spirituel expert. Tu réponds en français avec profondeur, clarté et bienveillance. Tes analyses sont structurées, bibliques et pertinentes pour la vie chrétienne contemporaine."
+            content: "Tu es un assistant théologique et spirituel expert. Tu réponds en français avec profondeur, clarté et bienveillance. Tes analyses sont structurées, bibliques et pertinentes pour la vie chrétienne contemporaine. Tu es capable de produire des contenus longs et détaillés sans te répéter."
           },
           {
             role: "user",
             content: prompt
           }
         ],
-        temperature: 0.7, // Équilibre entre créativité et précision
-        max_tokens: 1000 // Limite pour environ 500-700 mots
+        temperature: 0.5, // Équilibre parfait entre créativité et stabilité structurelle
+        max_tokens: 3000, // Augmenté à 3000 pour permettre des analyses complètes de chapitres entiers sans coupure
+        top_p: 1
       })
     });
 
@@ -53,6 +54,12 @@ export async function onRequestPost(context) {
     }
 
     const data = await response.json();
+    
+    // Vérification de sécurité si le contenu est vide
+    if (!data.choices || data.choices.length === 0) {
+      throw new Error("Aucune réponse générée par l'IA");
+    }
+
     const analysisText = data.choices[0].message.content.trim();
 
     return new Response(JSON.stringify({ 
