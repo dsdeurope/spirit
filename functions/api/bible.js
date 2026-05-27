@@ -34,7 +34,7 @@ export async function onRequestPost(context) {
     
     promptText += `. Réponds UNIQUEMENT par le texte biblique, sans introduction, sans commentaire, sans 'Voici le texte'. Commence directement par le premier mot du verset. Si le chapitre est long, assure-toi de ne rien omettre.`;
 
-    // Appel à l'API Mistral
+    // Appel à l'API Mistral avec capacité étendue pour les longs chapitres
     const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -54,7 +54,7 @@ export async function onRequestPost(context) {
           }
         ],
         temperature: 0.1, // Très faible pour éviter toute hallucination ou modification du texte sacré
-        max_tokens: 3000, // Augmenté à 3000 pour couvrir les chapitres les plus longs (ex: Psaume 119, Genèse 1)
+        max_tokens: 2500, // Augmenté à 2500 pour couvrir les chapitres les plus longs (ex: Psaume 119, Genèse 1) sans coupure
         top_p: 1
       })
     });
