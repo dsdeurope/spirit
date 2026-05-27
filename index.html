@@ -186,7 +186,6 @@
       flex-shrink: 0;
     }
     .brand svg { color: var(--accent); }
-    /* Page Nav */
     .page-nav {
       display: flex; align-items: center;
       gap: .25rem;
@@ -211,7 +210,6 @@
       font-weight: 600;
       box-shadow: var(--shadow-sm);
     }
-    /* Right actions */
     .header-right { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
     .streak-pill {
       display: flex; align-items: center; gap: .5rem;
@@ -250,10 +248,7 @@
       gap: 2.5rem;
     }
     @media (max-width: 1024px) { .p1-main { grid-template-columns: 1fr; } }
-
     .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
-
-    /* Card */
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -271,14 +266,9 @@
       display: flex; align-items: center; gap: .5rem;
     }
     .card-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
     .verse-ref { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; color: var(--accent); display: block; margin-bottom: .6rem; }
     .verse-text { font-style: italic; font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.75; color: var(--text-1); margin-bottom: 1.25rem; }
-
-    .tags-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: .5rem;
-    }
+    .tags-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
     .tag {
       font-size: .7rem; font-weight: 600;
       text-transform: uppercase; letter-spacing: .05em;
@@ -293,11 +283,7 @@
     .tag-6 { background: rgba(107,114,128,.08); color: var(--text-2); }
     .tag-7 { background: rgba(249,115,22,.08); color: #c2410c; }
     .tag-8 { background: rgba(59,130,246,.08); color: #1d4ed8; }
-
-    /* Content area */
     .p1-content { display: flex; flex-direction: column; gap: 2rem; }
-
-    /* Context Selector */
     .ctx-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: var(--r-lg); padding: 1.75rem;
@@ -322,8 +308,6 @@
     }
     .select-custom:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.08); }
     .select-custom:disabled { opacity: .45; cursor: not-allowed; }
-
-    /* Tabs */
     .tabs-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: var(--r-lg); overflow: hidden;
@@ -349,8 +333,6 @@
     }
     .tab-pane { display: none; padding: 2.5rem; animation: pgIn .35s var(--ease); }
     .tab-pane.active { display: block; }
-
-    /* Rich text */
     .rich-text { font-size: 1.05rem; line-height: 1.85; color: var(--text-1); max-width: 760px; margin: 0 auto; }
     .rich-text h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: .6rem; margin: 2rem 0 1rem; }
     .rich-text h2 { font-size: 1.6rem; margin: 1.75rem 0 .75rem; color: var(--accent); }
@@ -366,8 +348,6 @@
       transition: all .2s;
     }
     .bible-link:hover { background: var(--accent); color: #fff; padding: 0 2px; border-radius: 3px; }
-
-    /* Loading state */
     .loading-state {
       display: none; flex-direction: column;
       align-items: center; justify-content: center;
@@ -384,8 +364,6 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-msg { font-family: var(--font-serif); font-style: italic; font-size: 1rem; }
-
-    /* Gen button */
     .gen-wrap { margin-top: 2rem; text-align: center; }
     .btn-gen {
       display: inline-flex; align-items: center; gap: .6rem;
@@ -397,8 +375,6 @@
       transition: transform .2s, box-shadow .2s;
     }
     .btn-gen:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(var(--accent-rgb),.35); }
-
-    /* Search */
     .search-row { display: flex; gap: .75rem; margin-bottom: 2rem; }
     .search-input {
       flex: 1; padding: .85rem 1.1rem;
@@ -420,13 +396,8 @@
     /* ══════════════════════════════════════════════
        PAGE 2 — LECTIO DIVINA
     ══════════════════════════════════════════════ */
-    .p2-wrap {
-      max-width: 780px; margin: 0 auto;
-      padding: 2.5rem 5% 5rem;
-    }
-    .p2-header {
-      text-align: center; margin-bottom: 2.5rem;
-    }
+    .p2-wrap { max-width: 780px; margin: 0 auto; padding: 2.5rem 5% 5rem; }
+    .p2-header { text-align: center; margin-bottom: 2.5rem; }
     .p2-logo {
       font-family: var(--font-serif);
       font-size: clamp(1.8rem, 4vw, 2.5rem);
@@ -434,20 +405,10 @@
       letter-spacing: -.03em; margin-bottom: .3rem;
     }
     .p2-logo .accent { color: var(--gold); }
-    .p2-sub {
-      font-size: .8rem; color: var(--text-3);
-      letter-spacing: .12em; text-transform: uppercase;
-    }
-
-    /* Lectio screens */
+    .p2-sub { font-size: .8rem; color: var(--text-3); letter-spacing: .12em; text-transform: uppercase; }
     .l-screen { display: none; }
     .l-screen.active { display: block; animation: pgIn .3s var(--ease); }
-
-    /* Home screen */
-    .mode-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: .75rem; margin-bottom: 1.5rem;
-    }
+    .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-bottom: 1.5rem; }
     .mode-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: var(--r-lg); padding: 1.5rem .75rem;
@@ -463,7 +424,6 @@
     .mc-unit { font-size: .8rem; color: var(--text-2); }
     .mc-name { font-size: .7rem; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
     .mc-name-gold { color: var(--gold); }
-
     .verse-preview-card {
       background: linear-gradient(135deg, var(--gold-bg), rgba(253,251,247,.4));
       border: 1px solid var(--gold-bd);
@@ -473,7 +433,6 @@
     }
     .vp-label { font-size: .7rem; font-weight: 600; color: var(--gold); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .6rem; }
     .vp-text { font-family: var(--font-serif); font-size: 1.05rem; font-style: italic; line-height: 1.75; color: var(--text-1); }
-
     .btn-start {
       width: 100%; padding: 1.1rem;
       background: var(--accent); color: #fff;
@@ -484,8 +443,6 @@
       display: flex; align-items: center; justify-content: center; gap: .5rem;
     }
     .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(var(--accent-rgb),.35); }
-
-    /* Reading screen */
     .reading-top {
       display: flex; align-items: center;
       justify-content: space-between;
@@ -504,8 +461,6 @@
       border: 1px solid var(--gold-bd);
       padding: .35rem .9rem; border-radius: 20px;
     }
-
-    /* Timer ring */
     .timer-wrap { position: relative; width: 160px; height: 160px; margin: 0 auto 1.75rem; }
     .ring-svg { transform: rotate(-90deg); }
     .ring-bg-c { fill: none; stroke: var(--border-md); stroke-width: 6; }
@@ -513,8 +468,6 @@
     .timer-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
     .t-num { font-family: var(--font-serif); font-size: 2rem; font-weight: 700; color: var(--text-1); line-height: 1; }
     .t-st { font-size: .7rem; color: var(--text-3); letter-spacing: .1em; text-transform: uppercase; }
-
-    /* Passage block */
     .passage-block {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: var(--r-lg); padding: 1.75rem;
@@ -525,7 +478,6 @@
     .passage-block::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 4px; }
     .pb-ref { font-size: .75rem; color: var(--gold); letter-spacing: .12em; text-transform: uppercase; font-weight: 600; margin-bottom: .85rem; }
     .pb-text { font-family: var(--font-serif); font-size: 1.15rem; line-height: 1.9; color: var(--text-1); white-space: pre-wrap; }
-
     .r-controls { display: flex; gap: .75rem; }
     .btn-ctrl {
       flex: 1; padding: .8rem;
@@ -539,8 +491,6 @@
     .btn-ctrl.gold { background: var(--gold-bg); border-color: var(--gold-bd); color: var(--gold); font-weight: 600; }
     .btn-ctrl.gold:hover { filter: brightness(.96); }
     .btn-ctrl.full { width: 100%; flex: none; margin-top: 1rem; }
-
-    /* Analysis screen */
     .analysis-ref-bar {
       display: flex; align-items: center; gap: .75rem;
       background: var(--bg-subtle); border: 1px solid var(--border);
@@ -548,12 +498,7 @@
     }
     .arb-ref { font-size: .75rem; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: .1em; flex-shrink: 0; }
     .arb-txt { font-family: var(--font-serif); font-size: .9rem; color: var(--text-2); font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-    /* 8-tab grid */
-    .l-tab-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 5px; margin-bottom: 1.25rem;
-    }
+    .l-tab-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 1.25rem; }
     .l-tab {
       display: flex; flex-direction: column; align-items: center;
       gap: 3px; padding: 8px 4px;
@@ -566,7 +511,6 @@
     .l-tab span { text-align: center; }
     .l-tab.active { background: var(--gold-bg); color: var(--gold); border-color: var(--gold-bd); font-weight: 600; }
     .l-tab:hover:not(.active) { background: var(--bg-subtle); color: var(--text-2); }
-
     .l-tab-panel { display: none; }
     .l-tab-panel.active { display: block; animation: pgIn .25s var(--ease); }
     .lp-hd { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
@@ -574,18 +518,17 @@
     .lp-icon i { font-size: 17px; color: var(--gold); }
     .lp-title { font-size: .95rem; font-weight: 600; color: var(--text-1); }
     .lp-text { font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.9; color: var(--text-1); }
-
-    /* Loading dots */
+    .lp-text p { margin-bottom: 1.1rem; }
+    .lp-text p:last-child { margin-bottom: 0; }
+    .lp-text strong { color: var(--accent); font-weight: 600; }
+    .lp-text em { font-style: italic; }
+    .lp-text h4 { font-family: var(--font-serif); font-size: 1rem; color: var(--accent); margin: 1rem 0 .4rem; text-transform: uppercase; letter-spacing: .05em; }
     .dots-row { display: flex; align-items: center; gap: 6px; padding: 2rem 0; justify-content: center; color: var(--text-2); font-size: .85rem; }
     .dot { animation: blink 1.4s infinite both; font-size: 1.2rem; color: var(--gold); }
     .dot:nth-child(2) { animation-delay: .2s; }
     .dot:nth-child(3) { animation-delay: .4s; }
     @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
-
-    /* Reflection screen */
     .refl-text { font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.9; color: var(--text-1); display: none; }
-
-    /* Complete screen */
     .complete-block { text-align: center; padding: 2.5rem 0; }
     .complete-ico { font-size: 3.5rem; color: var(--gold); margin-bottom: .75rem; }
     .complete-title { font-family: var(--font-serif); font-size: 2rem; color: var(--text-1); margin-bottom: .4rem; }
@@ -601,20 +544,42 @@
     }
 
     /* ══════════════════════════════════════════════
-       RESPONSIVE
+       TAB LOADING STATE (per-tab inline spinner)
     ══════════════════════════════════════════════ */
-    @media (max-width: 640px) {
-      .page-nav { display: none; }
-      .brand { font-size: 1.2rem; }
-      .p1-main, .p2-wrap { padding: 1.5rem 4% 4rem; }
-      .tab-pane { padding: 1.5rem; }
-      .search-row { flex-direction: column; }
-      .tabs-nav { flex-wrap: nowrap; }
+    .tab-panel-loading {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 2.5rem 1rem; gap: .9rem;
+      color: var(--text-2); font-size: .85rem;
     }
-    @media (max-width: 480px) {
-      .mode-grid { grid-template-columns: repeat(3,1fr); }
-      .mc-time { font-size: 2rem; }
+    .tab-panel-progress {
+      width: 220px; height: 3px;
+      background: var(--border-md); border-radius: 2px; overflow: hidden;
     }
+    .tab-panel-progress-inner {
+      height: 100%; background: var(--gold); border-radius: 2px;
+      animation: tab-prog 20s ease-in-out forwards;
+    }
+    @keyframes tab-prog { 0%{width:0%} 75%{width:82%} 100%{width:94%} }
+    .mistral-badge {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .7rem; font-weight: 600; color: var(--text-3);
+      background: var(--bg-subtle); border: 1px solid var(--border);
+      padding: .25rem .65rem; border-radius: 20px;
+      letter-spacing: .05em; text-transform: uppercase;
+    }
+    .tab-error {
+      color: #ef4444; font-size: .9rem;
+      text-align: center; padding: 1.5rem;
+    }
+    .tab-retry-btn {
+      margin-top: .75rem;
+      padding: .5rem 1.25rem;
+      background: transparent; color: var(--accent);
+      border: 1px solid var(--accent); border-radius: var(--r-sm);
+      cursor: pointer; font-size: .85rem; font-weight: 500;
+      transition: background .15s, color .15s;
+    }
+    .tab-retry-btn:hover { background: var(--accent); color: #fff; }
 
     /* ══════════════════════════════════════════════
        BIBLE LOUIS SEGOND 1910
@@ -622,11 +587,7 @@
     .bible-ls-header { margin-bottom: 1.5rem; }
     .bible-ls-title { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600; color: var(--text-1); margin-bottom: .35rem; }
     .bible-ls-sub { font-size: .9rem; color: var(--text-2); line-height: 1.5; }
-
-    .bible-ls-controls {
-      display: grid; grid-template-columns: 1fr 1fr auto;
-      gap: 1rem; margin-bottom: 1.5rem; align-items: end;
-    }
+    .bible-ls-controls { display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; margin-bottom: 1.5rem; align-items: end; }
     @media (max-width: 600px) { .bible-ls-controls { grid-template-columns: 1fr 1fr; } }
     .bls-ext-wrap { display: flex; align-items: flex-end; }
     .btn-bls-ext {
@@ -639,16 +600,13 @@
       transition: all .2s var(--ease);
     }
     .btn-bls-ext:hover { background: var(--accent); color: #fff; }
-
     .bls-placeholder {
       text-align: center; padding: 4rem 1rem;
       border: 2px dashed var(--border-md);
-      border-radius: var(--r-lg);
-      color: var(--text-3);
+      border-radius: var(--r-lg); color: var(--text-3);
     }
     .bls-placeholder-icon { font-size: 2.5rem; margin-bottom: .75rem; }
     .bls-placeholder-text { font-family: var(--font-serif); font-size: 1rem; line-height: 1.65; }
-
     .bls-frame-wrap { border: 1px solid var(--border-md); border-radius: var(--r-lg); overflow: hidden; }
     .bls-frame-bar {
       display: flex; align-items: center; justify-content: space-between;
@@ -667,34 +625,19 @@
     .bls-iframe-fallback { padding: 2.5rem; text-align: center; }
 
     /* ══════════════════════════════════════════════
-       RICH LP-TEXT (Lectio analysis 300+ words)
+       RESPONSIVE
     ══════════════════════════════════════════════ */
-    .lp-text p { margin-bottom: 1.1rem; }
-    .lp-text p:last-child { margin-bottom: 0; }
-    .lp-text strong { color: var(--accent); font-weight: 600; }
-    .lp-text em { font-style: italic; }
-    .lp-text h4 { font-family: var(--font-serif); font-size: 1rem; color: var(--accent); margin: 1rem 0 .4rem; text-transform: uppercase; letter-spacing: .05em; }
-    .lp-loading-detail {
-      display: flex; flex-direction: column; align-items: center;
-      padding: 2rem 0; color: var(--text-2); font-size: .85rem; gap: .75rem;
+    @media (max-width: 640px) {
+      .page-nav { display: none; }
+      .brand { font-size: 1.2rem; }
+      .p1-main, .p2-wrap { padding: 1.5rem 4% 4rem; }
+      .tab-pane { padding: 1.5rem; }
+      .search-row { flex-direction: column; }
+      .tabs-nav { flex-wrap: nowrap; }
     }
-    .lp-progress-bar {
-      width: 200px; height: 3px; background: var(--border-md);
-      border-radius: 2px; overflow: hidden;
-    }
-    .lp-progress-inner {
-      height: 100%; background: var(--gold);
-      border-radius: 2px;
-      animation: lp-progress 18s ease-in-out forwards;
-    }
-    @keyframes lp-progress { 0%{width:0%} 80%{width:85%} 100%{width:95%} }
-    .mistral-badge {
-      display: inline-flex; align-items: center; gap: .4rem;
-      font-size: .7rem; font-weight: 600; color: var(--text-3);
-      background: var(--bg-subtle); border: 1px solid var(--border);
-      padding: .25rem .65rem; border-radius: 20px;
-      letter-spacing: .05em; text-transform: uppercase;
-      margin-top: .4rem;
+    @media (max-width: 480px) {
+      .mode-grid { grid-template-columns: repeat(3,1fr); }
+      .mc-time { font-size: 2rem; }
     }
   </style>
 </head>
@@ -750,7 +693,6 @@
   <!-- ═══ PAGE 1 : ÉTUDE BIBLIQUE ═══ -->
   <div id="page-study" class="page active">
     <main class="p1-main">
-      <!-- SIDEBAR -->
       <aside class="sidebar">
         <div class="card">
           <p class="card-label">Passage du Jour</p>
@@ -769,10 +711,7 @@
         </div>
       </aside>
 
-      <!-- CONTENT -->
       <div class="p1-content">
-
-        <!-- Sélecteur Livre / Chapitre -->
         <div class="ctx-card">
           <div class="select-group">
             <label for="book-select">Livre Biblique</label>
@@ -788,7 +727,6 @@
           </div>
         </div>
 
-        <!-- Onglets d'analyse -->
         <div class="tabs-card">
           <div class="tabs-nav">
             <button class="tab-nav-btn active" onclick="switchP1Tab('theological', event)">Analyse Théologique</button>
@@ -798,7 +736,6 @@
             <button class="tab-nav-btn" onclick="switchP1Tab('bible-ls', event)">📖 Bible LS 1910</button>
           </div>
 
-          <!-- Theological -->
           <div id="tab-theological" class="tab-pane active">
             <div id="load-theological" class="loading-state">
               <div class="spinner"></div>
@@ -815,7 +752,6 @@
             </div>
           </div>
 
-          <!-- Meditative -->
           <div id="tab-meditative" class="tab-pane">
             <div id="load-meditative" class="loading-state">
               <div class="spinner"></div>
@@ -827,7 +763,6 @@
             </div>
           </div>
 
-          <!-- Biblical -->
           <div id="tab-biblical" class="tab-pane">
             <div id="load-biblical" class="loading-state">
               <div class="spinner"></div>
@@ -839,7 +774,6 @@
             </div>
           </div>
 
-          <!-- Dictionary -->
           <div id="tab-dictionary" class="tab-pane">
             <div class="search-row">
               <input type="text" id="dict-input" class="search-input" placeholder="Ex: Grâce, Rédemption, Alliance…" />
@@ -854,7 +788,6 @@
             </div>
           </div>
 
-          <!-- Bible LS 1910 -->
           <div id="tab-bible-ls" class="tab-pane">
             <div class="bible-ls-header">
               <p class="bible-ls-title">📖 Bible Louis Segond 1910</p>
@@ -874,7 +807,7 @@
                 </select>
               </div>
               <div class="bls-ext-wrap">
-                <a id="bls-ext-link" href="https://saintebible.com " target="_blank" rel="noopener" class="btn-bls-ext">
+                <a id="bls-ext-link" href="https://saintebible.com" target="_blank" rel="noopener" class="btn-bls-ext">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   Ouvrir saintebible.com
                 </a>
@@ -910,7 +843,7 @@
     <div class="p2-wrap">
       <div class="p2-header">
         <h1 class="p2-logo">✦ Lectio <span class="accent">Divina</span></h1>
-        <p class="p2-sub">Lecture & méditation biblique quotidienne</p>
+        <p class="p2-sub">Lecture &amp; méditation biblique quotidienne</p>
       </div>
 
       <!-- HOME -->
@@ -932,12 +865,10 @@
             <span class="mc-name">lectio</span>
           </div>
         </div>
-
         <div class="verse-preview-card">
           <p class="vp-label">Passage du jour</p>
           <p class="vp-text" id="l-verse-prev">Chargement...</p>
         </div>
-
         <button class="btn-start" onclick="startLectio()">
           <i class="ti ti-player-play"></i>
           Commencer la lecture
@@ -981,9 +912,10 @@
           <span class="arb-txt" id="l-anal-exc"></span>
         </div>
 
+        <!-- Global loading kept for backward compat — hidden immediately in new flow -->
         <div id="l-anal-loading" class="dots-row" style="display:none;">
           <span class="dot">•</span><span class="dot">•</span><span class="dot">•</span>
-          <span style="margin-left:6px;font-size:.85rem;color:var(--text-2)">Analyse théologique en cours…</span>
+          <span style="margin-left:6px;font-size:.85rem;color:var(--text-2)">Analyse en cours…</span>
         </div>
 
         <div id="l-anal-content" style="display:none;">
@@ -998,14 +930,38 @@
             <button class="l-tab" data-ltab="spirituel" onclick="switchLTab('spirituel')"><i class="ti ti-flame"></i><span>Spirituel</span></button>
           </div>
 
-          <div id="ltab-contexte" class="l-tab-panel active"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-map-2"></i></div><div class="lp-title">Contexte historique</div></div><p class="lp-text" id="lc-contexte"></p></div>
-          <div id="ltab-qui_parle" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-user-circle"></i></div><div class="lp-title">Qui parle ?</div></div><p class="lp-text" id="lc-qui_parle"></p></div>
-          <div id="ltab-pourquoi" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-help"></i></div><div class="lp-title">Pourquoi ce message ?</div></div><p class="lp-text" id="lc-pourquoi"></p></div>
-          <div id="ltab-sens" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-book"></i></div><div class="lp-title">Sens du texte</div></div><p class="lp-text" id="lc-sens"></p></div>
-          <div id="ltab-theme" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-tag"></i></div><div class="lp-title">Thème principal</div></div><p class="lp-text" id="lc-theme"></p></div>
-          <div id="ltab-destinataires" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-users"></i></div><div class="lp-title">À qui s'adresse ce texte</div></div><p class="lp-text" id="lc-destinataires"></p></div>
-          <div id="ltab-theologiens" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-certificate"></i></div><div class="lp-title">Regard des théologiens</div></div><p class="lp-text" id="lc-theologiens"></p></div>
-          <div id="ltab-spirituel" class="l-tab-panel"><div class="lp-hd"><div class="lp-icon"><i class="ti ti-flame"></i></div><div class="lp-title">Sens spirituel</div></div><p class="lp-text" id="lc-spirituel"></p></div>
+          <div id="ltab-contexte" class="l-tab-panel active">
+            <div class="lp-hd"><div class="lp-icon"><i class="ti ti-map-2"></i></div><div class="lp-title">Contexte historique</div></div>
+            <div class="lp-text" id="lc-contexte"></div>
+          </div>
+          <div id="ltab-qui_parle" class="l-tab-panel">
+            <div class="lp-hd"><div class="lp-icon"><i class="ti ti-user-circle"></i></div><div class="lp-title">Qui parle ?</div></div>
+            <div class="lp-text" id="lc-qui_parle"></div>
+          </div>
+          <div id="ltab-pourquoi" class="l-tab-panel">
+            <div class="lp-hd"><div class="lp-icon"><i class="ti ti-help"></i></div><div class="lp-title">Pourquoi ce message ?</div></div>
+            <div class="lp-text" id="lc-pourquoi"></div>
+          </div>
+          <div id="ltab-sens" class="l-tab-panel">
+            <div class="lp-hd"><div class="lp-icon"><i class="ti ti-book"></i></div><div class="lp-title">Sens du texte</div></div>
+            <div class="lp-text" id="lc-sens"></div>
+          </div>
+          <div id="ltab-theme" class="l-tab-panel">
+            <div class="lp-hd"><div class="lp-icon"><i class="ti ti-tag"></i></div><div class="lp-title">Thème principal</div></div>
+            <div class="lp-text" id="lc-theme"></div>
+          </div>
+          <div id="ltab-destinataires" class="l-tab-panel">
+            <div class="lp-hd"><div class="lp-icon"><i class="ti ti-users"></i></div><div class="lp-title">À qui s'adresse ce texte</div></div>
+            <div class="lp-text" id="lc-destinataires"></div>
+          </div>
+          <div id="ltab-theologiens" class="l-tab-panel">
+            <div class="lp-hd"><div class="lp-icon"><i class="ti ti-certificate"></i></div><div class="lp-title">Regard des théologiens</div></div>
+            <div class="lp-text" id="lc-theologiens"></div>
+          </div>
+          <div id="ltab-spirituel" class="l-tab-panel">
+            <div class="lp-hd"><div class="lp-icon"><i class="ti ti-flame"></i></div><div class="lp-title">Sens spirituel</div></div>
+            <div class="lp-text" id="lc-spirituel"></div>
+          </div>
 
           <button class="btn-ctrl gold full" onclick="goLectioReflection()"><i class="ti ti-heart"></i> Méditation personnelle</button>
         </div>
@@ -1052,17 +1008,20 @@
 <script>
 /* ═══════════════════════════════════════════════════════════
    CONFIG API
-   ⚠️ Pour la sécurité, utilisez un proxy Cloudflare en production.
-   Ici, les clés sont exposées côté client pour la démo.
+   • MISTRAL  : utilisé pour les 8 onglets Lectio (via /functions/api/analyze.js)
+                et les analyses de la Page 1 (appel direct pour la démo)
+   • CLAUDE   : utilisé pour la méditation personnelle (Page 2 réflexion)
+   ⚠️  En production, ne jamais exposer les clés côté client.
+       Toujours passer par un proxy Cloudflare Worker.
 ═══════════════════════════════════════════════════════════ */
 const MISTRAL = {
-  KEY:   'YOUR_MISTRAL_API_KEY', // Remplacez par votre clé Mistral
+  KEY:   'YOUR_MISTRAL_API_KEY',
   MODEL: 'mistral-large-latest',
   URL:   'https://api.mistral.ai/v1/chat/completions',
 };
 
 const CLAUDE = {
-  KEY:   'YOUR_ANTHROPIC_API_KEY', // Remplacez par votre clé Anthropic
+  KEY:   'YOUR_ANTHROPIC_API_KEY',
   MODEL: 'claude-3-5-sonnet-20241022',
   URL:   'https://api.anthropic.com/v1/messages',
 };
@@ -1130,54 +1089,55 @@ const bookMap = {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   GÉNÉRATEUR DE VERSETS ILLIMITÉS (Algorithme Déterministe)
-   Utilise le jour de l'année + la durée pour sélectionner un passage unique.
-   Cela crée une réserve "infinie" sans base de données lourde.
+   GÉNÉRATEUR DE VERSETS (Algorithme Déterministe)
+   Sélectionne un passage unique basé sur le jour de l'année
+   et la durée choisie — réserve illimitée sans base de données.
 ═══════════════════════════════════════════════════════════ */
 function getDailyPassage(durationMin) {
-  const now = new Date();
+  const now   = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
-  const diff = now - start;
-  const oneDay = 1000 * 60 * 60 * 24;
-  const dayOfYear = Math.floor(diff / oneDay);
-  
-  // Graine unique pour ce jour et cette durée
-  const seed = dayOfYear * 100 + (durationMin * 13);
-  
-  // Fonction pseudo-aléatoire déterministe
+  const diff  = now - start;
+  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const seed  = dayOfYear * 100 + (durationMin * 13);
+
   const random = (min, max) => {
     const x = Math.sin(seed + min) * 10000;
     return Math.floor((x - Math.floor(x)) * (max - min + 1)) + min;
   };
 
-  // Sélection du livre basée sur la graine
   const bookIndex = random(0, bibleBooks.length - 1);
-  const book = bibleBooks[bookIndex];
-  
-  // Sélection du chapitre
-  const chapter = random(1, book.chapters);
-  
-  // Construction de la référence (Simulation de texte pour la démo sans API externe lourde)
-  // Dans une app réelle, vous appelleriez ici une API Bible pour récupérer le texte exact.
-  // Ici, on génère un texte de remplacement élégant basé sur la référence pour ne pas casser l'UI.
-  const ref = `${book.name} ${chapter}`;
-  const text = `[Lecture de ${book.name} chapitre ${chapter}]\n\nCe passage nous invite à méditer sur la profondeur de la parole divine. Aujourd'hui, le Seigneur vous parle à travers ce chapitre précis. Lisez-le lentement, laissez les mots résonner en vous. Comme il est écrit dans ce livre sacré, Dieu guide ses enfants pas à pas. Que ce texte soit une lampe à vos pieds et une lumière sur votre sentier.`;
-  
+  const book      = bibleBooks[bookIndex];
+  const chapter   = random(1, book.chapters);
+  const ref       = `${book.name} ${chapter}`;
+  const text      = `[Lecture de ${book.name} chapitre ${chapter}]\n\nCe passage nous invite à méditer sur la profondeur de la parole divine. Aujourd'hui, le Seigneur vous parle à travers ce chapitre précis. Lisez-le lentement, laissez les mots résonner en vous. Comme il est écrit dans ce livre sacré, Dieu guide ses enfants pas à pas. Que ce texte soit une lampe à vos pieds et une lumière sur votre sentier.`;
+
   return { ref, text };
 }
 
 /* ═══════════════════════════════════════════════════════════
    ÉTAT GLOBAL
 ═══════════════════════════════════════════════════════════ */
-let selectedBook='', selectedChapter='';
+let selectedBook = '';
+let selectedChapter = '';
 
 // Lectio state
-let lMode=2, lPassage=null, lInterval=null;
-let lTimeLeft=120, lTotalTime=120, lPaused=false;
-let lAnalysisData=null, lAnalysisPending=false;
-let lStreak=0, lDoneToday=false;
+let lMode        = 2;
+let lPassage     = null;
+let lInterval    = null;
+let lTimeLeft    = 120;
+let lTotalTime   = 120;
+let lPaused      = false;
+let lAnalysisData   = null;   // kept for backward compat
+let lAnalysisPending = false; // kept for backward compat
+let lStreak      = 0;
+let lDoneToday   = false;
 
-const CIRC = 2*Math.PI*62; // r=62
+// ── NEW: per-tab cache ──────────────────────────────────────
+// Stores which tabs have been successfully loaded for the
+// current reading session. Cleared in startLectio().
+let lTabCache = {};
+
+const CIRC = 2 * Math.PI * 62; // svg r=62
 
 /* ═══════════════════════════════════════════════════════════
    INIT
@@ -1189,65 +1149,79 @@ document.addEventListener('DOMContentLoaded', () => {
   initBibleReader();
   loadStreakDisplay();
   initLectioHome();
-  document.getElementById('access-code').addEventListener('keypress', e => { if(e.key==='Enter') checkAccess(); });
+  document.getElementById('access-code')
+    .addEventListener('keypress', e => { if(e.key === 'Enter') checkAccess(); });
   document.getElementById('l-ring').style.strokeDasharray = CIRC;
 });
 
 /* ═══════════════════════════════════════════════════════════
-   LOCK
+   LOCK SCREEN
 ═══════════════════════════════════════════════════════════ */
 function checkLock() {
-  if(localStorage.getItem('lectio_unlocked')==='true') unlockApp();
+  if(localStorage.getItem('lectio_unlocked') === 'true') unlockApp();
 }
+
 function checkAccess() {
-  const v = document.getElementById('access-code').value;
+  const v   = document.getElementById('access-code').value;
   const err = document.getElementById('lock-err');
-  if(v===ACCESS_CODE) { localStorage.setItem('lectio_unlocked','true'); unlockApp(); }
-  else {
+  if(v === ACCESS_CODE) {
+    localStorage.setItem('lectio_unlocked', 'true');
+    unlockApp();
+  } else {
     err.classList.add('show');
-    setTimeout(()=>err.classList.remove('show'),3000);
-    document.getElementById('access-code').value='';
+    setTimeout(() => err.classList.remove('show'), 3000);
+    document.getElementById('access-code').value = '';
   }
 }
+
 function unlockApp() {
-  const ls=document.getElementById('lock-screen'), ap=document.getElementById('app-container');
+  const ls = document.getElementById('lock-screen');
+  const ap = document.getElementById('app-container');
   ls.classList.add('hidden');
-  setTimeout(()=>{ ls.style.display='none'; ap.classList.add('visible'); },600);
+  setTimeout(() => { ls.style.display = 'none'; ap.classList.add('visible'); }, 600);
 }
 
 /* ═══════════════════════════════════════════════════════════
    THEME
 ═══════════════════════════════════════════════════════════ */
 function initTheme() {
-  const saved = localStorage.getItem('theme')||'light';
-  if(saved==='dark') applyDark();
-  document.getElementById('theme-btn').addEventListener('click',()=>{
-    const isDark = document.documentElement.getAttribute('data-theme')==='dark';
-    if(isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('theme','light'); applySun(); }
-    else { applyDark(); localStorage.setItem('theme','dark'); }
+  const saved = localStorage.getItem('theme') || 'light';
+  if(saved === 'dark') applyDark();
+  document.getElementById('theme-btn').addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if(isDark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+      applySun();
+    } else {
+      applyDark();
+      localStorage.setItem('theme', 'dark');
+    }
   });
 }
+
 function applyDark() {
-  document.documentElement.setAttribute('data-theme','dark');
-  document.getElementById('icon-sun').style.display='block';
-  document.getElementById('icon-moon').style.display='none';
+  document.documentElement.setAttribute('data-theme', 'dark');
+  document.getElementById('icon-sun').style.display  = 'block';
+  document.getElementById('icon-moon').style.display = 'none';
 }
+
 function applySun() {
-  document.getElementById('icon-sun').style.display='none';
-  document.getElementById('icon-moon').style.display='block';
+  document.getElementById('icon-sun').style.display  = 'none';
+  document.getElementById('icon-moon').style.display = 'block';
 }
 
 /* ═══════════════════════════════════════════════════════════
    PAGE NAVIGATION
 ═══════════════════════════════════════════════════════════ */
 function showPage(id, btn) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.page-nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
   btn.classList.add('active');
-  if(id==='study') {
+  if(id === 'study') {
     const nav = document.getElementById('page-nav');
-    if(nav) nav.querySelectorAll('.page-nav-btn').forEach((b,i)=>{ b.classList.toggle('active',i===0); });
+    if(nav) nav.querySelectorAll('.page-nav-btn').forEach((b, i) => { b.classList.toggle('active', i === 0); });
   }
 }
 
@@ -1256,350 +1230,536 @@ function showPage(id, btn) {
 ═══════════════════════════════════════════════════════════ */
 function initBooks() {
   const sel = document.getElementById('book-select');
-  bibleBooks.forEach((b,i)=>{
-    const o=document.createElement('option'); o.value=i; o.textContent=b.name; sel.appendChild(o);
+  bibleBooks.forEach((b, i) => {
+    const o = document.createElement('option');
+    o.value = i; o.textContent = b.name;
+    sel.appendChild(o);
   });
 }
+
 function loadChapters() {
-  const idx=document.getElementById('book-select').value;
-  const chapSel=document.getElementById('chapter-select');
-  chapSel.innerHTML='<option value="">Sélectionner un chapitre...</option>';
-  if(!idx) { chapSel.disabled=true; selectedBook=''; selectedChapter=''; updateCtxLabels(); return; }
-  const book=bibleBooks[idx]; selectedBook=book.name;
-  for(let i=1;i<=book.chapters;i++){const o=document.createElement('option');o.value=i;o.textContent=i;chapSel.appendChild(o);}
-  chapSel.disabled=false; updateCtxLabels();
+  const idx     = document.getElementById('book-select').value;
+  const chapSel = document.getElementById('chapter-select');
+  chapSel.innerHTML = '<option value="">Sélectionner un chapitre...</option>';
+  if(!idx) { chapSel.disabled = true; selectedBook = ''; selectedChapter = ''; updateCtxLabels(); return; }
+  const book = bibleBooks[idx];
+  selectedBook = book.name;
+  for(let i = 1; i <= book.chapters; i++) {
+    const o = document.createElement('option');
+    o.value = i; o.textContent = i;
+    chapSel.appendChild(o);
+  }
+  chapSel.disabled = false;
+  updateCtxLabels();
 }
-function updateCtx() { selectedChapter=document.getElementById('chapter-select').value; updateCtxLabels(); }
+
+function updateCtx() {
+  selectedChapter = document.getElementById('chapter-select').value;
+  updateCtxLabels();
+}
+
 function updateCtxLabels() {
-  const ctx=selectedBook&&selectedChapter?`${selectedBook} ${selectedChapter}`:'ce passage';
-  ['theo','med','bib'].forEach(id=>{ const el=document.getElementById('ctx-'+id); if(el)el.textContent=ctx; });
+  const ctx = selectedBook && selectedChapter ? `${selectedBook} ${selectedChapter}` : 'ce passage';
+  ['theo', 'med', 'bib'].forEach(id => {
+    const el = document.getElementById('ctx-' + id);
+    if(el) el.textContent = ctx;
+  });
 }
 
 function switchP1Tab(id, evt) {
-  document.querySelectorAll('.tab-nav-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   evt.target.classList.add('active');
-  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
 }
 
 async function generateContent(type) {
-  if(!selectedBook||!selectedChapter) {
+  if(!selectedBook || !selectedChapter) {
     alert('Veuillez sélectionner un Livre et un Chapitre avant de générer une analyse.');
-    document.querySelector('.ctx-card').scrollIntoView({behavior:'smooth'}); return;
+    document.querySelector('.ctx-card').scrollIntoView({ behavior: 'smooth' });
+    return;
   }
-  const cDiv=document.getElementById('content-'+type);
-  const lDiv=document.getElementById('load-'+type);
-  cDiv.style.display='none'; lDiv.classList.add('show');
+  const cDiv = document.getElementById('content-' + type);
+  const lDiv = document.getElementById('load-' + type);
+  cDiv.style.display = 'none';
+  lDiv.classList.add('show');
 
-  const wpm=130, dur=120;
-  const targetWords=Math.round((dur/60)*wpm);
-  const tLabel='2 minutes';
-  const passage=`${selectedBook} ${selectedChapter}`;
-  let prompt='';
+  const wpm         = 130;
+  const dur         = 120;
+  const targetWords = Math.round((dur / 60) * wpm);
+  const tLabel      = '2 minutes';
+  const passage     = `${selectedBook} ${selectedChapter}`;
+  let prompt = '';
 
-  if(type==='theological')
-    prompt=`Agis comme un théologien expert. Rédige une analyse théologique et doctrinale approfondie et structurée pour le chapitre complet suivant : ${passage}. L'analyse doit être calibrée pour un temps de lecture de ${tLabel} (environ ${targetWords} mots). Utilise des titres clairs (##, ###) et mets en gras les concepts clés. Inclue les implications pour la foi contemporaine.`;
-  else if(type==='meditative')
-    prompt=`Agis comme un guide spirituel expérimenté. Prépare une méditation guidée structurée (Lectio, Meditatio, Oratio, Contemplatio) basée sur le chapitre suivant : ${passage}. Le contenu doit être calibré pour ${tLabel} (environ ${targetWords} mots). Ton ton doit être doux, invitant et profond. Utilise des titres pour chaque étape.`;
-  else if(type==='biblical')
-    prompt=`Agis comme un exégète biblique. Donne le contexte historique, littéraire et les liens avec le reste de la Bible pour : ${passage}. Limite ta réponse pour ${tLabel} (environ ${targetWords} mots). Explique les termes originaux importants et les références croisées. Structure avec des titres.`;
-
-  try {
-    // Note: Cet appel échouera si la clé n'est pas valide ou si CORS bloque. 
-    // En production, passez par votre fonction Cloudflare /api/analyze
-    const r=await fetch(MISTRAL.URL,{ method:'POST', headers:{'Content-Type':'application/json', 'Authorization':`Bearer ${MISTRAL.KEY}`}, body:JSON.stringify({model:MISTRAL.MODEL, messages:[{role:'user',content:prompt}], max_tokens:1000}) });
-    if(!r.ok) throw new Error('Erreur API');
-    const d=await r.json();
-    cDiv.innerHTML=makeBibleLinks(parseMarkdown(d.choices[0].message.content));
-  } catch(e) {
-    console.error(e);
-    cDiv.innerHTML='<p style="color:#ef4444;text-align:center;">Une erreur est survenue (Vérifiez la clé API ou le proxy).</p>';
-  } finally {
-    lDiv.classList.remove('show'); cDiv.style.display='block';
-  }
-}
-
-async function searchDefinition() {
-  const word=document.getElementById('dict-input').value.trim();
-  if(!word) return;
-  const cDiv=document.getElementById('content-dictionary');
-  const lDiv=document.getElementById('load-dictionary');
-  cDiv.style.display='none'; lDiv.classList.add('show');
-  const prompt=`Agis comme un dictionnaire théologique et biblique expert. Donne une définition claire, le sens spirituel/théologique et un exemple d'usage dans la Bible pour le mot : "${word}". Structure ta réponse avec des titres si nécessaire.`;
-  try {
-    const r=await fetch(MISTRAL.URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${MISTRAL.KEY}`},body:JSON.stringify({model:MISTRAL.MODEL, messages:[{role:'user',content:prompt}], max_tokens:500})});
-    if(!r.ok) throw new Error();
-    const d=await r.json();
-    cDiv.innerHTML=makeBibleLinks(parseMarkdown(d.choices[0].message.content));
-  } catch(e) { cDiv.innerHTML='<p style="color:#ef4444;text-align:center;">Erreur lors de la recherche.</p>'; }
-  finally { lDiv.classList.remove('show'); cDiv.style.display='block'; }
-}
-
-function parseMarkdown(text) {
-  if(!text) return '';
-  let h=text
-    .replace(/^#### (.*$)/gim,'<h4>$1</h4>')
-    .replace(/^### (.*$)/gim,'<h3>$1</h3>')
-    .replace(/^## (.*$)/gim,'<h2>$1</h2>')
-    .replace(/^# (.*$)/gim,'<h1>$1</h1>')
-    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g,'<em>$1</em>')
-    .replace(/^\- (.*$)/gim,'<li>$1</li>')
-    .replace(/\n\n/g,'</p><p>');
-  return `<p>${h}</p>`;
-}
-function makeBibleLinks(html) {
-  const rx=/\b((?:1|2|3)\s)?([A-Za-zÀ-ÿ]+)\s(\d+):(\d+)\b/gi;
-  return html.replace(rx,(m,pre,book,ch,vs)=>{
-    const full=(pre?pre.trim()+' ':'')+book;
-    const key=full.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-    const slug=bookMap[key]||key.replace(/\s+/g,'');
-    return slug?`<a href="https://saintebible.com/${slug}/${ch}-${vs}.htm" target="_blank" rel="noopener" class="bible-link">${m}</a>`:m;
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════
-   STREAK (partagé)
-═══════════════════════════════════════════════════════════ */
-function loadStreakDisplay() {
-  const s=parseInt(localStorage.getItem('lectio_streak')||'0');
-  lStreak=s;
-  const lbl=s===1?'jour':'jours';
-  document.getElementById('streak-count').textContent=`${s} ${lbl}`;
-}
-function incrementStreak() {
-  const today=new Date().toDateString();
-  const last=localStorage.getItem('lectio_last_date');
-  if(last!==today) {
-    lStreak++;
-    localStorage.setItem('lectio_streak',lStreak);
-    localStorage.setItem('lectio_last_date',today);
-    const lbl=lStreak===1?'jour':'jours';
-    document.getElementById('streak-count').textContent=`${lStreak} ${lbl}`;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   PAGE 2 — LECTIO DIVINA (Moteur Illimité)
-═══════════════════════════════════════════════════════════ */
-function initLectioHome() {
-  // Utilisation du générateur illimité pour afficher un aperçu (mode 5 min par défaut)
-  const p = getDailyPassage(5);
-  document.getElementById('l-verse-prev').textContent='« '+p.text.substring(0,90).replace(/\n/g,' ')+'… » — '+p.ref;
-}
-
-function selectLectioMode(m, el) {
-  lMode=m;
-  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  // Mettre à jour l'aperçu avec le nouveau mode
-  const p = getDailyPassage(m);
-  document.getElementById('l-verse-prev').textContent='« '+p.text.substring(0,90).replace(/\n/g,' ')+'… » — '+p.ref;
-}
-
-function startLectio() {
-  // Génération du passage unique pour ce jour et ce mode
-  lPassage = getDailyPassage(lMode);
-  
-  lTimeLeft=lMode*60; lTotalTime=lMode*60; lPaused=false;
-  lAnalysisData=null; lAnalysisPending=false;
-
-  document.getElementById('l-mode-badge').textContent=lMode+' min';
-  document.getElementById('l-pb-ref').textContent=lPassage.ref;
-  document.getElementById('l-pb-text').textContent=lPassage.text;
-  document.getElementById('l-pause-btn').innerHTML='<i class="ti ti-player-pause"></i> Pause';
-  
-  updateLTimer();
-  showLScreen('l-reading');
-  clearInterval(lInterval);
-  lInterval=setInterval(()=>{
-    if(!lPaused){ lTimeLeft--; updateLTimer(); if(lTimeLeft<=0){clearInterval(lInterval); goLectioAnalysis();} }
-  },1000);
-  fetchLectioAnalysis();
-}
-
-function updateLTimer() {
-  const m=Math.floor(lTimeLeft/60), s=lTimeLeft%60;
-  document.getElementById('l-timer').textContent=m+':'+(s<10?'0':'')+s;
-  const offset=CIRC*(1-lTimeLeft/lTotalTime);
-  document.getElementById('l-ring').style.strokeDashoffset=offset;
-  const st=document.getElementById('l-st');
-  if(lTimeLeft<=0) st.textContent='terminé';
-  else if(lPaused) st.textContent='en pause';
-  else st.textContent='en cours';
-}
-
-function toggleLectioPause() {
-  lPaused=!lPaused;
-  const btn=document.getElementById('l-pause-btn');
-  if(lPaused){btn.innerHTML='<i class="ti ti-player-play"></i> Reprendre';document.getElementById('l-st').textContent='en pause';}
-  else{btn.innerHTML='<i class="ti ti-player-pause"></i> Pause';document.getElementById('l-st').textContent='en cours';}
-}
-
-function finishLectioEarly() { clearInterval(lInterval); goLectioAnalysis(); }
-
-function goLectioHome() { clearInterval(lInterval); showLScreen('l-home'); }
-
-function goLectioAnalysis() {
-  document.getElementById('l-anal-ref').textContent=lPassage.ref;
-  document.getElementById('l-anal-exc').textContent=lPassage.text.replace(/\n/g,' ').substring(0,100)+'…';
-  if(lAnalysisData){
-    renderLAnalysis(lAnalysisData);
-    document.getElementById('l-anal-loading').style.display='none';
-    document.getElementById('l-anal-content').style.display='block';
-  } else {
-    document.getElementById('l-anal-loading').style.display='flex';
-    document.getElementById('l-anal-content').style.display='none';
-    lAnalysisPending=true;
-  }
-  switchLTab('contexte');
-  showLScreen('l-analysis');
-}
-
-function renderLAnalysis(d) {
-  ['contexte','qui_parle','pourquoi','sens','theme','destinataires','theologiens','spirituel'].forEach(k=>{
-    const el=document.getElementById('lc-'+k);
-    if(el&&d[k]){
-      const html=d[k]
-        .split(/\n\n+/)
-        .filter(p=>p.trim())
-        .map(p=>{
-          const txt=p.trim()
-            .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-            .replace(/\*(.*?)\*/g,'<em>$1</em>');
-          return `<p>${txt}</p>`;
-        })
-        .join('');
-      el.innerHTML=html||`<p>${d[k]}</p>`;
-    }
-  });
-  document.getElementById('l-anal-loading').style.display='none';
-  document.getElementById('l-anal-content').style.display='block';
-  lAnalysisPending=false;
-}
-
-async function fetchLectioAnalysis() {
-  const loadingEl = document.getElementById('l-anal-loading');
-  loadingEl.innerHTML = `
-    <div class="lp-loading-detail">
-      <span class="dot">•</span><span class="dot" style="animation-delay:.2s">•</span><span class="dot" style="animation-delay:.4s">•</span>
-      <span style="margin-left:6px;font-size:.85rem;color:var(--text-2)">Analyse approfondie en cours (300+ mots par section)…</span>
-      <div class="lp-progress-bar"><div class="lp-progress-inner"></div></div>
-      <span class="mistral-badge">⚡ Propulsé par Mistral AI</span>
-    </div>`;
-
-  const systemPrompt = `Tu es un théologien exégète et bibliste francophone de haut niveau. Tu rédiges des analyses détaillées, riches et accessibles. Pour CHAQUE section demandée, tu dois rédiger un minimum strict de 300 mots. Réponds UNIQUEMENT avec un JSON valide.`;
-
-  const userPrompt = `Analyse en profondeur ce passage biblique : "${lPassage.ref}"
-Texte intégral : "${lPassage.text}"
-
-⚠️ OBLIGATION : Chaque valeur du JSON doit contenir MINIMUM 300 MOTS. Sépare tes paragraphes par deux sauts de ligne (\\n\\n). N'utilise pas de guillemets doubles à l'intérieur des valeurs JSON.
-
-Réponds UNIQUEMENT avec ce JSON valide :
-{
-"contexte": "MINIMUM 300 MOTS. Décris avec précision : l'époque exacte, l'empire dominant, la situation géopolitique, l'état spirituel du peuple, le genre littéraire.",
-"qui_parle": "MINIMUM 300 MOTS. Présente l'auteur humain : son nom, sa tribu, sa famille, sa formation, sa personnalité, ses forces et fragilités, son appel.",
-"pourquoi": "MINIMUM 300 MOTS. Explique les raisons de ce message : quelle crise spirituelle ou sociale a provoqué l'écriture, quelle était l'urgence.",
-"sens": "MINIMUM 300 MOTS. Exégèse approfondie : sens littéral, mots-clés en hébreu/grec, images et métaphores, structure rhétorique.",
-"theme": "MINIMUM 300 MOTS. Thèmes centraux et secondaires, leur fil conducteur à travers toute la Bible, portée doctrinale.",
-"destinataires": "MINIMUM 300 MOTS. Portrait complet des destinataires originaux : culture, langue, coutumes, situation économique, doutes et espoirs.",
-"theologiens": "MINIMUM 300 MOTS. Perspectives de théologiens contemporains (Wright, Keller, Barth, etc.) et débats herméneutiques.",
-"spirituel": "MINIMUM 300 MOTS. Application concrète pour l'âme humaine en 2025, transformations intérieures, exemples quotidiens, promesses de Dieu."
-}`;
+  if(type === 'theological')
+    prompt = `Agis comme un théologien expert. Rédige une analyse théologique et doctrinale approfondie et structurée pour le chapitre complet suivant : ${passage}. L'analyse doit être calibrée pour un temps de lecture de ${tLabel} (environ ${targetWords} mots). Utilise des titres clairs (##, ###) et mets en gras les concepts clés. Inclue les implications pour la foi contemporaine.`;
+  else if(type === 'meditative')
+    prompt = `Agis comme un guide spirituel expérimenté. Prépare une méditation guidée structurée (Lectio, Meditatio, Oratio, Contemplatio) basée sur le chapitre suivant : ${passage}. Le contenu doit être calibré pour ${tLabel} (environ ${targetWords} mots). Ton ton doit être doux, invitant et profond. Utilise des titres pour chaque étape.`;
+  else if(type === 'biblical')
+    prompt = `Agis comme un exégète biblique. Donne le contexte historique, littéraire et les liens avec le reste de la Bible pour : ${passage}. Limite ta réponse pour ${tLabel} (environ ${targetWords} mots). Explique les termes originaux importants et les références croisées. Structure avec des titres.`;
 
   try {
     const r = await fetch(MISTRAL.URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${MISTRAL.KEY}`,
-      },
-      body: JSON.stringify({
-        model: MISTRAL.MODEL,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        max_tokens: 10000,
-        temperature: 0.65,
-        response_format: { type: 'json_object' },
-      })
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MISTRAL.KEY}` },
+      body: JSON.stringify({ model: MISTRAL.MODEL, messages: [{ role: 'user', content: prompt }], max_tokens: 1000 })
     });
+    if(!r.ok) throw new Error('Erreur API');
     const d = await r.json();
-    let txt = d.choices?.[0]?.message?.content ?? '{}';
-    txt = txt.replace(/```json|```/g, '').trim();
-    let json;
-    try { json = JSON.parse(txt); }
-    catch(parseErr) {
-      const fixed = txt.replace(/[\u0000-\u001F]+/g,' ');
-      json = JSON.parse(fixed);
-    }
-    lAnalysisData = json;
-    if(lAnalysisPending) renderLAnalysis(json);
+    cDiv.innerHTML = makeBibleLinks(parseMarkdown(d.choices[0].message.content));
   } catch(e) {
-    console.error('Mistral API error:', e);
-    // Fallback en cas d'erreur API pour ne pas bloquer l'UX
-    const fb = {
-      contexte: "Ce passage s'inscrit dans une période riche de l'histoire biblique. L'auteur écrit dans un contexte de tension spirituelle profonde, où le peuple de Dieu traverse des épreuves. L'empire dominant exerce une pression constante. C'est dans ce creuset d'adversité que la Parole émerge comme un phare. Le livre appartient au canon des Écritures qui a traversé des siècles. Sa place dans la Bible n'est pas accidentelle : il répond à un besoin précis du peuple de Dieu.",
-      qui_parle: "L'auteur est une figure centrale de l'histoire de la foi. Choisi par Dieu non pas pour ses capacités humaines exceptionnelles, mais précisément dans ses limites, il incarne le paradoxe de la grâce divine. Sa vie est marquée par des hauts et des bas spirituels, par des moments de doute et de certitude. Il a reçu sa vocation comme un appel inattendu, parfois même comme un fardeau, et pourtant il a choisi de demeurer fidèle.",
-      pourquoi: "Ce message n'a pas été donné dans le vide. Il répond à une crise spirituelle et existentielle réelle. La situation était grave : les repères s'étaient effondrés, les certitudes avaient vacillé. C'est précisément dans ce moment de vulnérabilité maximale que Dieu choisit de parler. Son message n'est pas un discours abstrait : c'est une réponse directe à une douleur réelle.",
-      sens: "Ce texte dit, dans un langage à la fois simple et profond, que Dieu est présent dans toutes les circonstances. Chaque mot a été choisi avec soin. Les images utilisées parlent au cœur avant de parler à l'intellect. Le texte refuse le sentimentalisme facile : il ne promet pas l'absence de souffrance, mais la présence de Dieu dans la souffrance.",
-      theme: "Les thèmes centraux traversent toute la Bible comme un fil d'or. On y trouve la fidélité de Dieu face à l'infidélité humaine, la grâce qui précède tout mérite, l'espérance qui résiste à l'évidence contraire. Ces thèmes résonnent avec la Genèse, les Psaumes, les Évangiles et l'Apocalypse.",
-      destinataires: "Ce texte s'adressait à des personnes réelles, avec des noms et des visages. Ils n'étaient pas des héros : ils étaient épuisés, découragés. Et pourtant, c'est à eux que ce message était destiné. Dieu ne s'adresse pas aux forts qui n'ont pas besoin d'aide : il parle aux faibles qui ont besoin de lui entendre.",
-      theologiens: "Les grands théologiens contemporains ont consacré une attention particulière à ce passage. N.T. Wright souligne que ce texte ne peut être compris qu'à la lumière de l'ensemble du récit biblique. Timothy Keller insiste sur le fait que la grâce de Dieu exprimée ici n'est pas une récompense méritée mais un don absolument gratuit.",
-      spirituel: "Ce texte t'invite aujourd'hui à un acte de confiance radical. Non pas une confiance naïve, mais une confiance enracinée dans la connaissance de Dieu. Il t'invite à relâcher ce que tu portes seul depuis trop longtemps. À te laisser regarder par un Dieu qui te connaît mieux que tu ne te connais toi-même."
-    };
-    lAnalysisData = fb;
-    if(lAnalysisPending) renderLAnalysis(fb);
+    console.error(e);
+    cDiv.innerHTML = '<p style="color:#ef4444;text-align:center;">Une erreur est survenue (Vérifiez la clé API ou le proxy).</p>';
+  } finally {
+    lDiv.classList.remove('show');
+    cDiv.style.display = 'block';
   }
 }
 
-function switchLTab(name) {
-  document.querySelectorAll('.l-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.l-tab-panel').forEach(p=>p.classList.remove('active'));
-  const btn=document.querySelector('[data-ltab="'+name+'"]');
-  if(btn) btn.classList.add('active');
-  const panel=document.getElementById('ltab-'+name);
-  if(panel) panel.classList.add('active');
+async function searchDefinition() {
+  const word = document.getElementById('dict-input').value.trim();
+  if(!word) return;
+  const cDiv = document.getElementById('content-dictionary');
+  const lDiv = document.getElementById('load-dictionary');
+  cDiv.style.display = 'none';
+  lDiv.classList.add('show');
+  const prompt = `Agis comme un dictionnaire théologique et biblique expert. Donne une définition claire, le sens spirituel/théologique et un exemple d'usage dans la Bible pour le mot : "${word}". Structure ta réponse avec des titres si nécessaire.`;
+  try {
+    const r = await fetch(MISTRAL.URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MISTRAL.KEY}` },
+      body: JSON.stringify({ model: MISTRAL.MODEL, messages: [{ role: 'user', content: prompt }], max_tokens: 500 })
+    });
+    if(!r.ok) throw new Error();
+    const d = await r.json();
+    cDiv.innerHTML = makeBibleLinks(parseMarkdown(d.choices[0].message.content));
+  } catch(e) {
+    cDiv.innerHTML = '<p style="color:#ef4444;text-align:center;">Erreur lors de la recherche.</p>';
+  } finally {
+    lDiv.classList.remove('show');
+    cDiv.style.display = 'block';
+  }
 }
 
+function parseMarkdown(text) {
+  if(!text) return '';
+  let h = text
+    .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
+    .replace(/^### (.*$)/gim,  '<h3>$1</h3>')
+    .replace(/^## (.*$)/gim,   '<h2>$1</h2>')
+    .replace(/^# (.*$)/gim,    '<h1>$1</h1>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,     '<em>$1</em>')
+    .replace(/^\- (.*$)/gim,   '<li>$1</li>')
+    .replace(/\n\n/g, '</p><p>');
+  return `<p>${h}</p>`;
+}
+
+function makeBibleLinks(html) {
+  const rx = /\b((?:1|2|3)\s)?([A-Za-zÀ-ÿ]+)\s(\d+):(\d+)\b/gi;
+  return html.replace(rx, (m, pre, book, ch, vs) => {
+    const full = (pre ? pre.trim() + ' ' : '') + book;
+    const key  = full.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const slug = bookMap[key] || key.replace(/\s+/g, '');
+    return slug
+      ? `<a href="https://saintebible.com/${slug}/${ch}-${vs}.htm" target="_blank" rel="noopener" class="bible-link">${m}</a>`
+      : m;
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STREAK (partagé entre les deux pages)
+═══════════════════════════════════════════════════════════ */
+function loadStreakDisplay() {
+  const s   = parseInt(localStorage.getItem('lectio_streak') || '0');
+  lStreak   = s;
+  const lbl = s === 1 ? 'jour' : 'jours';
+  document.getElementById('streak-count').textContent = `${s} ${lbl}`;
+}
+
+function incrementStreak() {
+  const today = new Date().toDateString();
+  const last  = localStorage.getItem('lectio_last_date');
+  if(last !== today) {
+    lStreak++;
+    localStorage.setItem('lectio_streak', lStreak);
+    localStorage.setItem('lectio_last_date', today);
+    const lbl = lStreak === 1 ? 'jour' : 'jours';
+    document.getElementById('streak-count').textContent = `${lStreak} ${lbl}`;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE 2 — LECTIO DIVINA
+═══════════════════════════════════════════════════════════ */
+function initLectioHome() {
+  const p = getDailyPassage(5);
+  document.getElementById('l-verse-prev').textContent =
+    '« ' + p.text.substring(0, 90).replace(/\n/g, ' ') + '… » — ' + p.ref;
+}
+
+function selectLectioMode(m, el) {
+  lMode = m;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const p = getDailyPassage(m);
+  document.getElementById('l-verse-prev').textContent =
+    '« ' + p.text.substring(0, 90).replace(/\n/g, ' ') + '… » — ' + p.ref;
+}
+
+function startLectio() {
+  // Generate unique passage for this day + mode
+  lPassage         = getDailyPassage(lMode);
+  lTimeLeft        = lMode * 60;
+  lTotalTime       = lMode * 60;
+  lPaused          = false;
+  lAnalysisData    = null;
+  lAnalysisPending = false;
+
+  // ── Clear per-tab cache for the new session ──────────────
+  Object.keys(lTabCache).forEach(k => delete lTabCache[k]);
+  // Clear any previously rendered tab content
+  ['contexte','qui_parle','pourquoi','sens','theme','destinataires','theologiens','spirituel']
+    .forEach(k => {
+      const el = document.getElementById('lc-' + k);
+      if(el) el.innerHTML = '';
+    });
+
+  document.getElementById('l-mode-badge').textContent = lMode + ' min';
+  document.getElementById('l-pb-ref').textContent     = lPassage.ref;
+  document.getElementById('l-pb-text').textContent    = lPassage.text;
+  document.getElementById('l-pause-btn').innerHTML    = '<i class="ti ti-player-pause"></i> Pause';
+
+  updateLTimer();
+  showLScreen('l-reading');
+
+  clearInterval(lInterval);
+  lInterval = setInterval(() => {
+    if(!lPaused) {
+      lTimeLeft--;
+      updateLTimer();
+      if(lTimeLeft <= 0) {
+        clearInterval(lInterval);
+        goLectioAnalysis();
+      }
+    }
+  }, 1000);
+}
+
+function updateLTimer() {
+  const m = Math.floor(lTimeLeft / 60);
+  const s = lTimeLeft % 60;
+  document.getElementById('l-timer').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  const offset = CIRC * (1 - lTimeLeft / lTotalTime);
+  document.getElementById('l-ring').style.strokeDashoffset = offset;
+  const st = document.getElementById('l-st');
+  if(lTimeLeft <= 0)   st.textContent = 'terminé';
+  else if(lPaused)     st.textContent = 'en pause';
+  else                 st.textContent = 'en cours';
+}
+
+function toggleLectioPause() {
+  lPaused = !lPaused;
+  const btn = document.getElementById('l-pause-btn');
+  if(lPaused) {
+    btn.innerHTML = '<i class="ti ti-player-play"></i> Reprendre';
+    document.getElementById('l-st').textContent = 'en pause';
+  } else {
+    btn.innerHTML = '<i class="ti ti-player-pause"></i> Pause';
+    document.getElementById('l-st').textContent = 'en cours';
+  }
+}
+
+function finishLectioEarly() {
+  clearInterval(lInterval);
+  goLectioAnalysis();
+}
+
+function goLectioHome() {
+  clearInterval(lInterval);
+  showLScreen('l-home');
+}
+
+function goLectioAnalysis() {
+  document.getElementById('l-anal-ref').textContent = lPassage.ref;
+  document.getElementById('l-anal-exc').textContent =
+    lPassage.text.replace(/\n/g, ' ').substring(0, 100) + '…';
+
+  // Hide the global loading row; content area visible immediately.
+  // Each tab handles its own loading state when clicked.
+  document.getElementById('l-anal-loading').style.display = 'none';
+  document.getElementById('l-anal-content').style.display = 'block';
+
+  showLScreen('l-analysis');
+
+  // Auto-load the first tab (Contexte) without waiting for a click
+  switchLTab('contexte');
+}
+
+/* ──────────────────────────────────────────────────────────
+   MISSION 1 & 2 — Individual tab fetch logic
+   • switchLTab()      : visual switch + triggers fetchTabContent()
+   • fetchTabContent() : fetches /functions/api/analyze.js
+   • getTabPrompt()    : returns the per-tab prompt (300–400 word min)
+────────────────────────────────────────────────────────── */
+
+/**
+ * Switch active Lectio tab and trigger an API fetch if the
+ * tab content has not been loaded yet in this session.
+ */
+function switchLTab(name) {
+  // 1. Visual switch
+  document.querySelectorAll('.l-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.l-tab-panel').forEach(p => p.classList.remove('active'));
+  const btn   = document.querySelector('[data-ltab="' + name + '"]');
+  if(btn) btn.classList.add('active');
+  const panel = document.getElementById('ltab-' + name);
+  if(panel) panel.classList.add('active');
+
+  // 2. Fetch if not already cached for this session
+  if(!lTabCache[name] && lPassage) {
+    fetchTabContent(name);
+  }
+}
+
+/**
+ * Fetch content for a single Lectio tab from the Cloudflare
+ * Worker endpoint /functions/api/analyze.js.
+ * Renders a per-tab spinner while waiting, then injects HTML.
+ * On error shows an inline retry button.
+ */
+async function fetchTabContent(tabName) {
+  if(lTabCache[tabName]) return; // already loaded
+
+  const el = document.getElementById('lc-' + tabName);
+  if(!el) return;
+
+  // Show per-tab loading UI
+  el.innerHTML = `
+    <div class="tab-panel-loading">
+      <div style="display:flex;gap:4px;align-items:center;">
+        <span class="dot">•</span>
+        <span class="dot" style="animation-delay:.2s">•</span>
+        <span class="dot" style="animation-delay:.4s">•</span>
+        <span style="margin-left:6px;font-size:.85rem;color:var(--text-2)">
+          Chargement de l'analyse (300+ mots)…
+        </span>
+      </div>
+      <div class="tab-panel-progress">
+        <div class="tab-panel-progress-inner"></div>
+      </div>
+      <span class="mistral-badge">⚡ Propulsé par Mistral AI</span>
+    </div>`;
+
+  const prompt = getTabPrompt(tabName);
+
+  try {
+    const response = await fetch('/functions/api/analyze.js', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        prompt,
+        type:       tabName,
+        max_tokens: 2000,         // Mission 2 — hard limit to prevent cut-offs
+      }),
+    });
+
+    if(!response.ok) {
+      throw new Error(`HTTP ${response.status} — ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const text = data.result
+      || data.choices?.[0]?.message?.content
+      || '';
+
+    if(!text) throw new Error('Réponse vide reçue du serveur.');
+
+    // Render: split on double newlines → paragraphs, support **bold** and *italic*
+    const html = text
+      .split(/\n\n+/)
+      .filter(p => p.trim())
+      .map(p => {
+        const sanitised = p.trim()
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g,     '<em>$1</em>');
+        return `<p>${sanitised}</p>`;
+      })
+      .join('');
+
+    el.innerHTML = html || `<p>${text}</p>`;
+
+    // Mark as cached so subsequent clicks don't re-fetch
+    lTabCache[tabName] = true;
+
+  } catch(err) {
+    console.error(`[Lectio] fetchTabContent(${tabName}) →`, err);
+    el.innerHTML = `
+      <div class="tab-error">
+        <p>❌ Impossible de charger l'analyse.</p>
+        <p style="font-size:.8rem;margin-top:.4rem;color:var(--text-3)">${err.message}</p>
+        <button class="tab-retry-btn" onclick="retryTab('${tabName}')">
+          Réessayer
+        </button>
+      </div>`;
+  }
+}
+
+/**
+ * Retry helper — clears the cache entry and re-fetches.
+ */
+function retryTab(tabName) {
+  delete lTabCache[tabName];
+  fetchTabContent(tabName);
+}
+
+/**
+ * Mission 2 — returns the exact prompt for each of the 8 tabs.
+ * Every prompt ends with the mandatory 300–400 word instruction.
+ * The passage reference and session duration are injected dynamically.
+ */
+function getTabPrompt(tabName) {
+  const ref  = lPassage ? lPassage.ref : 'ce passage';
+  const time = lMode + ' minute' + (lMode > 1 ? 's' : '');
+
+  // Mandatory suffix appended to every prompt (Mission 2)
+  const MIN_WORDS_SUFFIX =
+    '\n\nIMPORTANT : Ta réponse doit être extrêmement détaillée et structurée. ' +
+    'Tu dois rédiger un MINIMUM absolu de 300 à 400 mots. ' +
+    'Ne fais pas de résumé court, développe profondément.';
+
+  const prompts = {
+
+    contexte:
+      `Analyse le contexte historique, culturel et littéraire de ${ref} ` +
+      `pour une lecture de ${time}.` +
+      MIN_WORDS_SUFFIX,
+
+    qui_parle:
+      `Explique en détail qui s'exprime et la perspective narrative dans ${ref} ` +
+      `pour une lecture de ${time}.` +
+      MIN_WORDS_SUFFIX,
+
+    pourquoi:
+      `Analyse les motivations et le but pour lesquels le texte de ${ref} ` +
+      `a été écrit pour une lecture de ${time}.` +
+      MIN_WORDS_SUFFIX,
+
+    sens:
+      `Donne l'exégèse littérale et le sens profond des mots clés de ${ref} ` +
+      `pour une lecture de ${time}.` +
+      MIN_WORDS_SUFFIX,
+
+    theme:
+      `Dégage les grands thèmes théologiques et les doctrines de ${ref} ` +
+      `pour une lecture de ${time}.` +
+      MIN_WORDS_SUFFIX,
+
+    destinataires:
+      `Analyse les destinataires originaux de ${ref} ` +
+      `et l'application moderne pour une lecture de ${time}.` +
+      MIN_WORDS_SUFFIX,
+
+    theologiens:
+      `Présente les perspectives et commentaires des grands théologiens historiques ` +
+      `sur ${ref} pour une lecture de ${time}.` +
+      MIN_WORDS_SUFFIX,
+
+    spirituel:
+      `Donne une application spirituelle et une orientation pour la prière ` +
+      `à partir de ${ref} pour une lecture de ${time}.` +
+      MIN_WORDS_SUFFIX,
+  };
+
+  return prompts[tabName] || `Analyse ${ref} pour une lecture de ${time}.${MIN_WORDS_SUFFIX}`;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Legacy renderLAnalysis kept for backward compatibility.
+   Not called in the new per-tab flow but retained as utility.
+────────────────────────────────────────────────────────── */
+function renderLAnalysis(d) {
+  ['contexte','qui_parle','pourquoi','sens','theme','destinataires','theologiens','spirituel']
+    .forEach(k => {
+      const el = document.getElementById('lc-' + k);
+      if(el && d[k]) {
+        const html = d[k]
+          .split(/\n\n+/)
+          .filter(p => p.trim())
+          .map(p => {
+            const txt = p.trim()
+              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+              .replace(/\*(.*?)\*/g,     '<em>$1</em>');
+            return `<p>${txt}</p>`;
+          })
+          .join('');
+        el.innerHTML = html || `<p>${d[k]}</p>`;
+        lTabCache[k] = true;
+      }
+    });
+  document.getElementById('l-anal-loading').style.display = 'none';
+  document.getElementById('l-anal-content').style.display = 'block';
+  lAnalysisPending = false;
+}
+
+/* ══════════════════════════════════════════════════════════
+   REFLECTION — Méditation personnelle (Claude API)
+══════════════════════════════════════════════════════════ */
 function goLectioReflection() {
-  document.getElementById('l-refl-ref').textContent=lPassage.ref;
-  document.getElementById('l-refl-exc').textContent=lPassage.text.replace(/\n/g,' ').substring(0,100)+'…';
-  document.getElementById('l-refl-loading').style.display='flex';
-  document.getElementById('l-refl-body').style.display='none';
-  document.getElementById('l-complete-btn').style.display='none';
+  document.getElementById('l-refl-ref').textContent = lPassage.ref;
+  document.getElementById('l-refl-exc').textContent =
+    lPassage.text.replace(/\n/g, ' ').substring(0, 100) + '…';
+  document.getElementById('l-refl-loading').style.display = 'flex';
+  document.getElementById('l-refl-body').style.display    = 'none';
+  document.getElementById('l-complete-btn').style.display = 'none';
   showLScreen('l-reflection');
   fetchLectioReflection();
 }
 
 async function fetchLectioReflection() {
-  const prompt=`Tu es un guide spirituel bienveillant. L'utilisateur vient de lire et d'étudier en profondeur le passage "${lPassage.ref}". Rédige une méditation personnelle (3-4 phrases) en français, profonde et nourrissante. Tutoie la personne avec affection.`;
+  const prompt =
+    `Tu es un guide spirituel bienveillant. L'utilisateur vient de lire et d'étudier ` +
+    `en profondeur le passage "${lPassage.ref}". Rédige une méditation personnelle ` +
+    `(3-4 phrases) en français, profonde et nourrissante. Tutoie la personne avec affection.`;
   try {
-    const r=await fetch(CLAUDE.URL,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':CLAUDE.KEY,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:CLAUDE.MODEL,max_tokens:600,messages:[{role:'user',content:prompt}]})});
-    const d=await r.json();
-    const txt=d.content?.[0]?.text??'Que cette Parole soit une graine plantée en toi aujourd\'hui.';
-    document.getElementById('l-refl-loading').style.display='none';
-    document.getElementById('l-refl-body').textContent=txt;
-    document.getElementById('l-refl-body').style.display='block';
-    document.getElementById('l-complete-btn').style.display='flex';
+    const r = await fetch(CLAUDE.URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'x-api-key':     CLAUDE.KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model:      CLAUDE.MODEL,
+        max_tokens: 600,
+        messages:   [{ role: 'user', content: prompt }],
+      }),
+    });
+    const d   = await r.json();
+    const txt = d.content?.[0]?.text ?? "Que cette Parole soit une graine plantée en toi aujourd'hui.";
+    document.getElementById('l-refl-loading').style.display = 'none';
+    document.getElementById('l-refl-body').textContent      = txt;
+    document.getElementById('l-refl-body').style.display    = 'block';
+    document.getElementById('l-complete-btn').style.display = 'flex';
   } catch(e) {
-    document.getElementById('l-refl-loading').style.display='none';
-    document.getElementById('l-refl-body').textContent='Que cette Parole soit une graine plantée en toi aujourd\'hui — elle portera du fruit dans les moments où tu t\'y attendras le moins.';
-    document.getElementById('l-refl-body').style.display='block';
-    document.getElementById('l-complete-btn').style.display='flex';
+    document.getElementById('l-refl-loading').style.display = 'none';
+    document.getElementById('l-refl-body').textContent      =
+      "Que cette Parole soit une graine plantée en toi aujourd'hui — elle portera du fruit dans les moments où tu t'y attendras le moins.";
+    document.getElementById('l-refl-body').style.display    = 'block';
+    document.getElementById('l-complete-btn').style.display = 'flex';
   }
 }
 
 function completeLectio() {
-  if(!lDoneToday){ incrementStreak(); lDoneToday=true; }
-  document.getElementById('l-comp-streak').textContent=lStreak;
-  document.getElementById('l-comp-verse').textContent='« '+lPassage.text.replace(/\n/g,' ').substring(0,110)+'… » — '+lPassage.ref;
+  if(!lDoneToday) { incrementStreak(); lDoneToday = true; }
+  document.getElementById('l-comp-streak').textContent = lStreak;
+  document.getElementById('l-comp-verse').textContent  =
+    '« ' + lPassage.text.replace(/\n/g, ' ').substring(0, 110) + '… » — ' + lPassage.ref;
   showLScreen('l-complete');
 }
 
 /* ═══════════════════════════════════════════════════════════
-   BIBLE LOUIS SEGOND 1910 — Lecteur intégré
+   BIBLE LOUIS SEGOND 1910 — Lecteur intégré (Page 1)
 ═══════════════════════════════════════════════════════════ */
 const blsSlugs = {
   "Genèse":"genese","Exode":"exode","Lévitique":"levitique","Nombres":"nombres",
@@ -1618,16 +1778,16 @@ const blsSlugs = {
   "1 Thessaloniciens":"1-thessaloniciens","2 Thessaloniciens":"2-thessaloniciens",
   "1 Timothée":"1-timothee","2 Timothée":"2-timothee","Tite":"tite","Philémon":"philemon",
   "Hébreux":"hebreux","Jacques":"jacques","1 Pierre":"1-pierre","2 Pierre":"2-pierre",
-  "1 Jean":"1-jean","2 Jean":"2-jean","3 Jean":"3-jean","Jude":"jude","Apocalypse":"apocalypse"
+  "1 Jean":"1-jean","2 Jean":"2-jean","3 Jean":"3-jean","Jude":"jude","Apocalypse":"apocalypse",
 };
 
 let blsCurrentBookIdx = null;
-let blsCurrentChap = null;
+let blsCurrentChap    = null;
 
 function initBibleReader() {
   const sel = document.getElementById('bls-book');
   if(!sel) return;
-  bibleBooks.forEach((b,i) => {
+  bibleBooks.forEach((b, i) => {
     const o = document.createElement('option');
     o.value = i; o.textContent = b.name;
     sel.appendChild(o);
@@ -1635,48 +1795,51 @@ function initBibleReader() {
 }
 
 function blsLoadChapters() {
-  const idx = document.getElementById('bls-book').value;
+  const idx     = document.getElementById('bls-book').value;
   const chapSel = document.getElementById('bls-chap');
   chapSel.innerHTML = '<option value="">Chapitre...</option>';
-  if(!idx){ chapSel.disabled=true; return; }
+  if(!idx) { chapSel.disabled = true; return; }
   blsCurrentBookIdx = parseInt(idx);
   const book = bibleBooks[blsCurrentBookIdx];
-  for(let i=1; i<=book.chapters; i++){
+  for(let i = 1; i <= book.chapters; i++) {
     const o = document.createElement('option');
     o.value = i; o.textContent = i;
     chapSel.appendChild(o);
   }
-  chapSel.disabled = false;
-  blsCurrentChap = null;
+  chapSel.disabled  = false;
+  blsCurrentChap    = null;
 }
 
 function blsLoadPassage() {
-  const idx = document.getElementById('bls-book').value;
+  const idx  = document.getElementById('bls-book').value;
   const chap = document.getElementById('bls-chap').value;
   if(!idx || !chap) return;
   blsCurrentBookIdx = parseInt(idx);
-  blsCurrentChap = parseInt(chap);
+  blsCurrentChap    = parseInt(chap);
   blsRender();
 }
 
 function blsRender() {
-  if(blsCurrentBookIdx===null || !blsCurrentChap) return;
+  if(blsCurrentBookIdx === null || !blsCurrentChap) return;
   const book = bibleBooks[blsCurrentBookIdx];
-  const slug = blsSlugs[book.name] || book.name.toLowerCase().replace(/[éèê]/g,'e').replace(/[àâ]/g,'a').replace(/\s+/g,'-');
+  const slug = blsSlugs[book.name]
+    || book.name.toLowerCase()
+         .replace(/[éèê]/g, 'e').replace(/[àâ]/g, 'a')
+         .replace(/\s+/g, '-');
   const url = `https://saintebible.com/${slug}/${blsCurrentChap}.htm`;
 
   document.getElementById('bls-book').value = blsCurrentBookIdx;
   document.getElementById('bls-chap').value = blsCurrentChap;
 
-  document.getElementById('bls-frame-title').textContent = `${book.name} ${blsCurrentChap} — Louis Segond 1910`;
-  document.getElementById('bls-ext-link').href = url;
-  document.getElementById('bls-fallback-link').href = url;
+  document.getElementById('bls-frame-title').textContent  = `${book.name} ${blsCurrentChap} — Louis Segond 1910`;
+  document.getElementById('bls-ext-link').href            = url;
+  document.getElementById('bls-fallback-link').href       = url;
 
-  document.getElementById('bls-placeholder').style.display = 'none';
-  document.getElementById('bls-frame-wrap').style.display = 'block';
-  document.getElementById('bls-fallback').style.display = 'none';
-  document.getElementById('bls-iframe').style.display = 'block';
-  document.getElementById('bls-iframe').src = url;
+  document.getElementById('bls-placeholder').style.display  = 'none';
+  document.getElementById('bls-frame-wrap').style.display   = 'block';
+  document.getElementById('bls-fallback').style.display     = 'none';
+  document.getElementById('bls-iframe').style.display       = 'block';
+  document.getElementById('bls-iframe').src                 = url;
 }
 
 function blsCheckFrame(iframe) {
@@ -1684,12 +1847,13 @@ function blsCheckFrame(iframe) {
     const loc = iframe.contentWindow.location.href;
     if(!loc || loc === 'about:blank') return;
   } catch(e) {
+    // Cross-origin block: the page loaded correctly — this is expected behaviour.
     return;
   }
 }
 
 function blsPrev() {
-  if(blsCurrentChap && blsCurrentChap > 1){
+  if(blsCurrentChap && blsCurrentChap > 1) {
     blsCurrentChap--;
     document.getElementById('bls-chap').value = blsCurrentChap;
     blsRender();
@@ -1697,9 +1861,9 @@ function blsPrev() {
 }
 
 function blsNext() {
-  if(blsCurrentBookIdx!==null && blsCurrentChap){
+  if(blsCurrentBookIdx !== null && blsCurrentChap) {
     const maxChap = bibleBooks[blsCurrentBookIdx].chapters;
-    if(blsCurrentChap < maxChap){
+    if(blsCurrentChap < maxChap) {
       blsCurrentChap++;
       document.getElementById('bls-chap').value = blsCurrentChap;
       blsRender();
@@ -1707,8 +1871,11 @@ function blsNext() {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════════════════ */
 function showLScreen(id) {
-  document.querySelectorAll('.l-screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.l-screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 </script>
