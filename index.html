@@ -624,6 +624,56 @@
     .bls-iframe { width: 100%; height: 680px; border: none; display: block; }
     .bls-iframe-fallback { padding: 2.5rem; text-align: center; }
 
+    /* ── Real Bible text display (replaces broken iframe) ── */
+    .bls-text-content {
+      padding: 2.25rem 1.75rem;
+      max-height: 720px; overflow-y: auto;
+      font-family: var(--font-serif);
+      font-size: 1.1rem; line-height: 1.95;
+      color: var(--text-1);
+      background: var(--bg-card);
+    }
+    .bls-text-content::-webkit-scrollbar { width: 6px; }
+    .bls-text-content::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 4px; }
+    .bls-text-content p { margin-bottom: 1.1rem; }
+    .bls-text-content p:last-child { margin-bottom: 0; }
+    .verse-num {
+      display: inline-block; min-width: 1.4em;
+      font-family: var(--font-sans); font-size: .72em;
+      color: var(--gold); font-weight: 700;
+      vertical-align: super; margin-right: .35em;
+      line-height: 1;
+    }
+    .bls-text-loading {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 5rem 2rem; gap: 1.25rem;
+      color: var(--text-2);
+    }
+    .bls-text-loading span {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: .95rem;
+    }
+    .bls-text-error {
+      padding: 3rem 2rem; text-align: center;
+      color: var(--text-2);
+    }
+    .bls-text-error p { margin-bottom: .75rem; }
+    .bls-text-error .err-detail {
+      font-size: .8rem; color: var(--text-3);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── Reading screen loading (Lectio Bible text fetch) ── */
+    .reading-loading-state {
+      display: flex; flex-direction: column;
+      align-items: center; padding: 2rem 1rem; gap: 1rem;
+      color: var(--text-2); font-size: .9rem;
+    }
+    .reading-loading-state span {
+      font-family: var(--font-serif); font-style: italic;
+    }
+
     /* ══════════════════════════════════════════════
        RESPONSIVE
     ══════════════════════════════════════════════ */
@@ -825,9 +875,15 @@
                   <button onclick="blsNext()" class="bls-nav-btn" title="Chapitre suivant">&#8594;</button>
                 </div>
               </div>
-              <iframe id="bls-iframe" class="bls-iframe" src="about:blank" title="Bible Louis Segond 1910" onload="blsCheckFrame(this)"></iframe>
+              <div id="bls-text-content" class="bls-text-content">
+                <div class="bls-text-loading">
+                  <div class="spinner"></div>
+                  <span>Sélectionnez un chapitre…</span>
+                </div>
+              </div>
+              <!-- Backup fallback if API completely fails -->
               <div class="bls-iframe-fallback" id="bls-fallback" style="display:none;">
-                <p style="color:var(--text-2);margin-bottom:1rem;">Ce site bloque l'intégration directe. Cliquez ci-dessous pour lire le chapitre.</p>
+                <p style="color:var(--text-2);margin-bottom:1rem;">Impossible de charger le texte. Cliquez ci-dessous.</p>
                 <a id="bls-fallback-link" href="#" target="_blank" rel="noopener" class="btn-gen" style="display:inline-flex;">Lire ce chapitre sur saintebible.com →</a>
               </div>
             </div>
@@ -1008,14 +1064,24 @@
 <script>
 /* ═══════════════════════════════════════════════════════════
    CONFIG API
-   • MISTRAL  : utilisé pour les 8 onglets Lectio (via /functions/api/analyze.js)
-                et les analyses de la Page 1 (appel direct pour la démo)
-   • CLAUDE   : utilisé pour la méditation personnelle (Page 2 réflexion)
-   ⚠️  En production, ne jamais exposer les clés côté client.
-       Toujours passer par un proxy Cloudflare Worker.
+   ┌─────────────────────────────────────────────────────────┐
+   │ 🔒  PRODUCTION (GitHub + Cloudflare Pages) :             │
+   │     Laissez KEY sur 'YOUR_MISTRAL_API_KEY'.             │
+   │     La vraie clé vit UNIQUEMENT dans la variable d'env  │
+   │     MISTRAL_API_KEY (Cloudflare → Settings → Env Vars). │
+   │     Le frontend appelle /api/analyze et /api/bible qui  │
+   │     utilisent cette variable côté serveur. Aucune clé   │
+   │     n'est exposée.                                       │
+   │                                                          │
+   │ 🧪  TEST LOCAL (optionnel) :                            │
+   │     Collez temporairement votre clé dans KEY ci-dessous │
+   │     pour activer le fallback direct. NE COMMITEZ JAMAIS │
+   │     cette clé sur GitHub. Remettez le placeholder avant │
+   │     de pousser.                                          │
+   └─────────────────────────────────────────────────────────┘
 ═══════════════════════════════════════════════════════════ */
 const MISTRAL = {
-  KEY:   'YOUR_MISTRAL_API_KEY',
+  KEY:   'YOUR_MISTRAL_API_KEY', // 🔒 placeholder — vraie clé dans Cloudflare env vars
   MODEL: 'mistral-large-latest',
   URL:   'https://api.mistral.ai/v1/chat/completions',
 };
@@ -1390,6 +1456,139 @@ function incrementStreak() {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   API HELPERS — double voie (proxy Cloudflare → fallback direct)
+   
+   Stratégie :
+   1. Essaye d'abord /api/analyze et /api/bible (sécurisé,
+      la clé est dans une variable d'env Cloudflare).
+   2. Si le proxy n'est pas joignable (test local, "Failed to fetch")
+      ou répond par une erreur, bascule vers un appel direct à
+      l'API Mistral en utilisant MISTRAL.KEY.
+   
+   Bénéfice : fonctionne en local pour les tests ET reste sécurisé
+   en production une fois déployé sur Cloudflare Pages.
+═══════════════════════════════════════════════════════════ */
+
+/**
+ * Appel à Mistral pour les 8 onglets d'analyse Lectio.
+ * Reproduit côté frontend la logique de /api/analyze.
+ */
+async function callMistralAnalyze(prompt, type, maxTokens = 2000) {
+  // ── Voie 1 : proxy Cloudflare (production) ──
+  try {
+    const r = await fetch('/api/analyze', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ prompt, type, max_tokens: maxTokens }),
+    });
+    if(r.ok) {
+      const d = await r.json();
+      const txt = d.result || d.choices?.[0]?.message?.content;
+      if(txt) return txt;
+    }
+    // Si on arrive ici, le proxy a répondu mais sans contenu exploitable
+    console.warn('[analyze] Proxy a répondu sans contenu — fallback direct');
+  } catch(proxyErr) {
+    // Erreur réseau → le proxy n'est pas joignable (test local)
+    console.warn('[analyze] Proxy indisponible, fallback direct Mistral :', proxyErr.message);
+  }
+
+  // ── Voie 2 : appel direct à Mistral (fallback / test local) ──
+  if(!MISTRAL.KEY || MISTRAL.KEY.startsWith('YOUR_')) {
+    throw new Error("Aucune clé Mistral configurée et proxy Cloudflare injoignable.");
+  }
+  const r = await fetch(MISTRAL.URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${MISTRAL.KEY}`,
+    },
+    body: JSON.stringify({
+      model:       MISTRAL.MODEL,
+      messages: [
+        {
+          role:    'system',
+          content: 'Tu es un assistant théologique expert. Tes réponses sont structurées, profondes et bibliques. Tu rédiges un MINIMUM de 300 mots.',
+        },
+        { role: 'user', content: prompt },
+      ],
+      temperature: 0.6,
+      max_tokens:  maxTokens,
+    }),
+  });
+  if(!r.ok) {
+    const errText = await r.text().catch(() => '');
+    throw new Error(`Mistral API ${r.status} — ${errText.substring(0, 200)}`);
+  }
+  const data = await r.json();
+  const content = data.choices?.[0]?.message?.content;
+  if(!content) throw new Error('Réponse vide de Mistral.');
+  return content;
+}
+
+/**
+ * Appel à Mistral pour récupérer le texte d'un chapitre biblique.
+ * Reproduit côté frontend la logique de /api/bible.
+ */
+async function callMistralBible(book, chapter) {
+  // ── Voie 1 : proxy Cloudflare (production) ──
+  try {
+    const r = await fetch('/api/bible', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ book, chapter }),
+    });
+    if(r.ok) {
+      const d = await r.json();
+      if(d.text) return d.text;
+    }
+    console.warn('[bible] Proxy a répondu sans texte — fallback direct');
+  } catch(proxyErr) {
+    console.warn('[bible] Proxy indisponible, fallback direct Mistral :', proxyErr.message);
+  }
+
+  // ── Voie 2 : appel direct à Mistral (fallback / test local) ──
+  if(!MISTRAL.KEY || MISTRAL.KEY.startsWith('YOUR_')) {
+    throw new Error("Aucune clé Mistral configurée et proxy Cloudflare injoignable.");
+  }
+  const promptText =
+    `Donne moi le texte exact et complet du passage biblique suivant en version Louis Segond 1910 : ` +
+    `${book} chapitre ${chapter} (tout le chapitre). ` +
+    `Réponds UNIQUEMENT par le texte biblique, sans introduction, sans commentaire, sans "Voici le texte". ` +
+    `Commence directement par le premier verset. ` +
+    `Si le chapitre est long, assure-toi de ne rien omettre.`;
+
+  const r = await fetch(MISTRAL.URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${MISTRAL.KEY}`,
+    },
+    body: JSON.stringify({
+      model:       'mistral-small-latest', // mistral-tiny est déprécié côté API
+      messages: [
+        {
+          role:    'system',
+          content: "Tu es un expert biblique. Tu fournis uniquement le texte exact de la Bible en français (Louis Segond 1910). Tu ne donnes aucune explication, aucun ajout. Tu respectes scrupuleusement la ponctuation et la structure du texte original.",
+        },
+        { role: 'user', content: promptText },
+      ],
+      temperature: 0.1,
+      max_tokens:  2500,
+      top_p:       1,
+    }),
+  });
+  if(!r.ok) {
+    const errText = await r.text().catch(() => '');
+    throw new Error(`Mistral API ${r.status} — ${errText.substring(0, 200)}`);
+  }
+  const data = await r.json();
+  const content = data.choices?.[0]?.message?.content;
+  if(!content) throw new Error('Réponse vide de Mistral.');
+  return content.trim();
+}
+
+/* ═══════════════════════════════════════════════════════════
    PAGE 2 — LECTIO DIVINA
 ═══════════════════════════════════════════════════════════ */
 function initLectioHome() {
@@ -1407,8 +1606,8 @@ function selectLectioMode(m, el) {
     '« ' + p.text.substring(0, 90).replace(/\n/g, ' ') + '… » — ' + p.ref;
 }
 
-function startLectio() {
-  // Generate unique passage for this day + mode
+async function startLectio() {
+  // Generate ref+placeholder for this day + mode
   lPassage         = getDailyPassage(lMode);
   lTimeLeft        = lMode * 60;
   lTotalTime       = lMode * 60;
@@ -1418,7 +1617,6 @@ function startLectio() {
 
   // ── Clear per-tab cache for the new session ──────────────
   Object.keys(lTabCache).forEach(k => delete lTabCache[k]);
-  // Clear any previously rendered tab content
   ['contexte','qui_parle','pourquoi','sens','theme','destinataires','theologiens','spirituel']
     .forEach(k => {
       const el = document.getElementById('lc-' + k);
@@ -1427,12 +1625,41 @@ function startLectio() {
 
   document.getElementById('l-mode-badge').textContent = lMode + ' min';
   document.getElementById('l-pb-ref').textContent     = lPassage.ref;
-  document.getElementById('l-pb-text').textContent    = lPassage.text;
   document.getElementById('l-pause-btn').innerHTML    = '<i class="ti ti-player-pause"></i> Pause';
+
+  // Show reading screen with a loading state in the passage area.
+  // We DELAY starting the timer until the real text arrives.
+  document.getElementById('l-pb-text').innerHTML = `
+    <div class="reading-loading-state">
+      <div class="spinner"></div>
+      <span>Chargement du passage biblique…</span>
+    </div>`;
 
   updateLTimer();
   showLScreen('l-reading');
 
+  // ── Fetch the real Bible text via dual-path helper ──
+  const parsed = parsePassageRef(lPassage.ref);
+  if(parsed) {
+    try {
+      const text = await callMistralBible(parsed.book, parsed.chapter);
+      if(text) {
+        lPassage.text = text;
+        document.getElementById('l-pb-text').innerHTML = formatBibleText(text);
+      } else {
+        throw new Error('Texte vide.');
+      }
+    } catch(err) {
+      console.error('[Lectio] Bible fetch error:', err);
+      // Fallback: show the placeholder text we had from getDailyPassage()
+      document.getElementById('l-pb-text').textContent = lPassage.text;
+    }
+  } else {
+    // Couldn't parse the reference — use placeholder
+    document.getElementById('l-pb-text').textContent = lPassage.text;
+  }
+
+  // ── Now start the countdown timer ──
   clearInterval(lInterval);
   lInterval = setInterval(() => {
     if(!lPaused) {
@@ -1499,7 +1726,7 @@ function goLectioAnalysis() {
 /* ──────────────────────────────────────────────────────────
    MISSION 1 & 2 — Individual tab fetch logic
    • switchLTab()      : visual switch + triggers fetchTabContent()
-   • fetchTabContent() : fetches /functions/api/analyze.js
+   • fetchTabContent() : fetches /api/analyze
    • getTabPrompt()    : returns the per-tab prompt (300–400 word min)
 ────────────────────────────────────────────────────────── */
 
@@ -1524,7 +1751,7 @@ function switchLTab(name) {
 
 /**
  * Fetch content for a single Lectio tab from the Cloudflare
- * Worker endpoint /functions/api/analyze.js.
+ * Worker endpoint /api/analyze.
  * Renders a per-tab spinner while waiting, then injects HTML.
  * On error shows an inline retry button.
  */
@@ -1554,40 +1781,13 @@ async function fetchTabContent(tabName) {
   const prompt = getTabPrompt(tabName);
 
   try {
-    const response = await fetch('/functions/api/analyze.js', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({
-        prompt,
-        type:       tabName,
-        max_tokens: 2000,         // Mission 2 — hard limit to prevent cut-offs
-      }),
-    });
+    // Appel à Mistral via le helper double-voie (proxy → fallback direct)
+    const text = await callMistralAnalyze(prompt, tabName, 2000);
+    if(!text) throw new Error('Réponse vide.');
 
-    if(!response.ok) {
-      throw new Error(`HTTP ${response.status} — ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    const text = data.result
-      || data.choices?.[0]?.message?.content
-      || '';
-
-    if(!text) throw new Error('Réponse vide reçue du serveur.');
-
-    // Render: split on double newlines → paragraphs, support **bold** and *italic*
-    const html = text
-      .split(/\n\n+/)
-      .filter(p => p.trim())
-      .map(p => {
-        const sanitised = p.trim()
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g,     '<em>$1</em>');
-        return `<p>${sanitised}</p>`;
-      })
-      .join('');
-
-    el.innerHTML = html || `<p>${text}</p>`;
+    // Rendu riche : titres markdown (####/###/##/#) → <h4> stylés,
+    // **gras** → <strong>, *italique* → <em>, et nettoyage des # résiduels.
+    el.innerHTML = renderLpText(text);
 
     // Mark as cached so subsequent clicks don't re-fetch
     lTabCache[tabName] = true;
@@ -1614,6 +1814,42 @@ function retryTab(tabName) {
 }
 
 /**
+ * Rendu du texte d'analyse : convertit le markdown en HTML propre.
+ *  - Titres ####/###/##/#  →  <h4> stylés (plus de symboles bruts à l'écran)
+ *  - **gras**              →  <strong>
+ *  - *italique*            →  <em>
+ *  - Nettoie tout # résiduel en début de ligne
+ */
+function renderLpText(text) {
+  if(!text) return '<p>Aucun contenu.</p>';
+
+  const inlineFmt = (s) => s
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,     '<em>$1</em>');
+
+  return text
+    .split(/\n\n+/)
+    .filter(block => block.trim())
+    .map(block => {
+      const b = block.trim();
+      // Bloc titre : commence par 1 à 6 dièses
+      const h = b.match(/^#{1,6}\s+(.+)$/);
+      if(h) {
+        return `<h4>${inlineFmt(h[1].trim())}</h4>`;
+      }
+      // Paragraphe : on retire tout dièse résiduel en début de ligne
+      const cleaned = b
+        .replace(/^#{1,6}\s*/gm, '')
+        .split('\n')
+        .map(l => l.trim())
+        .filter(Boolean)
+        .join(' ');
+      return `<p>${inlineFmt(cleaned)}</p>`;
+    })
+    .join('');
+}
+
+/**
  * Mission 2 — returns the exact prompt for each of the 8 tabs.
  * Every prompt ends with the mandatory 300–400 word instruction.
  * The passage reference and session duration are injected dynamically.
@@ -1626,7 +1862,9 @@ function getTabPrompt(tabName) {
   const MIN_WORDS_SUFFIX =
     '\n\nIMPORTANT : Ta réponse doit être extrêmement détaillée et structurée. ' +
     'Tu dois rédiger un MINIMUM absolu de 300 à 400 mots. ' +
-    'Ne fais pas de résumé court, développe profondément.';
+    'Ne fais pas de résumé court, développe profondément. ' +
+    'Rédige en paragraphes fluides. N\'utilise PAS de symboles markdown comme ####, ###, ## ou ** ; ' +
+    'écris un texte naturel et continu.';
 
   const prompts = {
 
@@ -1819,7 +2057,7 @@ function blsLoadPassage() {
   blsRender();
 }
 
-function blsRender() {
+async function blsRender() {
   if(blsCurrentBookIdx === null || !blsCurrentChap) return;
   const book = bibleBooks[blsCurrentBookIdx];
   const slug = blsSlugs[book.name]
@@ -1835,11 +2073,73 @@ function blsRender() {
   document.getElementById('bls-ext-link').href            = url;
   document.getElementById('bls-fallback-link').href       = url;
 
-  document.getElementById('bls-placeholder').style.display  = 'none';
-  document.getElementById('bls-frame-wrap').style.display   = 'block';
-  document.getElementById('bls-fallback').style.display     = 'none';
-  document.getElementById('bls-iframe').style.display       = 'block';
-  document.getElementById('bls-iframe').src                 = url;
+  document.getElementById('bls-placeholder').style.display = 'none';
+  document.getElementById('bls-frame-wrap').style.display  = 'block';
+  document.getElementById('bls-fallback').style.display    = 'none';
+
+  // Show loading state in text container
+  const textEl = document.getElementById('bls-text-content');
+  textEl.style.display = 'block';
+  textEl.innerHTML = `
+    <div class="bls-text-loading">
+      <div class="spinner"></div>
+      <span>Chargement de ${book.name} ${blsCurrentChap}…</span>
+    </div>`;
+
+  // Fetch real text via dual-path helper (proxy → fallback direct)
+  try {
+    const text = await callMistralBible(book.name, blsCurrentChap);
+    if(!text) throw new Error('Texte vide.');
+    textEl.innerHTML = formatBibleText(text);
+
+  } catch(err) {
+    console.error('[BLS] Bible fetch error:', err);
+    textEl.innerHTML = `
+      <div class="bls-text-error">
+        <p>❌ Impossible de charger ce chapitre.</p>
+        <p class="err-detail">${err.message}</p>
+        <a href="${url}" target="_blank" rel="noopener" class="btn-gen" style="display:inline-flex;">
+          Lire sur saintebible.com →
+        </a>
+      </div>`;
+  }
+}
+
+/**
+ * Format raw Bible text into HTML paragraphs with verse-number styling.
+ * Mistral typically returns text with verse numbers at the start of each verse.
+ */
+function formatBibleText(text) {
+  if(!text) return '<p>Aucun texte disponible.</p>';
+
+  // Normalise: ensure each verse number starts on a fresh line.
+  // Pattern: ". <digits> " or "! <digits> " or "? <digits> "  →  paragraph break
+  let normalised = text
+    .replace(/\s*\n\s*/g, '\n')                     // collapse weird whitespace
+    .replace(/([.!?»])\s+(\d{1,3})\s+/g, '$1\n$2 ') // break before verse numbers
+    .replace(/^(\d{1,3})\s+/, '$1 ');               // ensure first verse stays clean
+
+  // Split into verse-paragraphs
+  const lines = normalised.split('\n').map(l => l.trim()).filter(Boolean);
+
+  return lines.map(line => {
+    // Wrap a leading "N " (verse number) in a styled span
+    const formatted = line.replace(
+      /^(\d{1,3})\s+/,
+      '<span class="verse-num">$1</span>'
+    );
+    return `<p>${formatted}</p>`;
+  }).join('');
+}
+
+/**
+ * Parse a passage reference like "Genèse 5" or "1 Samuel 12" into {book, chapter}.
+ */
+function parsePassageRef(ref) {
+  if(!ref) return null;
+  const m = ref.match(/^(.+?)\s+(\d+)$/);
+  if(!m) return null;
+  return { book: m[1].trim(), chapter: parseInt(m[2], 10) };
 }
 
 function blsCheckFrame(iframe) {
