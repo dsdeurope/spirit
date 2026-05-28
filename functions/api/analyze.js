@@ -1,10 +1,17 @@
 // functions/api/analyze.js
+//
+// Cloudflare Pages Function — proxy sécurisé vers Mistral pour les
+// 8 onglets d'analyse Lectio. La clé API reste côté serveur (jamais
+// exposée au navigateur).
+//
+// Route publique : POST /api/analyze
+// Corps attendu  : { prompt: string, type?: string, max_tokens?: number }
+// Réponse        : { success: true, result: string, type: string }
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const url = new URL(request.url);
 
-  // 1. En-têtes CORS obligatoires pour TOUTES les réponses
+  // 1. En-têtes CORS pour TOUTES les réponses
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -13,34 +20,26 @@ export async function onRequest(context) {
     "Content-Type": "application/json"
   };
 
-  // 2. Gestion explicite de la pré-vérification OPTIONS
-  // C'est CE BLOC qui empêche l'erreur 405 du navigateur
+  // 2. Pré-vérification OPTIONS (évite l'erreur 405 du navigateur)
   if (request.method === "OPTIONS") {
-    return new Response(null, {
-      status: 204, // No Content est la réponse standard pour OPTIONS
-      headers: corsHeaders
-    });
+    return new Response(null, { status: 204, headers: corsHeaders });
   }
 
-  // 3. Refus strict de toute méthode autre que POST
+  // 3. Seul POST est autorisé
   if (request.method !== "POST") {
-    return new Response(JSON.stringify({ 
-      error: "Method Not Allowed", 
+    return new Response(JSON.stringify({
+      error: "Method Not Allowed",
       message: "Cette endpoint accepte uniquement les requêtes POST.",
-      received_method: request.method 
-    }), {
-      status: 405,
-      headers: corsHeaders
-    });
+      received_method: request.method
+    }), { status: 405, headers: corsHeaders });
   }
 
-  // 4. Vérification de la clé API
+  // 4. Vérification de la clé API (variable d'environnement Cloudflare)
   const MISTRAL_API_KEY = env.MISTRAL_API_KEY;
   if (!MISTRAL_API_KEY) {
-    return new Response(JSON.stringify({ error: "Configuration manquante : MISTRAL_API_KEY non définie dans Cloudflare." }), {
-      status: 500,
-      headers: corsHeaders
-    });
+    return new Response(JSON.stringify({
+      error: "Configuration manquante : MISTRAL_API_KEY non définie dans Cloudflare."
+    }), { status: 500, headers: corsHeaders });
   }
 
   try {
@@ -50,23 +49,24 @@ export async function onRequest(context) {
       body = await request.json();
     } catch (e) {
       return new Response(JSON.stringify({ error: "Corps de requête invalide (JSON attendu)." }), {
-        status: 400,
-        headers: corsHeaders
+        status: 400, headers: corsHeaders
       });
     }
 
     const { prompt, type, max_tokens: requestedMaxTokens } = body;
-
     if (!prompt) {
       return new Response(JSON.stringify({ error: "Le champ 'prompt' est obligatoire." }), {
-        status: 400,
-        headers: corsHeaders
+        status: 400, headers: corsHeaders
       });
     }
 
-    // 6. Construction du prompt système renforcé
-    const systemMsg = "Tu es un assistant théologique expert. Tes réponses sont structurées, profondes et bibliques. Tu rédiges un MINIMUM de 300 mots.";
-    
+    // 6. Prompt système : profond, structuré, 300 mots min, SANS markdown
+    const systemMsg =
+      "Tu es un assistant théologique expert. Tes réponses sont structurées, " +
+      "profondes et bibliques. Tu rédiges un MINIMUM de 300 mots. " +
+      "Rédige en paragraphes fluides et naturels. " +
+      "N'utilise PAS de symboles markdown comme ####, ###, ## ou ** dans ta réponse.";
+
     // 7. Appel à Mistral
     const mistralResponse = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
@@ -81,7 +81,7 @@ export async function onRequest(context) {
           { role: "user", content: prompt }
         ],
         temperature: 0.6,
-        max_tokens: requestedMaxTokens || 2500
+        max_tokens: requestedMaxTokens || 2000
       })
     });
 
@@ -98,19 +98,13 @@ export async function onRequest(context) {
       success: true,
       result: content,
       type: type || "unknown"
-    }), {
-      status: 200,
-      headers: corsHeaders
-    });
+    }), { status: 200, headers: corsHeaders });
 
   } catch (error) {
     console.error("[analyze.js] Critical Error:", error);
     return new Response(JSON.stringify({
       error: "Internal Server Error",
       details: error.message
-    }), {
-      status: 500,
-      headers: corsHeaders
-    });
+    }), { status: 500, headers: corsHeaders });
   }
 }
