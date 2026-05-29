@@ -258,6 +258,41 @@
       transition: transform .3s var(--ease), box-shadow .3s var(--ease);
     }
     .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+    /* Verse card header (avec bouton refresh) */
+    .card-header-row {
+      display: flex; align-items: center; gap: .75rem;
+      margin-bottom: 1.25rem;
+    }
+    .card-header-row .card-label {
+      margin-bottom: 0; flex: 1;
+    }
+    .refresh-verse-btn {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-2);
+      transition: all .35s var(--ease);
+      flex-shrink: 0;
+    }
+    .refresh-verse-btn:hover:not(:disabled) {
+      background: var(--gold-bg);
+      color: var(--gold);
+      border-color: var(--gold-bd);
+      transform: rotate(180deg);
+    }
+    .refresh-verse-btn:disabled { opacity: .5; cursor: wait; }
+    .refresh-verse-btn svg { width: 14px; height: 14px; }
+    .verse-loading-mini {
+      width: 14px; height: 14px;
+      border: 2px solid var(--border-md);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
     .card-label {
       font-size: .75rem; font-weight: 600;
       color: var(--text-3);
@@ -745,10 +780,19 @@
     <main class="p1-main">
       <aside class="sidebar">
         <div class="card">
-          <p class="card-label">Passage du Jour</p>
-          <span class="verse-ref">Jean 3:16</span>
-          <p class="verse-text">"Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."</p>
-          <div class="tags-grid">
+          <div class="card-header-row">
+            <p class="card-label">Passage du Jour</p>
+            <button class="refresh-verse-btn" id="refresh-verse-btn" onclick="loadNewVerse()" title="Nouveau verset" aria-label="Charger un nouveau verset">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </button>
+          </div>
+          <span class="verse-ref" id="dv-ref">Jean 3:16</span>
+          <p class="verse-text" id="dv-text">"Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."</p>
+          <div class="tags-grid" id="dv-tags">
             <div class="tag tag-1">Amour</div>
             <div class="tag tag-2">Grâce</div>
             <div class="tag tag-3">Salut</div>
@@ -1350,32 +1394,36 @@ async function generateContent(type) {
   cDiv.style.display = 'none';
   lDiv.classList.add('show');
 
-  const wpm         = 130;
-  const dur         = 120;
-  const targetWords = Math.round((dur / 60) * wpm);
-  const tLabel      = '2 minutes';
-  const passage     = `${selectedBook} ${selectedChapter}`;
+  const passage = `${selectedBook} ${selectedChapter}`;
   let prompt = '';
 
   if(type === 'theological')
-    prompt = `Agis comme un théologien expert. Rédige une analyse théologique et doctrinale approfondie et structurée pour le chapitre complet suivant : ${passage}. L'analyse doit être calibrée pour un temps de lecture de ${tLabel} (environ ${targetWords} mots). Utilise des titres clairs (##, ###) et mets en gras les concepts clés. Inclue les implications pour la foi contemporaine.`;
+    prompt = `Agis comme un théologien expert. Rédige une analyse théologique et doctrinale approfondie et structurée pour le chapitre complet suivant : ${passage}. Inclue les implications pour la foi contemporaine. Rédige en paragraphes fluides, environ 400 mots.`;
   else if(type === 'meditative')
-    prompt = `Agis comme un guide spirituel expérimenté. Prépare une méditation guidée structurée (Lectio, Meditatio, Oratio, Contemplatio) basée sur le chapitre suivant : ${passage}. Le contenu doit être calibré pour ${tLabel} (environ ${targetWords} mots). Ton ton doit être doux, invitant et profond. Utilise des titres pour chaque étape.`;
+    prompt = `Agis comme un guide spirituel expérimenté. Prépare une méditation guidée structurée (Lectio, Meditatio, Oratio, Contemplatio) basée sur le chapitre suivant : ${passage}. Ton ton doit être doux, invitant et profond. Environ 400 mots.`;
   else if(type === 'biblical')
-    prompt = `Agis comme un exégète biblique. Donne le contexte historique, littéraire et les liens avec le reste de la Bible pour : ${passage}. Limite ta réponse pour ${tLabel} (environ ${targetWords} mots). Explique les termes originaux importants et les références croisées. Structure avec des titres.`;
+    prompt = `Agis comme un exégète biblique. Donne le contexte historique, littéraire et les liens avec le reste de la Bible pour : ${passage}. Explique les termes originaux importants et les références croisées. Environ 400 mots.`;
+
+  // Cache local pour Page 1 aussi
+  const cacheKey = `p1analysis:${passage}:${type}`;
+  const cached = cacheGet(cacheKey);
+  if(cached) {
+    console.log(`[p1] cache HIT — 0 token pour ${passage} / ${type}`);
+    cDiv.innerHTML = makeBibleLinks(parseMarkdown(cached));
+    lDiv.classList.remove('show');
+    cDiv.style.display = 'block';
+    return;
+  }
 
   try {
-    const r = await fetch(MISTRAL.URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MISTRAL.KEY}` },
-      body: JSON.stringify({ model: MISTRAL.MODEL, messages: [{ role: 'user', content: prompt }], max_tokens: 1000 })
-    });
-    if(!r.ok) throw new Error('Erreur API');
-    const d = await r.json();
-    cDiv.innerHTML = makeBibleLinks(parseMarkdown(d.choices[0].message.content));
+    // Utilise le helper double-voie (proxy → fallback) — plus de "clé API" requise côté client
+    const text = await callMistralAnalyze(prompt, 'p1_' + type, 1500);
+    if(!text) throw new Error('Réponse vide.');
+    cacheSet(cacheKey, text, TTL_ANALYSIS);
+    cDiv.innerHTML = makeBibleLinks(parseMarkdown(text));
   } catch(e) {
-    console.error(e);
-    cDiv.innerHTML = '<p style="color:#ef4444;text-align:center;">Une erreur est survenue (Vérifiez la clé API ou le proxy).</p>';
+    console.error('[p1 generateContent]', e);
+    cDiv.innerHTML = `<p style="color:#ef4444;text-align:center;">Erreur : ${e.message}</p>`;
   } finally {
     lDiv.classList.remove('show');
     cDiv.style.display = 'block';
@@ -1389,18 +1437,27 @@ async function searchDefinition() {
   const lDiv = document.getElementById('load-dictionary');
   cDiv.style.display = 'none';
   lDiv.classList.add('show');
-  const prompt = `Agis comme un dictionnaire théologique et biblique expert. Donne une définition claire, le sens spirituel/théologique et un exemple d'usage dans la Bible pour le mot : "${word}". Structure ta réponse avec des titres si nécessaire.`;
+
+  // Cache local sur le mot (insensible à la casse)
+  const cacheKey = `dict:${word.toLowerCase()}`;
+  const cached = cacheGet(cacheKey);
+  if(cached) {
+    console.log(`[dict] cache HIT — 0 token pour "${word}"`);
+    cDiv.innerHTML = makeBibleLinks(parseMarkdown(cached));
+    lDiv.classList.remove('show');
+    cDiv.style.display = 'block';
+    return;
+  }
+
+  const prompt = `Agis comme un dictionnaire théologique et biblique expert. Donne une définition claire, le sens spirituel/théologique et un exemple d'usage dans la Bible pour le mot : "${word}". Réponse concise, environ 200 mots, en paragraphes fluides.`;
   try {
-    const r = await fetch(MISTRAL.URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MISTRAL.KEY}` },
-      body: JSON.stringify({ model: MISTRAL.MODEL, messages: [{ role: 'user', content: prompt }], max_tokens: 500 })
-    });
-    if(!r.ok) throw new Error();
-    const d = await r.json();
-    cDiv.innerHTML = makeBibleLinks(parseMarkdown(d.choices[0].message.content));
+    const text = await callMistralAnalyze(prompt, 'dict', 800);
+    if(!text) throw new Error('Réponse vide.');
+    cacheSet(cacheKey, text, TTL_ANALYSIS);
+    cDiv.innerHTML = makeBibleLinks(parseMarkdown(text));
   } catch(e) {
-    cDiv.innerHTML = '<p style="color:#ef4444;text-align:center;">Erreur lors de la recherche.</p>';
+    console.error('[searchDefinition]', e);
+    cDiv.innerHTML = `<p style="color:#ef4444;text-align:center;">Erreur : ${e.message}</p>`;
   } finally {
     lDiv.classList.remove('show');
     cDiv.style.display = 'block';
@@ -1453,6 +1510,194 @@ function incrementStreak() {
     const lbl = lStreak === 1 ? 'jour' : 'jours';
     document.getElementById('streak-count').textContent = `${lStreak} ${lbl}`;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CACHE PERSISTANT (localStorage)
+   
+   Économie majeure : un passage ou une analyse déjà chargé(e)
+   n'engendre PLUS aucun appel Mistral. Premier chargement payant,
+   tous les suivants gratuits et instantanés.
+   
+   Stratégie de TTL :
+   • Texte biblique  → jamais d'expiration (la Bible ne change pas)
+   • Analyse Lectio  → 30 jours (permet une régénération naturelle)
+   
+   Gestion du quota localStorage (5-10MB selon navigateur) :
+   sur QuotaExceededError, on évince les 30% d'entrées les plus
+   anciennes (LRU approximatif) et on retente une fois.
+═══════════════════════════════════════════════════════════ */
+const CACHE_PREFIX  = 'lectio_cache_';
+const TTL_BIBLE     = 0;                         // pas d'expiration
+const TTL_ANALYSIS  = 30 * 24 * 60 * 60 * 1000;  // 30 jours
+
+function cacheGet(key) {
+  try {
+    const raw = localStorage.getItem(CACHE_PREFIX + key);
+    if(!raw) return null;
+    const entry = JSON.parse(raw);
+    if(entry.expires && Date.now() > entry.expires) {
+      localStorage.removeItem(CACHE_PREFIX + key);
+      return null;
+    }
+    return entry.value;
+  } catch(e) { return null; }
+}
+
+function cacheSet(key, value, ttlMs) {
+  const entry = { value, stored: Date.now() };
+  if(ttlMs && ttlMs > 0) entry.expires = Date.now() + ttlMs;
+  try {
+    localStorage.setItem(CACHE_PREFIX + key, JSON.stringify(entry));
+  } catch(e) {
+    if(e.name === 'QuotaExceededError' || e.code === 22) {
+      cacheEvictOldest();
+      try { localStorage.setItem(CACHE_PREFIX + key, JSON.stringify(entry)); }
+      catch(e2) { console.warn('[cache] Impossible de sauvegarder, quota plein:', e2.message); }
+    }
+  }
+}
+
+function cacheEvictOldest() {
+  const entries = [];
+  for(let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if(k && k.startsWith(CACHE_PREFIX)) {
+      try {
+        const v = JSON.parse(localStorage.getItem(k));
+        entries.push({ key: k, stored: v.stored || 0 });
+      } catch(e) {}
+    }
+  }
+  entries.sort((a, b) => a.stored - b.stored);
+  const toRemove = Math.ceil(entries.length * 0.3);
+  for(let i = 0; i < toRemove; i++) localStorage.removeItem(entries[i].key);
+  console.log(`[cache] Évincé ${toRemove} entrées anciennes pour libérer de l'espace.`);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ROTATION DE VERSET (Page 1) — Cache-aware
+   
+   Stratégie économe en tokens :
+   • 70% de chance de piocher dans un chapitre DÉJÀ en cache local
+     (= 0 token consommé)
+   • 30% de chance d'élargir le pool avec un nouveau chapitre
+   • Chaque chapitre fetché libère ~25 versets accessibles ensuite
+   
+   Bilan : après 40 sessions, ~1000 versets disponibles avec ~40
+   appels Mistral seulement (au lieu de 1000 sans cette stratégie).
+═══════════════════════════════════════════════════════════ */
+const VERSE_THEMES = [
+  'Amour', 'Grâce', 'Foi', 'Salut', 'Espérance', 'Joie', 'Paix', 'Sagesse',
+  'Justice', 'Vérité', 'Compassion', 'Patience', 'Humilité', 'Pardon',
+  'Courage', 'Force', 'Lumière', 'Vie', 'Éternité', 'Création',
+  'Rédemption', 'Sacrifice', 'Prière', 'Promesse', 'Bénédiction',
+  'Miséricorde', 'Sainteté', 'Obéissance', 'Service', 'Communion',
+  'Mission', 'Témoignage', 'Adoration', 'Louange',
+];
+
+/** Hachage simple d'une chaîne → entier (pour seed déterministe par verset) */
+function seededHash(s) {
+  let h = 0;
+  for(let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h) + s.charCodeAt(i);
+    h |= 0;
+  }
+  return Math.abs(h);
+}
+
+/** Tags thématiques déterministes pour un verset donné (mêmes tags si même réf) */
+function getVerseTags(ref) {
+  const seed = seededHash(ref);
+  const tags = [];
+  for(let i = 0; i < 4; i++) {
+    tags.push(VERSE_THEMES[(seed + i * 7) % VERSE_THEMES.length]);
+  }
+  return tags;
+}
+
+/** Liste des chapitres bibliques déjà en cache localStorage */
+function getCachedBibleChapters() {
+  const chapters = [];
+  for(let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if(k && k.startsWith(CACHE_PREFIX + 'bible:')) {
+      const parts = k.replace(CACHE_PREFIX + 'bible:', '').split(':');
+      if(parts.length >= 2) chapters.push({ book: parts[0], chapter: parseInt(parts[1]) });
+    }
+  }
+  return chapters;
+}
+
+/** Découpe le texte brut d'un chapitre en tableau de versets {num, text} */
+function parseChapterIntoVerses(rawText) {
+  if(!rawText) return [];
+  const verses = [];
+  // Normalise puis cherche "N texte..." où N est un numéro de verset
+  const cleaned = rawText.replace(/\s*\n\s*/g, '\n');
+  const lines = cleaned.split(/\n+/);
+  for(const line of lines) {
+    const m = line.trim().match(/^(\d{1,3})[\.\s]+(.+)$/);
+    if(m && m[2].length > 15) {  // ignore les fragments trop courts
+      verses.push({ num: parseInt(m[1]), text: m[2].trim() });
+    }
+  }
+  return verses;
+}
+
+/** Charge un nouveau verset aléatoire sur la carte Page 1 */
+async function loadNewVerse() {
+  const btn      = document.getElementById('refresh-verse-btn');
+  const refEl    = document.getElementById('dv-ref');
+  const textEl   = document.getElementById('dv-text');
+  const tagsEl   = document.getElementById('dv-tags');
+  const originalIcon = btn.innerHTML;
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="verse-loading-mini"></div>';
+
+  // Jusqu'à 4 tentatives (chapitre vide, parsing raté, etc.)
+  for(let attempt = 0; attempt < 4; attempt++) {
+    try {
+      const cached = getCachedBibleChapters();
+      const useNew = cached.length === 0 || Math.random() < 0.3;
+
+      let book, chapter;
+      if(useNew) {
+        const b = bibleBooks[Math.floor(Math.random() * bibleBooks.length)];
+        book = b.name;
+        chapter = Math.floor(Math.random() * b.chapters) + 1;
+      } else {
+        const pick = cached[Math.floor(Math.random() * cached.length)];
+        book = pick.book;
+        chapter = pick.chapter;
+      }
+
+      const chapterText = await callMistralBible(book, chapter);
+      const verses = parseChapterIntoVerses(chapterText);
+      if(verses.length === 0) continue; // retry
+
+      const verse = verses[Math.floor(Math.random() * verses.length)];
+      const ref = `${book} ${chapter}:${verse.num}`;
+
+      // Update UI
+      refEl.textContent = ref;
+      textEl.textContent = `« ${verse.text} »`;
+      const tags = getVerseTags(ref);
+      tagsEl.innerHTML = tags.map((t, i) =>
+        `<div class="tag tag-${(i % 8) + 1}">${t}</div>`
+      ).join('');
+
+      console.log(`[verse] ${ref} ${useNew ? '(nouveau chapitre)' : '(depuis cache)'}`);
+      break;
+
+    } catch(err) {
+      console.warn(`[verse] tentative ${attempt + 1} échouée :`, err.message);
+    }
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = originalIcon;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1531,6 +1776,14 @@ async function callMistralAnalyze(prompt, type, maxTokens = 2000) {
  * Reproduit côté frontend la logique de /api/bible.
  */
 async function callMistralBible(book, chapter) {
+  // ── Cache local persistant (gros gain de tokens) ──
+  const cacheKey = `bible:${book}:${chapter}`;
+  const cached = cacheGet(cacheKey);
+  if(cached) {
+    console.log(`[bible] cache HIT — 0 token consommé pour ${book} ${chapter}`);
+    return cached;
+  }
+
   // ── Voie 1 : proxy Cloudflare (production) ──
   try {
     const r = await fetch('/api/bible', {
@@ -1540,7 +1793,10 @@ async function callMistralBible(book, chapter) {
     });
     if(r.ok) {
       const d = await r.json();
-      if(d.text) return d.text;
+      if(d.text) {
+        cacheSet(cacheKey, d.text, TTL_BIBLE);
+        return d.text;
+      }
     }
     console.warn('[bible] Proxy a répondu sans texte — fallback direct');
   } catch(proxyErr) {
@@ -1565,7 +1821,7 @@ async function callMistralBible(book, chapter) {
       'Authorization': `Bearer ${MISTRAL.KEY}`,
     },
     body: JSON.stringify({
-      model:       'mistral-small-latest', // mistral-tiny est déprécié côté API
+      model:       'mistral-small-latest',
       messages: [
         {
           role:    'system',
@@ -1585,7 +1841,9 @@ async function callMistralBible(book, chapter) {
   const data = await r.json();
   const content = data.choices?.[0]?.message?.content;
   if(!content) throw new Error('Réponse vide de Mistral.');
-  return content.trim();
+  const trimmed = content.trim();
+  cacheSet(cacheKey, trimmed, TTL_BIBLE);
+  return trimmed;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1761,6 +2019,17 @@ async function fetchTabContent(tabName) {
   const el = document.getElementById('lc-' + tabName);
   if(!el) return;
 
+  // ── Cache local persistant ──
+  // Affichage instantané sur cache HIT, sans spinner ni appel API.
+  const cacheKey = `analysis:${lPassage.ref}:${tabName}`;
+  const cachedText = cacheGet(cacheKey);
+  if(cachedText) {
+    console.log(`[analyze] cache HIT — 0 token consommé pour ${lPassage.ref} / ${tabName}`);
+    el.innerHTML = renderLpText(cachedText);
+    lTabCache[tabName] = true;
+    return;
+  }
+
   // Show per-tab loading UI
   el.innerHTML = `
     <div class="tab-panel-loading">
@@ -1788,6 +2057,9 @@ async function fetchTabContent(tabName) {
     // Rendu riche : titres markdown (####/###/##/#) → <h4> stylés,
     // **gras** → <strong>, *italique* → <em>, et nettoyage des # résiduels.
     el.innerHTML = renderLpText(text);
+
+    // Persiste 30 jours pour éviter les ré-appels coûteux
+    cacheSet(cacheKey, text, TTL_ANALYSIS);
 
     // Mark as cached so subsequent clicks don't re-fetch
     lTabCache[tabName] = true;
@@ -1858,13 +2130,11 @@ function getTabPrompt(tabName) {
   const ref  = lPassage ? lPassage.ref : 'ce passage';
   const time = lMode + ' minute' + (lMode > 1 ? 's' : '');
 
-  // Mandatory suffix appended to every prompt (Mission 2)
-  const MIN_WORDS_SUFFIX =
-    '\n\nIMPORTANT : Ta réponse doit être extrêmement détaillée et structurée. ' +
-    'Tu dois rédiger un MINIMUM absolu de 300 à 400 mots. ' +
-    'Ne fais pas de résumé court, développe profondément. ' +
-    'Rédige en paragraphes fluides. N\'utilise PAS de symboles markdown comme ####, ###, ## ou ** ; ' +
-    'écris un texte naturel et continu.';
+  // Suffixe minimal : le system prompt de /api/analyze impose déjà
+  // "300+ mots, paragraphes fluides, pas de markdown". On garde juste
+  // un rappel court pour renforcer (économie : ~65 tokens × 8 onglets
+  // = ~520 tokens par session par rapport à l'ancien suffixe).
+  const MIN_WORDS_SUFFIX = ' Réponse détaillée, 300+ mots, paragraphes fluides, sans markdown.';
 
   const prompts = {
 
