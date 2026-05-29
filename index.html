@@ -1242,6 +1242,12 @@ let lAnalysisPending = false; // kept for backward compat
 let lStreak      = 0;
 let lDoneToday   = false;
 
+// ── NEW: verset partagé entre Page 1 et Lectio Divina ──
+// Mis à jour par loadNewVerse() (bouton refresh Page 1).
+// Persisté en localStorage pour survivre aux rechargements.
+// Utilisé par startLectio() en priorité (sinon fallback getDailyPassage).
+let currentDailyVerse = null; // { ref, text, book, chapter, verseNum }
+
 // ── NEW: per-tab cache ──────────────────────────────────────
 // Stores which tabs have been successfully loaded for the
 // current reading session. Cleared in startLectio().
@@ -1258,11 +1264,55 @@ document.addEventListener('DOMContentLoaded', () => {
   initBooks();
   initBibleReader();
   loadStreakDisplay();
+  restoreDailyVerse();  // restaure le verset partagé depuis localStorage
   initLectioHome();
   document.getElementById('access-code')
     .addEventListener('keypress', e => { if(e.key === 'Enter') checkAccess(); });
   document.getElementById('l-ring').style.strokeDasharray = CIRC;
 });
+
+/**
+ * Restaure le verset courant depuis localStorage au démarrage (s'il existe).
+ * Met à jour les DEUX interfaces (Page 1 carte + Page 2 preview Lectio).
+ */
+function restoreDailyVerse() {
+  try {
+    const raw = localStorage.getItem('lectio_current_verse');
+    if(!raw) return;
+    const v = JSON.parse(raw);
+    if(v && v.ref && v.text) {
+      currentDailyVerse = v;
+      applyDailyVerseToUI(v);
+      console.log(`[init] Verset restauré : ${v.ref}`);
+    }
+  } catch(e) { /* silent */ }
+}
+
+/**
+ * Met à jour les DEUX interfaces (Page 1 verse card ET Page 2 Lectio preview)
+ * avec le verset courant. Source unique de vérité.
+ */
+function applyDailyVerseToUI(v) {
+  if(!v) return;
+  // Page 1 — verse card
+  const refEl  = document.getElementById('dv-ref');
+  const textEl = document.getElementById('dv-text');
+  const tagsEl = document.getElementById('dv-tags');
+  if(refEl)  refEl.textContent  = v.ref;
+  if(textEl) textEl.textContent = `« ${v.text} »`;
+  if(tagsEl) {
+    const tags = getVerseTags(v.ref);
+    tagsEl.innerHTML = tags.map((t, i) =>
+      `<div class="tag tag-${(i % 8) + 1}">${t}</div>`
+    ).join('');
+  }
+  // Page 2 — Lectio Divina home preview
+  const prevEl = document.getElementById('l-verse-prev');
+  if(prevEl) {
+    const excerpt = v.text.length > 90 ? v.text.substring(0, 90) + '…' : v.text;
+    prevEl.textContent = `« ${excerpt} » — ${v.ref}`;
+  }
+}
 
 /* ═══════════════════════════════════════════════════════════
    LOCK SCREEN
@@ -1340,11 +1390,18 @@ function showPage(id, btn) {
 ═══════════════════════════════════════════════════════════ */
 function initBooks() {
   const sel = document.getElementById('book-select');
+  if(!sel) {
+    console.error('[init] ❌ Élément book-select introuvable dans le DOM');
+    return;
+  }
+  // Si déjà peuplé (rechargement partiel), on vide d'abord
+  while(sel.options.length > 1) sel.remove(1);
   bibleBooks.forEach((b, i) => {
     const o = document.createElement('option');
     o.value = i; o.textContent = b.name;
     sel.appendChild(o);
   });
+  console.log(`[init] ✓ ${bibleBooks.length} livres chargés dans le sélecteur Page 1`);
 }
 
 function loadChapters() {
@@ -1657,12 +1714,10 @@ function parseChapterIntoVerses(rawText) {
   return verses;
 }
 
-/** Charge un nouveau verset aléatoire sur la carte Page 1 */
+/** Charge un nouveau verset aléatoire et le synchronise Page 1 ↔ Lectio Divina */
 async function loadNewVerse() {
   const btn      = document.getElementById('refresh-verse-btn');
-  const refEl    = document.getElementById('dv-ref');
   const textEl   = document.getElementById('dv-text');
-  const tagsEl   = document.getElementById('dv-tags');
   const originalIcon = btn.innerHTML;
 
   btn.disabled = true;
@@ -1698,21 +1753,28 @@ async function loadNewVerse() {
 
       if(verses.length === 0) {
         lastError = new Error('Aucun verset détecté dans la réponse');
-        continue; // retry avec un autre chapitre
+        continue;
       }
 
       const verse = verses[Math.floor(Math.random() * verses.length)];
       const ref = `${book} ${chapter}:${verse.num}`;
 
-      // Update UI
-      refEl.textContent = ref;
-      textEl.textContent = `« ${verse.text} »`;
-      const tags = getVerseTags(ref);
-      tagsEl.innerHTML = tags.map((t, i) =>
-        `<div class="tag tag-${(i % 8) + 1}">${t}</div>`
-      ).join('');
+      // ── Source unique de vérité : update global state, persist, propagate UI ──
+      currentDailyVerse = {
+        ref,
+        text:     verse.text,
+        book,
+        chapter,
+        verseNum: verse.num,
+      };
+      try {
+        localStorage.setItem('lectio_current_verse', JSON.stringify(currentDailyVerse));
+      } catch(e) { /* quota — ok */ }
 
-      console.log(`[verse] ✓ Affiché : ${ref}`);
+      // Propage à Page 1 ET Lectio Divina d'un coup
+      applyDailyVerseToUI(currentDailyVerse);
+
+      console.log(`[verse] ✓ Affiché et synchronisé : ${ref}`);
       success = true;
       break;
 
@@ -1883,23 +1945,43 @@ async function callMistralBible(book, chapter) {
    PAGE 2 — LECTIO DIVINA
 ═══════════════════════════════════════════════════════════ */
 function initLectioHome() {
-  const p = getDailyPassage(5);
-  document.getElementById('l-verse-prev').textContent =
-    '« ' + p.text.substring(0, 90).replace(/\n/g, ' ') + '… » — ' + p.ref;
+  // Si on a un verset partagé (depuis le bouton Page 1), on l'affiche.
+  // Sinon, fallback sur le passage du jour algorithmique.
+  if(currentDailyVerse && currentDailyVerse.ref) {
+    applyDailyVerseToUI(currentDailyVerse);
+  } else {
+    const p = getDailyPassage(5);
+    document.getElementById('l-verse-prev').textContent =
+      '« ' + p.text.substring(0, 90).replace(/\n/g, ' ') + '… » — ' + p.ref;
+  }
 }
 
 function selectLectioMode(m, el) {
   lMode = m;
   document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
-  const p = getDailyPassage(m);
-  document.getElementById('l-verse-prev').textContent =
-    '« ' + p.text.substring(0, 90).replace(/\n/g, ' ') + '… » — ' + p.ref;
+  // On NE rafraîchit PAS le preview ici si un verset partagé existe :
+  // changer le mode (2/5/10 min) ne doit pas changer le verset.
+  if(!currentDailyVerse) {
+    const p = getDailyPassage(m);
+    document.getElementById('l-verse-prev').textContent =
+      '« ' + p.text.substring(0, 90).replace(/\n/g, ' ') + '… » — ' + p.ref;
+  }
 }
 
 async function startLectio() {
-  // Generate ref+placeholder for this day + mode
-  lPassage         = getDailyPassage(lMode);
+  // ── Source du passage : verset partagé en priorité, sinon algorithme du jour ──
+  if(currentDailyVerse && currentDailyVerse.book && currentDailyVerse.chapter) {
+    lPassage = {
+      ref:  `${currentDailyVerse.book} ${currentDailyVerse.chapter}`,
+      text: '', // sera rempli ci-dessous par callMistralBible
+    };
+    console.log(`[lectio] Démarrage avec le verset partagé : ${currentDailyVerse.ref} (chapitre complet : ${lPassage.ref})`);
+  } else {
+    lPassage = getDailyPassage(lMode);
+    console.log(`[lectio] Démarrage avec passage algorithmique : ${lPassage.ref}`);
+  }
+
   lTimeLeft        = lMode * 60;
   lTotalTime       = lMode * 60;
   lPaused          = false;
