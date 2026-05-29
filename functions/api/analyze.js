@@ -67,6 +67,25 @@ export async function onRequest(context) {
       "Rédige en paragraphes fluides et naturels. " +
       "N'utilise PAS de symboles markdown comme ####, ###, ## ou ** dans ta réponse.";
 
+    // 6b. Choix du modèle adaptatif selon le type d'onglet :
+    //     • small (~10× moins cher) : onglets factuels où la profondeur compte moins
+    //     • large : onglets nécessitant exégèse poussée et nuance théologique
+    const MODEL_BY_TYPE = {
+      contexte:      "mistral-small-latest",
+      qui_parle:     "mistral-small-latest",
+      destinataires: "mistral-small-latest",
+      theme:         "mistral-small-latest",
+      p1_biblical:   "mistral-small-latest",
+      dict:          "mistral-small-latest",
+      sens:          "mistral-large-latest",
+      pourquoi:      "mistral-large-latest",
+      theologiens:   "mistral-large-latest",
+      spirituel:     "mistral-large-latest",
+      p1_theological:"mistral-large-latest",
+      p1_meditative: "mistral-large-latest",
+    };
+    const chosenModel = MODEL_BY_TYPE[type] || "mistral-large-latest";
+
     // 7. Appel à Mistral
     const mistralResponse = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
@@ -75,7 +94,7 @@ export async function onRequest(context) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "mistral-large-latest",
+        model: chosenModel,
         messages: [
           { role: "system", content: systemMsg },
           { role: "user", content: prompt }
