@@ -1005,9 +1005,9 @@
                 </select>
               </div>
               <div class="bls-ext-wrap">
-                <a id="bls-ext-link" href="https://saintebible.com" target="_blank" rel="noopener" class="btn-bls-ext">
+                <a id="bls-ext-link" href="https://www.bible.com/fr/bible/" target="_blank" rel="noopener" class="btn-bls-ext">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  Ouvrir saintebible.com
+                  Ouvrir bible.com
                 </a>
               </div>
             </div>
@@ -1032,7 +1032,7 @@
               <!-- Backup fallback if API completely fails -->
               <div class="bls-iframe-fallback" id="bls-fallback" style="display:none;">
                 <p style="color:var(--text-2);margin-bottom:1rem;">Impossible de charger le texte. Cliquez ci-dessous.</p>
-                <a id="bls-fallback-link" href="#" target="_blank" rel="noopener" class="btn-gen" style="display:inline-flex;">Lire ce chapitre sur saintebible.com →</a>
+                <a id="bls-fallback-link" href="#" target="_blank" rel="noopener" class="btn-gen" style="display:inline-flex;">Lire ce chapitre sur bible.com →</a>
               </div>
             </div>
           </div>
@@ -1311,6 +1311,28 @@ const bookMap = {
   "tite":"titus","philémon":"philemon","hébreux":"hebrews","jacques":"james",
   "1 pierre":"1peter","2 pierre":"2peter","1 jean":"1john","2 jean":"2john",
   "3 jean":"3john","jude":"jude","apocalypse":"revelation",
+};
+
+// Codes USFM utilisés par bible.com (YouVersion) pour la version Louis Segond 1910 (ID 93)
+// Format URL : https://www.bible.com/fr/bible/93/<CODE>.<chap>.<verset>.LSG
+const bibleComCodes = {
+  "genèse":"GEN","exode":"EXO","lévitique":"LEV","nombres":"NUM",
+  "deutéronome":"DEU","josué":"JOS","juges":"JDG","ruth":"RUT",
+  "1 samuel":"1SA","2 samuel":"2SA","1 rois":"1KI","2 rois":"2KI",
+  "1 chroniques":"1CH","2 chroniques":"2CH","esdras":"EZR","néhémie":"NEH",
+  "esther":"EST","job":"JOB","psaumes":"PSA","proverbes":"PRO",
+  "ecclésiaste":"ECC","cantique":"SNG","ésaïe":"ISA","jérémie":"JER",
+  "lamentations":"LAM","ézéchiel":"EZK","daniel":"DAN","osée":"HOS",
+  "joël":"JOL","amos":"AMO","abdias":"OBA","jonas":"JON",
+  "michée":"MIC","nahum":"NAM","habacuc":"HAB","sophonie":"ZEP",
+  "aggée":"HAG","zacharie":"ZEC","malachie":"MAL",
+  "matthieu":"MAT","marc":"MRK","luc":"LUK","jean":"JHN",
+  "actes":"ACT","romains":"ROM","1 corinthiens":"1CO","2 corinthiens":"2CO",
+  "galates":"GAL","éphésiens":"EPH","philippiens":"PHP","colossiens":"COL",
+  "1 thessaloniciens":"1TH","2 thessaloniciens":"2TH","1 timothée":"1TI","2 timothée":"2TI",
+  "tite":"TIT","philémon":"PHM","hébreux":"HEB","jacques":"JAS",
+  "1 pierre":"1PE","2 pierre":"2PE","1 jean":"1JN","2 jean":"2JN",
+  "3 jean":"3JN","jude":"JUD","apocalypse":"REV",
 };
 
 /* ═══════════════════════════════════════════════════════════
@@ -1685,9 +1707,9 @@ function makeBibleLinks(html) {
   return html.replace(rx, (m, pre, book, ch, vs) => {
     const full = (pre ? pre.trim() + ' ' : '') + book;
     const key  = full.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const slug = bookMap[key] || key.replace(/\s+/g, '');
-    return slug
-      ? `<a href="https://saintebible.com/${slug}/${ch}-${vs}.htm" target="_blank" rel="noopener" class="bible-link">${m}</a>`
+    const code = bibleComCodes[key];
+    return code
+      ? `<a href="https://www.bible.com/fr/bible/93/${code}.${ch}.${vs}.LSG" target="_blank" rel="noopener" class="bible-link">${m}</a>`
       : m;
   });
 }
@@ -1829,11 +1851,11 @@ function saveVerseForToday(verseObj, overwrite = true) {
   } catch(e) { /* quota */ }
 }
 
-/** Construit l'URL saintebible.com pour un verset donné */
+/** Construit l'URL bible.com (Louis Segond 1910, ID 93) pour un verset donné */
 function buildBibleUrl(book, chapter, verseNum) {
   const key  = book.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const slug = bookMap[key] || key.replace(/\s+/g, '');
-  return `https://saintebible.com/${slug}/${chapter}-${verseNum}.htm`;
+  const code = bibleComCodes[key] || key.toUpperCase().substring(0, 3);
+  return `https://www.bible.com/fr/bible/93/${code}.${chapter}.${verseNum}.LSG`;
 }
 
 /** Rend la liste verticale du journal (jour le plus récent en haut) */
@@ -2723,11 +2745,9 @@ function blsLoadPassage() {
 async function blsRender() {
   if(blsCurrentBookIdx === null || !blsCurrentChap) return;
   const book = bibleBooks[blsCurrentBookIdx];
-  const slug = blsSlugs[book.name]
-    || book.name.toLowerCase()
-         .replace(/[éèê]/g, 'e').replace(/[àâ]/g, 'a')
-         .replace(/\s+/g, '-');
-  const url = `https://saintebible.com/${slug}/${blsCurrentChap}.htm`;
+  const key  = book.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const code = bibleComCodes[key] || key.toUpperCase().substring(0, 3);
+  const url  = `https://www.bible.com/fr/bible/93/${code}.${blsCurrentChap}.LSG`;
 
   document.getElementById('bls-book').value = blsCurrentBookIdx;
   document.getElementById('bls-chap').value = blsCurrentChap;
@@ -2762,7 +2782,7 @@ async function blsRender() {
         <p>❌ Impossible de charger ce chapitre.</p>
         <p class="err-detail">${err.message}</p>
         <a href="${url}" target="_blank" rel="noopener" class="btn-gen" style="display:inline-flex;">
-          Lire sur saintebible.com →
+          Lire sur bible.com →
         </a>
       </div>`;
   }
