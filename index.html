@@ -710,8 +710,111 @@
     }
 
     /* ══════════════════════════════════════════════
-       RESPONSIVE
+       PAGE 3 — JOURNAL DES VERSETS
     ══════════════════════════════════════════════ */
+    .journal-wrap {
+      max-width: 820px; margin: 0 auto;
+      padding: 2.5rem 5% 5rem;
+    }
+    .journal-header {
+      text-align: center; margin-bottom: 2.5rem;
+    }
+    .journal-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700; color: var(--text-1);
+      letter-spacing: -.03em; margin-bottom: .4rem;
+    }
+    .journal-sub {
+      font-size: .82rem; color: var(--text-3);
+      letter-spacing: .12em; text-transform: uppercase;
+    }
+    .journal-list {
+      display: flex; flex-direction: column; gap: .85rem;
+    }
+    .journal-item {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      grid-template-rows: auto auto;
+      column-gap: 1.25rem; row-gap: .35rem;
+      padding: 1.1rem 1.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      text-decoration: none;
+      color: var(--text-1);
+      box-shadow: var(--shadow-sm);
+      transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;
+      align-items: center;
+    }
+    .journal-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold-bd);
+    }
+    .journal-day-meta {
+      grid-column: 1; grid-row: 1 / span 2;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding-right: 1rem;
+      border-right: 1px solid var(--border);
+      height: 100%;
+    }
+    .journal-day-num {
+      font-family: var(--font-serif);
+      font-size: 1.45rem; font-weight: 700;
+      color: var(--gold); line-height: 1;
+      letter-spacing: -.02em;
+    }
+    .journal-date {
+      font-size: .68rem; color: var(--text-3);
+      letter-spacing: .04em; text-transform: uppercase;
+      margin-top: .35rem;
+    }
+    .journal-ref {
+      grid-column: 2; grid-row: 1;
+      font-family: var(--font-serif);
+      font-size: 1.05rem; font-weight: 600;
+      color: var(--accent);
+      letter-spacing: -.01em;
+    }
+    .journal-text {
+      grid-column: 2; grid-row: 2;
+      font-family: var(--font-serif);
+      font-size: .92rem;
+      font-style: italic;
+      color: var(--text-2);
+      /* TRUNCATURE SUR UNE SEULE LIGNE — clé du visuel demandé */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+    .journal-arrow {
+      grid-column: 3; grid-row: 1 / span 2;
+      align-self: center;
+      color: var(--text-3);
+      transition: color .2s, transform .2s;
+      flex-shrink: 0;
+    }
+    .journal-item:hover .journal-arrow {
+      color: var(--gold);
+      transform: translateX(3px);
+    }
+    .journal-empty {
+      text-align: center; padding: 4rem 1rem;
+      color: var(--text-3);
+      font-family: var(--font-serif);
+      font-style: italic; font-size: 1rem;
+    }
+    @media (max-width: 560px) {
+      .journal-item {
+        grid-template-columns: 70px 1fr auto;
+        padding: 1rem 1.1rem;
+      }
+      .journal-day-num { font-size: 1.2rem; }
+      .journal-ref { font-size: .95rem; }
+      .journal-text { font-size: .85rem; }
+    }
     @media (max-width: 640px) {
       .page-nav { display: none; }
       .brand { font-size: 1.2rem; }
@@ -761,6 +864,7 @@
       <nav class="page-nav" id="page-nav">
         <button class="page-nav-btn active" onclick="showPage('study',this)">Étude Biblique</button>
         <button class="page-nav-btn" onclick="showPage('lectio',this)">Lectio Divina</button>
+        <button class="page-nav-btn" onclick="showPage('journal',this)">Journal</button>
       </nav>
       <div class="header-right">
         <div class="streak-pill" id="streak-pill">
@@ -1103,6 +1207,17 @@
     </div><!-- /p2-wrap -->
   </div><!-- /page-lectio -->
 
+  <!-- ═══ PAGE 3 : JOURNAL DES VERSETS ═══ -->
+  <div id="page-journal" class="page">
+    <div class="journal-wrap">
+      <div class="journal-header">
+        <h1 class="journal-title">✦ Journal des Versets</h1>
+        <p class="journal-sub">Vos versets quotidiens, jour après jour</p>
+      </div>
+      <div id="journal-list" class="journal-list"></div>
+    </div>
+  </div><!-- /page-journal -->
+
 </div><!-- /app-container -->
 
 <script>
@@ -1356,6 +1471,17 @@ function unlockApp() {
   const ap = document.getElementById('app-container');
   ls.classList.add('hidden');
   setTimeout(() => { ls.style.display = 'none'; ap.classList.add('visible'); }, 600);
+
+  // ── Incrément du streak basé sur le calendrier ──
+  // Si nouvelle date depuis la dernière ouverture, +1 jour (sinon no-op).
+  // Branché ici car checkLock/unlockApp est appelé à chaque chargement.
+  incrementStreak();
+
+  // ── Enregistrement du verset du jour dans le journal ──
+  // Si on n'a pas encore d'entrée pour aujourd'hui, on sauve le verset courant.
+  setTimeout(() => {
+    if(currentDailyVerse) saveVerseForToday(currentDailyVerse, false);
+  }, 100);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1400,6 +1526,8 @@ function showPage(id, btn) {
     const nav = document.getElementById('page-nav');
     if(nav) nav.querySelectorAll('.page-nav-btn').forEach((b, i) => { b.classList.toggle('active', i === 0); });
   }
+  // Render journal fresh on each navigation (catches new entries)
+  if(id === 'journal') renderVerseHistory();
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1650,6 +1778,105 @@ function cacheEvictOldest() {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   JOURNAL DES VERSETS — historique persistant
+═══════════════════════════════════════════════════════════ */
+
+/** Lit l'historique trié par date croissante (jour 1 → N) */
+function getVerseHistory() {
+  try {
+    const raw = localStorage.getItem('lectio_verse_history');
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch(e) { return []; }
+}
+
+/**
+ * Enregistre/met à jour le verset du jour dans l'historique.
+ * @param {object}  verseObj   { ref, text, book, chapter, verseNum }
+ * @param {boolean} overwrite  Si true, écrase l'entrée du jour. Si false, n'écrit
+ *                              que s'il n'y a pas déjà d'entrée pour aujourd'hui.
+ *                              (false = appel automatique à l'unlock,
+ *                               true  = clic explicite sur le bouton refresh)
+ */
+function saveVerseForToday(verseObj, overwrite = true) {
+  if(!verseObj || !verseObj.ref || !verseObj.book) return;
+  const history = getVerseHistory();
+  const today   = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+
+  const idx = history.findIndex(h => h.date === today);
+  const entry = {
+    date:     today,
+    ref:      verseObj.ref,
+    text:     verseObj.text || '',
+    book:     verseObj.book,
+    chapter:  verseObj.chapter,
+    verseNum: verseObj.verseNum,
+  };
+
+  if(idx >= 0) {
+    if(overwrite) history[idx] = entry;
+    else return; // déjà une entrée pour aujourd'hui, on ne réécrit pas
+  } else {
+    history.push(entry);
+  }
+
+  // Tri par date croissante puis numéros de jour séquentiels
+  history.sort((a, b) => a.date.localeCompare(b.date));
+  history.forEach((h, i) => h.dayNumber = i + 1);
+
+  try {
+    localStorage.setItem('lectio_verse_history', JSON.stringify(history));
+  } catch(e) { /* quota */ }
+}
+
+/** Construit l'URL saintebible.com pour un verset donné */
+function buildBibleUrl(book, chapter, verseNum) {
+  const key  = book.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const slug = bookMap[key] || key.replace(/\s+/g, '');
+  return `https://saintebible.com/${slug}/${chapter}-${verseNum}.htm`;
+}
+
+/** Rend la liste verticale du journal (jour le plus récent en haut) */
+function renderVerseHistory() {
+  const container = document.getElementById('journal-list');
+  if(!container) return;
+  const history = getVerseHistory();
+
+  if(history.length === 0) {
+    container.innerHTML = '<div class="journal-empty">Aucun verset enregistré pour le moment.<br>Cliquez sur ↻ pour découvrir un verset.</div>';
+    return;
+  }
+
+  const sorted = [...history].sort((a, b) => b.dayNumber - a.dayNumber);
+  const arrowSvg = `<svg class="journal-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
+
+  container.innerHTML = sorted.map(item => {
+    const url = buildBibleUrl(item.book, item.chapter, item.verseNum);
+    let formattedDate = '';
+    try {
+      formattedDate = new Date(item.date + 'T12:00:00').toLocaleDateString('fr-FR', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      });
+    } catch(e) { formattedDate = item.date; }
+
+    const safeText = (item.text || '').replace(/[<>&"]/g, c =>
+      ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;' }[c])
+    );
+
+    return `
+      <a href="${url}" target="_blank" rel="noopener" class="journal-item">
+        <div class="journal-day-meta">
+          <span class="journal-day-num">Jour ${item.dayNumber}</span>
+          <span class="journal-date">${formattedDate}</span>
+        </div>
+        <div class="journal-ref">${item.book} ${item.chapter}:${item.verseNum}</div>
+        <div class="journal-text">« ${safeText} »</div>
+        ${arrowSvg}
+      </a>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
    ROTATION DE VERSET (Page 1) — Cache-aware
    
    Stratégie économe en tokens :
@@ -1821,6 +2048,9 @@ async function loadNewVerse() {
 
       // Propage à Page 1 ET Lectio Divina d'un coup
       applyDailyVerseToUI(currentDailyVerse);
+
+      // Enregistre/écrase l'entrée du jour dans le journal
+      saveVerseForToday(currentDailyVerse, true);
 
       console.log(`[verse] ✓ Affiché et synchronisé : ${ref}`);
       success = true;
