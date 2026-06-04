@@ -806,6 +806,58 @@
       font-family: var(--font-serif);
       font-style: italic; font-size: 1rem;
     }
+
+    /* ══════════════════════════════════════════════
+       TYPOGRAPHIE — LISIBILITÉ AMÉLIORÉE
+    ══════════════════════════════════════════════ */
+
+    /* Lissage des polices sur tous les écrans */
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      line-height: 1.7;
+    }
+
+    /* Verset du jour (carte sidebar) */
+    .verse-ref  { font-size: 1.05rem; letter-spacing: .01em; }
+    .verse-text { font-size: 1.12rem; line-height: 1.92; letter-spacing: .012em; }
+
+    /* Contenu IA — analyse, méditation, contexte biblique */
+    .rich-text    { font-size: 1.1rem; line-height: 1.95; }
+    .rich-text p  { margin-bottom: 1.55rem; }
+    .rich-text li { margin-bottom: .85rem; line-height: 1.9; }
+    .rich-text h2 { font-size: 1.65rem; }
+    .rich-text h3 { font-size: 1.35rem; }
+
+    /* Texte Bible Louis Segond 1910 */
+    .bls-text-content { font-size: 1.17rem; line-height: 2.1; letter-spacing: .012em; word-spacing: .04em; }
+
+    /* Passage de lecture (Lectio — écran lecture) */
+    .pb-text { font-size: 1.2rem; line-height: 2.08; letter-spacing: .014em; word-spacing: .03em; }
+
+    /* Verset preview (accueil Lectio) */
+    .vp-text { font-size: 1.1rem; line-height: 1.88; letter-spacing: .012em; }
+
+    /* Panneaux d'analyse Lectio */
+    .lp-text   { font-size: 1.1rem; line-height: 1.97; }
+    .lp-text p { margin-bottom: 1.3rem; }
+
+    /* Texte de réflexion / méditation personnelle */
+    .refl-text { font-size: 1.18rem; line-height: 2.1; letter-spacing: .014em; }
+
+    /* Référence dans la barre d'analyse */
+    .arb-txt { font-size: .97rem; }
+
+    /* Verset dans l'écran "Bien joué" */
+    .complete-verse-card { font-size: 1rem; line-height: 1.78; }
+
+    /* Indices et sous-titres Bible LS */
+    .bible-ls-sub { line-height: 1.65; font-size: .92rem; }
+
+    /* Texte hint du lock screen */
+    .lock-hint { font-size: .9rem; line-height: 1.75; }
+
     @media (max-width: 560px) {
       .journal-item {
         grid-template-columns: 70px 1fr auto;
@@ -836,11 +888,15 @@
       .ctx-card  { padding: 1.25rem; }
       .tabs-card { border-radius: var(--r-md); }
 
-      /* ── Contenu IA : titres et texte réduits ── */
-      .rich-text       { font-size: 1rem; }
-      .rich-text h1    { font-size: 1.5rem; margin: 1.5rem 0 .75rem; }
-      .rich-text h2    { font-size: 1.2rem; margin: 1.25rem 0 .6rem; }
-      .rich-text h3    { font-size: 1.05rem; margin: 1rem 0 .5rem; }
+      /* ── Contenu IA : titres et texte réduits (mais lisibles) ── */
+      .rich-text        { font-size: 1.05rem; line-height: 1.88; }
+      .rich-text h1     { font-size: 1.5rem;  margin: 1.5rem 0 .75rem; }
+      .rich-text h2     { font-size: 1.25rem; margin: 1.25rem 0 .6rem; }
+      .rich-text h3     { font-size: 1.08rem; margin: 1rem 0 .5rem; }
+      .pb-text          { font-size: 1.1rem;  line-height: 2.0; }
+      .lp-text          { font-size: .98rem;  line-height: 1.88; }
+      .vp-text          { font-size: 1rem;    line-height: 1.78; }
+      .bls-text-content { font-size: 1.05rem; line-height: 1.95; }
 
       /* ── Bouton "Générer" : pleine largeur pour faciliter le tap ── */
       .btn-gen { width: 100%; justify-content: center; }
