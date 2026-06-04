@@ -827,6 +827,99 @@
       .mode-grid { grid-template-columns: repeat(3,1fr); }
       .mc-time { font-size: 2rem; }
     }
+
+    /* ══════════════════════════════════════════════
+       NAVIGATION MOBILE (barre basse)
+    ══════════════════════════════════════════════ */
+    .mobile-nav {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 200;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      box-shadow: 0 -4px 20px rgba(26,26,30,.08);
+    }
+    [data-theme="dark"] .mobile-nav { background: var(--bg-card); }
+    .mobile-nav-inner {
+      display: flex; align-items: stretch;
+    }
+    .mobile-nav-btn {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 3px; padding: .55rem .3rem .6rem;
+      background: transparent; border: none; cursor: pointer;
+      color: var(--text-3); font-size: .6rem; font-weight: 500;
+      letter-spacing: .02em;
+      transition: color .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-nav-btn i { font-size: 20px; line-height: 1; }
+    .mobile-nav-btn.active { color: var(--accent); }
+    @media (max-width: 640px) {
+      .mobile-nav { display: block; }
+      body { padding-bottom: 64px; }
+    }
+
+    /* ══════════════════════════════════════════════
+       PAGE HOMILÉTIQUE — VISIONNEUSE PDF
+    ══════════════════════════════════════════════ */
+    .homil-wrap {
+      max-width: 1200px; margin: 0 auto;
+      padding: 2rem 5% 3rem;
+    }
+    .homil-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .homil-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700; color: var(--text-1);
+      letter-spacing: -.02em;
+    }
+    .homil-sub {
+      font-size: .82rem; color: var(--text-3);
+      letter-spacing: .1em; text-transform: uppercase;
+      margin-top: .25rem;
+    }
+    .btn-pdf-open {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .7rem 1.4rem;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: var(--r-md);
+      font-size: .88rem; font-weight: 600; cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(var(--accent-rgb),.25);
+      transition: transform .2s, box-shadow .2s;
+      white-space: nowrap;
+    }
+    .btn-pdf-open:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(var(--accent-rgb),.35); }
+    .pdf-frame-wrap {
+      border: 1px solid var(--border-md);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--bg-subtle);
+    }
+    .pdf-iframe {
+      width: 100%;
+      height: calc(100vh - 200px);
+      min-height: 520px;
+      border: none; display: block;
+    }
+    .pdf-mobile-msg {
+      display: none;
+      text-align: center; padding: 3rem 1.5rem;
+    }
+    .pdf-mobile-msg p {
+      font-family: var(--font-serif); font-size: 1rem;
+      color: var(--text-2); margin-bottom: 1.5rem; line-height: 1.75;
+    }
+    @media (max-width: 640px) {
+      .pdf-iframe { display: none; }
+      .pdf-mobile-msg { display: block; }
+      .homil-wrap { padding: 1.25rem 4% 2rem; }
+    }
   </style>
 </head>
 <body>
@@ -862,9 +955,10 @@
         Lectio Divina
       </div>
       <nav class="page-nav" id="page-nav">
-        <button class="page-nav-btn active" onclick="showPage('study',this)">Étude Biblique</button>
-        <button class="page-nav-btn" onclick="showPage('lectio',this)">Lectio Divina</button>
-        <button class="page-nav-btn" onclick="showPage('journal',this)">Journal</button>
+        <button class="page-nav-btn active" data-page="study" onclick="showPage('study',this)">Étude Biblique</button>
+        <button class="page-nav-btn" data-page="lectio" onclick="showPage('lectio',this)">Lectio Divina</button>
+        <button class="page-nav-btn" data-page="journal" onclick="showPage('journal',this)">Journal</button>
+        <button class="page-nav-btn" data-page="homiletique" onclick="showPage('homiletique',this)">Homilétique</button>
       </nav>
       <div class="header-right">
         <div class="streak-pill" id="streak-pill">
@@ -1218,6 +1312,54 @@
     </div>
   </div><!-- /page-journal -->
 
+  <!-- ═══ PAGE 4 : HOMILÉTIQUE ═══ -->
+  <div id="page-homiletique" class="page">
+    <div class="homil-wrap">
+      <div class="homil-header">
+        <div>
+          <h1 class="homil-title">✦ Homilétique</h1>
+          <p class="homil-sub">Manuel — 163 pages</p>
+        </div>
+        <a href="homiletique.pdf" target="_blank" rel="noopener" class="btn-pdf-open">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Télécharger / Ouvrir
+        </a>
+      </div>
+      <div class="pdf-frame-wrap">
+        <iframe src="homiletique.pdf" class="pdf-iframe" title="Manuel d'Homilétique"></iframe>
+        <div class="pdf-mobile-msg">
+          <p>Ce manuel d'homilétique de 163 pages est disponible en téléchargement ou à lire directement dans votre navigateur.</p>
+          <a href="homiletique.pdf" target="_blank" rel="noopener" class="btn-pdf-open">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Ouvrir le PDF
+          </a>
+        </div>
+      </div>
+    </div>
+  </div><!-- /page-homiletique -->
+
+  <!-- NAVIGATION MOBILE -->
+  <nav class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav-inner">
+      <button class="mobile-nav-btn active" data-page="study" onclick="showPage('study',this)">
+        <i class="ti ti-book-2"></i>
+        <span>Étude</span>
+      </button>
+      <button class="mobile-nav-btn" data-page="lectio" onclick="showPage('lectio',this)">
+        <i class="ti ti-flame"></i>
+        <span>Lectio</span>
+      </button>
+      <button class="mobile-nav-btn" data-page="journal" onclick="showPage('journal',this)">
+        <i class="ti ti-notebook"></i>
+        <span>Journal</span>
+      </button>
+      <button class="mobile-nav-btn" data-page="homiletique" onclick="showPage('homiletique',this)">
+        <i class="ti ti-microphone-2"></i>
+        <span>Homilét.</span>
+      </button>
+    </div>
+  </nav>
+
 </div><!-- /app-container -->
 
 <script>
@@ -1541,14 +1683,9 @@ function applySun() {
 ═══════════════════════════════════════════════════════════ */
 function showPage(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.page-nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-page]').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-  btn.classList.add('active');
-  if(id === 'study') {
-    const nav = document.getElementById('page-nav');
-    if(nav) nav.querySelectorAll('.page-nav-btn').forEach((b, i) => { b.classList.toggle('active', i === 0); });
-  }
-  // Render journal fresh on each navigation (catches new entries)
+  document.querySelectorAll('[data-page="' + id + '"]').forEach(b => b.classList.add('active'));
   if(id === 'journal') renderVerseHistory();
 }
 
