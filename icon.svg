@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#1B2A4A"/>
+  <!-- Page gauche (or) -->
+  <path d="M108 372V168a46 46 0 0 1 46-46l102 14v236l-102-14a46 46 0 0 0-46 14z" fill="#B8882A"/>
+  <!-- Page droite (bleu) -->
+  <path d="M404 372V168a46 46 0 0 0-46-46l-102 14v236l102-14a46 46 0 0 1 46 14z" fill="#4A65A0"/>
+  <!-- Reliure -->
+  <rect x="248" y="122" width="16" height="236" rx="6" fill="#D4A94A"/>
+  <!-- Étoile décorative -->
+  <path d="M256 74 l8 28 h28 l-22 16 8 28-22-16-22 16 8-28-22-16 h28z" fill="#D4A94A"/>
+</svg>

@@ -11,6 +11,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <!-- Tabler Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.2.0/dist/tabler-icons.min.css" />
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1B2A4A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Lectio" />
+  <link rel="apple-touch-icon" href="/icon.svg" />
 
   <style>
     /* ══════════════════════════════════════════════
@@ -1008,6 +1015,79 @@
     }
 
     /* ══════════════════════════════════════════════
+       RETOUR TACTILE — press feedback
+    ══════════════════════════════════════════════ */
+    @media (hover: none) {
+      .btn-gen:active, .btn-start:active, .btn-ctrl:active,
+      .btn-pdf-open:active, .lock-btn:active, .btn-search:active,
+      .btn-bls-ext:active { transform: scale(.96); transition: transform .08s; }
+      .mode-card:active   { transform: scale(.97) !important; opacity: .85; }
+      .journal-item:active { transform: scale(.99) !important; border-color: var(--gold-bd) !important; }
+      .card:active        { transform: scale(.99); }
+      .mobile-nav-btn:active i { transform: scale(.85) !important; }
+    }
+
+    /* ══════════════════════════════════════════════
+       TRANSITIONS DE PAGE AMÉLIORÉES
+    ══════════════════════════════════════════════ */
+    .page.active     { animation: pgIn .38s cubic-bezier(.25,.46,.45,.94); }
+    .l-screen.active { animation: pgIn .3s  cubic-bezier(.25,.46,.45,.94); }
+
+    /* Icône nav mobile — remonte légèrement sur l'onglet actif */
+    .mobile-nav-btn i { transition: transform .22s var(--ease), color .2s; }
+    .mobile-nav-btn.active i { transform: translateY(-3px); }
+
+    /* ══════════════════════════════════════════════
+       CONTRÔLE TAILLE DE POLICE  A− / A+
+    ══════════════════════════════════════════════ */
+    .font-ctrl {
+      display: flex; align-items: center;
+      background: var(--bg-subtle); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden; flex-shrink: 0;
+    }
+    .font-btn {
+      width: 30px; height: 32px;
+      background: transparent; border: none; cursor: pointer;
+      font-weight: 700; color: var(--text-2);
+      font-family: var(--font-sans);
+      display: flex; align-items: center; justify-content: center;
+      padding: 0; line-height: 1;
+      transition: background .15s, color .15s;
+    }
+    .font-btn.font-minus { font-size: .7rem; }
+    .font-btn.font-plus  { font-size: .92rem; }
+    .font-btn:hover { background: var(--bg-card); color: var(--accent); }
+    @media (max-width: 380px) { .font-ctrl { display: none; } }
+
+    /* ══════════════════════════════════════════════
+       BOUTON RETOUR EN HAUT
+    ══════════════════════════════════════════════ */
+    #scroll-top {
+      position: fixed; bottom: 88px; right: 1rem; z-index: 190;
+      width: 46px; height: 46px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 18px rgba(var(--accent-rgb),.45);
+      opacity: 0; pointer-events: none;
+      transform: translateY(16px) scale(.85);
+      transition: opacity .28s var(--ease), transform .28s var(--ease);
+    }
+    #scroll-top.visible { opacity: 1; pointer-events: auto; transform: none; }
+    #scroll-top i { font-size: 20px; }
+    @media (min-width: 641px) { #scroll-top { bottom: 1.5rem; } }
+
+    /* ══════════════════════════════════════════════
+       INDICATEUR DE SCROLL SUR LA BARRE D'ONGLETS
+    ══════════════════════════════════════════════ */
+    @media (max-width: 640px) {
+      .tabs-nav {
+        mask-image: linear-gradient(to right, black 84%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, black 84%, transparent 100%);
+      }
+    }
+
+    /* ══════════════════════════════════════════════
        NAVIGATION MOBILE (barre basse)
     ══════════════════════════════════════════════ */
     .mobile-nav {
@@ -1140,6 +1220,10 @@
         <button class="page-nav-btn" data-page="homiletique" onclick="showPage('homiletique',this)">Homilétique</button>
       </nav>
       <div class="header-right">
+        <div class="font-ctrl" title="Taille du texte">
+          <button class="font-btn font-minus" onclick="adjustFont(-1)" aria-label="Réduire le texte">A−</button>
+          <button class="font-btn font-plus"  onclick="adjustFont(1)"  aria-label="Agrandir le texte">A+</button>
+        </div>
         <div class="streak-pill" id="streak-pill">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3.3.9.8 1.8 1.5 2.8z"/></svg>
           <span id="streak-count">0 jour</span>
@@ -1727,13 +1811,15 @@ const CIRC = 2 * Math.PI * 62; // svg r=62
    INIT
 ═══════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+  initFontSize();
   checkLock();
   initTheme();
   initBooks();
   initBibleReader();
   loadStreakDisplay();
-  restoreDailyVerse();  // restaure le verset partagé depuis localStorage
+  restoreDailyVerse();
   initLectioHome();
+  registerSW();
   document.getElementById('access-code')
     .addEventListener('keypress', e => { if(e.key === 'Enter') checkAccess(); });
   document.getElementById('l-ring').style.strokeDasharray = CIRC;
@@ -3177,6 +3263,73 @@ function showLScreen(id) {
   document.querySelectorAll('.l-screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
+
+/* ═══════════════════════════════════════════════════════════
+   TAILLE DE POLICE  A− / A+
+═══════════════════════════════════════════════════════════ */
+const FONT_SIZES = [13, 14, 15, 16, 17, 18, 20];
+let fontIdx = 3; // 16 px par défaut
+
+function adjustFont(dir) {
+  fontIdx = Math.max(0, Math.min(FONT_SIZES.length - 1, fontIdx + dir));
+  document.documentElement.style.fontSize = FONT_SIZES[fontIdx] + 'px';
+  localStorage.setItem('lectio_font_idx', fontIdx);
+}
+
+function initFontSize() {
+  const saved = localStorage.getItem('lectio_font_idx');
+  if (saved !== null) {
+    const idx = parseInt(saved, 10);
+    if (!isNaN(idx) && idx >= 0 && idx < FONT_SIZES.length) {
+      fontIdx = idx;
+      document.documentElement.style.fontSize = FONT_SIZES[fontIdx] + 'px';
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOUTON RETOUR EN HAUT
+═══════════════════════════════════════════════════════════ */
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scroll-top');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 320);
+}, { passive: true });
+
+/* ═══════════════════════════════════════════════════════════
+   SERVICE WORKER — PWA mode hors-ligne
+═══════════════════════════════════════════════════════════ */
+function registerSW() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const w = reg.installing;
+      w.addEventListener('statechange', () => {
+        if (w.state === 'installed' && navigator.serviceWorker.controller) {
+          showUpdateBanner();
+        }
+      });
+    });
+  }).catch(() => {});
+}
+
+function showUpdateBanner() {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);' +
+    'background:var(--accent);color:#fff;padding:.7rem 1.4rem;' +
+    'border-radius:var(--r-md);font-size:.85rem;font-weight:600;' +
+    'box-shadow:var(--shadow-lg);z-index:9999;cursor:pointer;white-space:nowrap;';
+  el.textContent = '✦ Mise à jour disponible — Appuyer pour recharger';
+  el.onclick = () => window.location.reload();
+  document.body.appendChild(el);
+}
 </script>
+
+<button id="scroll-top" onclick="scrollToTop()" aria-label="Retour en haut" title="Retour en haut">
+  <i class="ti ti-arrow-up"></i>
+</button>
 </body>
 </html>
