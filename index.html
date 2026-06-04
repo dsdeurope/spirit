@@ -816,16 +816,63 @@
       .journal-text { font-size: .85rem; }
     }
     @media (max-width: 640px) {
+      /* Header */
       .page-nav { display: none; }
-      .brand { font-size: 1.2rem; }
-      .p1-main, .p2-wrap { padding: 1.5rem 4% 4rem; }
-      .tab-pane { padding: 1.5rem; }
+      .brand { font-size: 1.1rem; }
+      .header-inner { height: 56px; gap: .6rem; }
+      .streak-pill { font-size: .72rem; padding: .28rem .6rem; gap: .3rem; }
+      .header-right { gap: .6rem; }
+
+      /* Pages — padding bottom cleared beyond mobile nav */
+      .p1-main    { padding: 1.25rem 4% 5.5rem; gap: 1.25rem; }
+      .p2-wrap    { padding: 1.25rem 4% 5.5rem; }
+      .journal-wrap { padding: 1.25rem 4% 5.5rem; }
+
+      /* Cards */
+      .card       { padding: 1.25rem; }
+      .ctx-card   { padding: 1.25rem; }
+      .tabs-card  { border-radius: var(--r-md); }
+
+      /* Tab bar — chaque bouton scroll horizontalement sans se comprimer */
+      .tabs-nav   { flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
+      .tab-nav-btn { font-size: .82rem; padding: .85rem .9rem; flex: 0 0 auto; }
+      .tab-pane   { padding: 1.25rem; }
       .search-row { flex-direction: column; }
-      .tabs-nav { flex-wrap: nowrap; }
+
+      /* Bible LS controls : bouton pleine largeur */
+      .bible-ls-controls { grid-template-columns: 1fr 1fr; row-gap: .75rem; }
+      .bls-ext-wrap { grid-column: 1 / -1; }
+      .btn-bls-ext  { width: 100%; justify-content: center; }
+      .bls-text-content { padding: 1.25rem 1rem; font-size: 1rem; max-height: 60vh; }
+
+      /* Lectio */
+      .passage-block { padding: 1.1rem; }
+      .r-controls    { gap: .5rem; }
+      .btn-ctrl      { font-size: .82rem; padding: .7rem .4rem; }
+      .l-tab         { font-size: .65rem; padding: 7px 3px; }
+      .l-tab i       { font-size: 15px; }
+
+      /* Journal header */
+      .journal-header { margin-bottom: 1.5rem; }
     }
     @media (max-width: 480px) {
-      .mode-grid { grid-template-columns: repeat(3,1fr); }
-      .mc-time { font-size: 2rem; }
+      .mode-grid  { grid-template-columns: repeat(3,1fr); }
+      .mc-time    { font-size: 2rem; }
+      .streak-pill { font-size: .68rem; padding: .26rem .5rem; }
+    }
+    @media (max-width: 380px) {
+      /* Très petits écrans : on cache le texte du streak, garde l'icône */
+      #streak-count { display: none; }
+      .streak-pill  { padding: .3rem .45rem; }
+      .brand        { font-size: 1rem; }
+    }
+    /* Désactive les effets hover sur écrans tactiles */
+    @media (hover: none) {
+      .card:hover          { transform: none; box-shadow: var(--shadow-sm); }
+      .mode-card:hover     { transform: none; box-shadow: var(--shadow-sm); }
+      .journal-item:hover  { transform: none; box-shadow: var(--shadow-sm); border-color: var(--border); }
+      .btn-gen:hover, .btn-start:hover, .lock-btn:hover,
+      .btn-pdf-open:hover, .btn-search:hover { transform: none; box-shadow: none; }
     }
 
     /* ══════════════════════════════════════════════
