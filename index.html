@@ -8,7 +8,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <!-- Tabler Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.2.0/dist/tabler-icons.min.css" />
 
@@ -38,17 +38,18 @@
       --r-md:  14px;
       --r-lg:  20px;
       --r-xl:  28px;
-      --font-serif: 'Playfair Display', Georgia, serif;
-      --font-sans:  'Inter', system-ui, sans-serif;
+      --font-serif:   'Playfair Display', Georgia, serif;
+      --font-reading: 'Lora', Georgia, serif;
+      --font-sans:    'Inter', system-ui, sans-serif;
       --ease:  cubic-bezier(.4,0,.2,1);
     }
     [data-theme="dark"] {
       --bg-site:   #0D0D10;
       --bg-card:   #141418;
       --bg-subtle: #1A1A20;
-      --text-1:    #E8E8F0;
-      --text-2:    #9090A0;
-      --text-3:    #5A5A6A;
+      --text-1:    #EEEEF6;
+      --text-2:    #A0A0B2;
+      --text-3:    #626274;
       --accent:    #7B8FD0;
       --accent-rgb:123,143,208;
       --accent-lt: #161A28;
@@ -817,6 +818,30 @@
       -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
       line-height: 1.7;
+    }
+
+    /* ─────────────────────────────────────────
+       LORA — police de lecture
+       Remplace Playfair Display (police d'affichage)
+       sur tous les textes lus en continu.
+       Playfair reste pour les grands titres décoratifs.
+    ───────────────────────────────────────── */
+    .verse-text,
+    .vp-text,
+    .pb-text,
+    .arb-txt,
+    .lp-text,
+    .lp-text h4,
+    .refl-text,
+    .complete-verse-card,
+    .bls-text-content,
+    .bls-placeholder-text,
+    .loading-msg,
+    .journal-text,
+    .rich-text,
+    .reading-loading-state span,
+    .bls-text-loading span {
+      font-family: var(--font-reading);
     }
 
     /* Verset du jour (carte sidebar) */
