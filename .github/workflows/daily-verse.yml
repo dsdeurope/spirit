@@ -136,7 +136,16 @@ jobs:
                   return None
 
           # Message 1 — Verset du jour
+          JOURS = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"]
+          MOIS  = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"]
+          paris = datetime.now(timezone.utc).replace(tzinfo=None)
+          # UTC+1 (heure Paris hiver) — GitHub Actions envoie à 5h UTC = 6h Paris
+          heure_paris = (datetime.now(timezone.utc).hour + 1) % 24
+          jour_nom = JOURS[datetime.now(timezone.utc).weekday()]
+          date_str = f"{jour_nom} {datetime.now(timezone.utc).day} {MOIS[datetime.now(timezone.utc).month-1]} {datetime.now(timezone.utc).year}"
+          heure_str = f"{heure_paris:02d}:00"
           msg1 = (
+              f"🗓 *{date_str} — {heure_str}*\n\n"
               f"📖 *Verset du Jour*\n\n"
               f"_{ref}_\n\n"
               f"« {text} »\n\n"
