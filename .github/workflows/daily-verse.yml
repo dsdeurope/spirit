@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Envoyer le verset du jour
         env:
-          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          BOT_TOKEN: "8990060132:AAFQfwN75J8UHvvHR-46UsVJgTQAW6gh3cU"
+          CHAT_ID: "1027845253"
         run: |
           python3 << 'EOF'
           import os, json, math, urllib.request, urllib.parse
