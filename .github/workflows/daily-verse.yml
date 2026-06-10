@@ -13,113 +13,200 @@ jobs:
         env:
           BOT_TOKEN: "8990060132:AAFQfwN75J8UHvvHR-46UsVJgTQAW6gh3cU"
           CHAT_ID: "1027845253"
+          MISTRAL_API_KEY: "vht9HzRAc1j7hddwuzFXWJmAcvssXHom"
         run: |
           python3 << 'EOF'
-          import os, json, math, urllib.request, urllib.parse
+          import os, json, math, time, urllib.request, urllib.parse
           from datetime import datetime
 
           VERSES = [
-            ("Jean 3:16", "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."),
-            ("Psaume 23:1", "L'Éternel est mon berger : je ne manquerai de rien."),
-            ("Romains 8:28", "Toutes choses concourent au bien de ceux qui aiment Dieu."),
-            ("Philippiens 4:13", "Je puis tout par celui qui me fortifie."),
-            ("Ésaïe 40:31", "Ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles ; ils courent, et ne se lassent point."),
-            ("Jérémie 29:11", "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance."),
-            ("Proverbes 3:5-6", "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse ; reconnais-le dans toutes tes voies, et il aplanira tes sentiers."),
-            ("Matthieu 11:28", "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos."),
-            ("Psaume 46:2", "Dieu est pour nous un refuge et un appui, un secours qui ne manque jamais dans la détresse."),
-            ("1 Corinthiens 13:4", "L'amour est patient, il est plein de bonté ; l'amour n'est point envieux ; l'amour ne se vante point, il ne s'enfle point d'orgueil."),
-            ("Galates 5:22", "Mais le fruit de l'Esprit, c'est l'amour, la joie, la paix, la patience, la bonté, la bénignité, la fidélité, la douceur, la tempérance."),
-            ("Josué 1:9", "Sois fort et courageux. Ne t'effraie point et ne t'épouvante point, car l'Éternel, ton Dieu, est avec toi dans tout ce que tu entreprendras."),
-            ("Psaume 119:105", "Ta parole est une lampe à mes pieds, et une lumière sur mon sentier."),
-            ("Jean 14:6", "Jésus lui dit : Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi."),
-            ("Romains 8:1", "Il n'y a donc maintenant aucune condamnation pour ceux qui sont en Jésus-Christ."),
-            ("Psaume 34:9", "Goûtez et voyez que l'Éternel est bon. Heureux l'homme qui cherche en lui son refuge !"),
-            ("Ésaïe 41:10", "Ne crains rien, car je suis avec toi ; ne promène pas des regards inquiets, car je suis ton Dieu ; je te fortifie, je viens à ton secours."),
-            ("2 Timothée 1:7", "Car ce n'est pas un esprit de timidité que Dieu nous a donné, mais un esprit de force, d'amour et de sagesse."),
-            ("Jean 1:1", "Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu."),
-            ("Hébreux 11:1", "Or la foi est une ferme assurance des choses qu'on espère, une démonstration de celles qu'on ne voit pas."),
-            ("Jacques 1:17", "Toute grâce excellente et tout don parfait descendent d'en haut, du Père des lumières."),
-            ("Psaume 27:1", "L'Éternel est ma lumière et mon salut : de qui aurais-je crainte ? L'Éternel est le soutien de ma vie : de qui aurais-je frayeur ?"),
-            ("Romains 12:2", "Ne vous conformez pas au siècle présent, mais soyez transformés par le renouvellement de l'intelligence."),
-            ("Matthieu 6:33", "Cherchez premièrement le royaume et la justice de Dieu ; et toutes ces choses vous seront données par-dessus."),
-            ("Psaume 91:1", "Celui qui demeure sous l'abri du Très-Haut repose à l'ombre du Tout-Puissant."),
-            ("1 Jean 4:19", "Nous l'aimons, parce qu'il nous a aimés le premier."),
-            ("Éphésiens 2:8", "Car c'est par la grâce que vous êtes sauvés, par le moyen de la foi. Et cela ne vient pas de vous, c'est le don de Dieu."),
-            ("Psaume 37:4", "Fais de l'Éternel tes délices, et il te donnera ce que ton cœur désire."),
-            ("Lamentations 3:23", "Elles se renouvellent chaque matin. Ta fidélité est grande !"),
-            ("Psaume 103:1", "Bénis l'Éternel, ô mon âme ! Que tout ce qui est en moi bénisse son saint nom !"),
-            ("Jean 10:10", "Je suis venu afin que les brebis aient la vie, et qu'elles soient dans l'abondance."),
-            ("Apocalypse 3:20", "Voici, je me tiens à la porte, et je frappe. Si quelqu'un entend ma voix et ouvre la porte, j'entrerai chez lui."),
-            ("Psaume 16:8", "J'ai constamment l'Éternel sous mes yeux ; quand il est à ma droite, je ne chancelle pas."),
-            ("Matthieu 28:20", "Et voici, je suis avec vous tous les jours, jusqu'à la fin du monde."),
-            ("Philippiens 4:7", "Et la paix de Dieu, qui surpasse toute intelligence, gardera vos cœurs et vos pensées en Jésus-Christ."),
-            ("Ésaïe 53:5", "Il était blessé pour nos péchés, brisé pour nos iniquités ; le châtiment qui nous donne la paix est tombé sur lui, et c'est par ses meurtrissures que nous sommes guéris."),
-            ("Psaume 121:1-2", "Je lève les yeux vers les montagnes… Le secours me vient de l'Éternel, qui a fait les cieux et la terre."),
-            ("Jean 16:33", "Dans le monde vous aurez des tribulations ; mais prenez courage, j'ai vaincu le monde."),
-            ("1 Pierre 5:7", "Déchargez-vous sur lui de tous vos soucis, car il prend soin de vous."),
-            ("Romains 5:8", "Mais Dieu prouve son amour envers nous, en ce que Christ est mort pour nous pendant que nous étions encore des pécheurs."),
-            ("Psaume 139:14", "Je te loue de ce que je suis une créature si merveilleuse. Tes œuvres sont admirables."),
-            ("Genèse 1:1", "Au commencement, Dieu créa les cieux et la terre."),
-            ("Actes 1:8", "Vous recevrez une puissance, le Saint-Esprit survenant sur vous, et vous serez mes témoins jusqu'aux extrémités de la terre."),
-            ("Marc 10:27", "Aux hommes cela est impossible, mais non à Dieu ; car tout est possible à Dieu."),
-            ("Psaume 51:12", "Rends-moi la joie de ton salut, et qu'un esprit de bonne volonté me soutienne !"),
-            ("Romains 10:9", "Si tu confesses de ta bouche le Seigneur Jésus, et si tu crois dans ton cœur que Dieu l'a ressuscité des morts, tu seras sauvé."),
-            ("1 Thessaloniciens 5:16-18", "Soyez toujours joyeux. Priez sans cesse. Rendez grâces en toutes choses."),
-            ("Psaume 62:2", "Il est mon seul rocher et mon salut, ma haute retraite : je ne serai point ébranlé."),
-            ("Ésaïe 26:3", "A celui dont l'esprit est ferme tu assures la paix, parce qu'il se confie en toi."),
-            ("Jean 8:36", "Si donc le Fils vous affranchit, vous serez réellement libres."),
-            ("Luc 1:37", "Car rien n'est impossible à Dieu."),
-            ("Matthieu 7:7", "Demandez, et l'on vous donnera ; cherchez, et vous trouverez ; frappez, et l'on vous ouvrira."),
-            ("Psaume 145:18", "L'Éternel est près de tous ceux qui l'invoquent, de tous ceux qui l'invoquent en vérité."),
-            ("Éphésiens 6:10", "Au reste, fortifiez-vous dans le Seigneur, et par sa force toute-puissante."),
-            ("Colossiens 3:23", "Quoi que vous fassiez, faites-le de bon cœur, comme pour le Seigneur et non pour des hommes."),
-            ("Proverbes 16:9", "Le cœur de l'homme médite sa voie, mais c'est l'Éternel qui dirige ses pas."),
-            ("Jean 15:5", "Je suis le cep, vous êtes les sarments. Celui qui demeure en moi porte beaucoup de fruit, car sans moi vous ne pouvez rien faire."),
-            ("Romains 15:13", "Que le Dieu de l'espérance vous remplisse de toute joie et de toute paix dans la foi."),
-            ("Hébreux 4:16", "Approchons-nous donc avec assurance du trône de la grâce, afin d'obtenir miséricorde et de trouver grâce."),
-            ("1 Corinthiens 10:13", "Dieu, qui est fidèle, ne permettra pas que vous soyez tentés au-delà de vos forces ; mais avec la tentation il préparera aussi le moyen d'en sortir."),
+            ("Jean 3:16", "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.", "JHN", "3", "16"),
+            ("Psaume 23:1", "L'Éternel est mon berger : je ne manquerai de rien.", "PSA", "23", "1"),
+            ("Romains 8:28", "Toutes choses concourent au bien de ceux qui aiment Dieu.", "ROM", "8", "28"),
+            ("Philippiens 4:13", "Je puis tout par celui qui me fortifie.", "PHP", "4", "13"),
+            ("Ésaïe 40:31", "Ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles ; ils courent, et ne se lassent point.", "ISA", "40", "31"),
+            ("Jérémie 29:11", "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.", "JER", "29", "11"),
+            ("Proverbes 3:5-6", "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse ; reconnais-le dans toutes tes voies, et il aplanira tes sentiers.", "PRO", "3", "5"),
+            ("Matthieu 11:28", "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos.", "MAT", "11", "28"),
+            ("Psaume 46:2", "Dieu est pour nous un refuge et un appui, un secours qui ne manque jamais dans la détresse.", "PSA", "46", "2"),
+            ("1 Corinthiens 13:4", "L'amour est patient, il est plein de bonté ; l'amour n'est point envieux ; l'amour ne se vante point, il ne s'enfle point d'orgueil.", "1CO", "13", "4"),
+            ("Galates 5:22", "Mais le fruit de l'Esprit, c'est l'amour, la joie, la paix, la patience, la bonté, la bénignité, la fidélité, la douceur, la tempérance.", "GAL", "5", "22"),
+            ("Josué 1:9", "Sois fort et courageux. Ne t'effraie point et ne t'épouvante point, car l'Éternel, ton Dieu, est avec toi dans tout ce que tu entreprendras.", "JOS", "1", "9"),
+            ("Psaume 119:105", "Ta parole est une lampe à mes pieds, et une lumière sur mon sentier.", "PSA", "119", "105"),
+            ("Jean 14:6", "Jésus lui dit : Je suis le chemin, la vérité, et la vie. Nul ne vient au Père que par moi.", "JHN", "14", "6"),
+            ("Romains 8:1", "Il n'y a donc maintenant aucune condamnation pour ceux qui sont en Jésus-Christ.", "ROM", "8", "1"),
+            ("Psaume 34:9", "Goûtez et voyez que l'Éternel est bon. Heureux l'homme qui cherche en lui son refuge !", "PSA", "34", "9"),
+            ("Ésaïe 41:10", "Ne crains rien, car je suis avec toi ; ne promène pas des regards inquiets, car je suis ton Dieu ; je te fortifie, je viens à ton secours.", "ISA", "41", "10"),
+            ("2 Timothée 1:7", "Car ce n'est pas un esprit de timidité que Dieu nous a donné, mais un esprit de force, d'amour et de sagesse.", "2TI", "1", "7"),
+            ("Jean 1:1", "Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu.", "JHN", "1", "1"),
+            ("Hébreux 11:1", "Or la foi est une ferme assurance des choses qu'on espère, une démonstration de celles qu'on ne voit pas.", "HEB", "11", "1"),
+            ("Jacques 1:17", "Toute grâce excellente et tout don parfait descendent d'en haut, du Père des lumières.", "JAS", "1", "17"),
+            ("Psaume 27:1", "L'Éternel est ma lumière et mon salut : de qui aurais-je crainte ? L'Éternel est le soutien de ma vie : de qui aurais-je frayeur ?", "PSA", "27", "1"),
+            ("Romains 12:2", "Ne vous conformez pas au siècle présent, mais soyez transformés par le renouvellement de l'intelligence.", "ROM", "12", "2"),
+            ("Matthieu 6:33", "Cherchez premièrement le royaume et la justice de Dieu ; et toutes ces choses vous seront données par-dessus.", "MAT", "6", "33"),
+            ("Psaume 91:1", "Celui qui demeure sous l'abri du Très-Haut repose à l'ombre du Tout-Puissant.", "PSA", "91", "1"),
+            ("1 Jean 4:19", "Nous l'aimons, parce qu'il nous a aimés le premier.", "1JN", "4", "19"),
+            ("Éphésiens 2:8", "Car c'est par la grâce que vous êtes sauvés, par le moyen de la foi. Et cela ne vient pas de vous, c'est le don de Dieu.", "EPH", "2", "8"),
+            ("Psaume 37:4", "Fais de l'Éternel tes délices, et il te donnera ce que ton cœur désire.", "PSA", "37", "4"),
+            ("Lamentations 3:23", "Elles se renouvellent chaque matin. Ta fidélité est grande !", "LAM", "3", "23"),
+            ("Psaume 103:1", "Bénis l'Éternel, ô mon âme ! Que tout ce qui est en moi bénisse son saint nom !", "PSA", "103", "1"),
+            ("Jean 10:10", "Je suis venu afin que les brebis aient la vie, et qu'elles soient dans l'abondance.", "JHN", "10", "10"),
+            ("Apocalypse 3:20", "Voici, je me tiens à la porte, et je frappe. Si quelqu'un entend ma voix et ouvre la porte, j'entrerai chez lui.", "REV", "3", "20"),
+            ("Psaume 16:8", "J'ai constamment l'Éternel sous mes yeux ; quand il est à ma droite, je ne chancelle pas.", "PSA", "16", "8"),
+            ("Matthieu 28:20", "Et voici, je suis avec vous tous les jours, jusqu'à la fin du monde.", "MAT", "28", "20"),
+            ("Philippiens 4:7", "Et la paix de Dieu, qui surpasse toute intelligence, gardera vos cœurs et vos pensées en Jésus-Christ.", "PHP", "4", "7"),
+            ("Ésaïe 53:5", "Il était blessé pour nos péchés, brisé pour nos iniquités ; le châtiment qui nous donne la paix est tombé sur lui, et c'est par ses meurtrissures que nous sommes guéris.", "ISA", "53", "5"),
+            ("Psaume 121:1-2", "Je lève les yeux vers les montagnes… Le secours me vient de l'Éternel, qui a fait les cieux et la terre.", "PSA", "121", "1"),
+            ("Jean 16:33", "Dans le monde vous aurez des tribulations ; mais prenez courage, j'ai vaincu le monde.", "JHN", "16", "33"),
+            ("1 Pierre 5:7", "Déchargez-vous sur lui de tous vos soucis, car il prend soin de vous.", "1PE", "5", "7"),
+            ("Romains 5:8", "Mais Dieu prouve son amour envers nous, en ce que Christ est mort pour nous pendant que nous étions encore des pécheurs.", "ROM", "5", "8"),
+            ("Psaume 139:14", "Je te loue de ce que je suis une créature si merveilleuse. Tes œuvres sont admirables.", "PSA", "139", "14"),
+            ("Genèse 1:1", "Au commencement, Dieu créa les cieux et la terre.", "GEN", "1", "1"),
+            ("Actes 1:8", "Vous recevrez une puissance, le Saint-Esprit survenant sur vous, et vous serez mes témoins jusqu'aux extrémités de la terre.", "ACT", "1", "8"),
+            ("Marc 10:27", "Aux hommes cela est impossible, mais non à Dieu ; car tout est possible à Dieu.", "MRK", "10", "27"),
+            ("Psaume 51:12", "Rends-moi la joie de ton salut, et qu'un esprit de bonne volonté me soutienne !", "PSA", "51", "12"),
+            ("Romains 10:9", "Si tu confesses de ta bouche le Seigneur Jésus, et si tu crois dans ton cœur que Dieu l'a ressuscité des morts, tu seras sauvé.", "ROM", "10", "9"),
+            ("1 Thessaloniciens 5:16-18", "Soyez toujours joyeux. Priez sans cesse. Rendez grâces en toutes choses.", "1TH", "5", "16"),
+            ("Psaume 62:2", "Il est mon seul rocher et mon salut, ma haute retraite : je ne serai point ébranlé.", "PSA", "62", "2"),
+            ("Ésaïe 26:3", "A celui dont l'esprit est ferme tu assures la paix, parce qu'il se confie en toi.", "ISA", "26", "3"),
+            ("Jean 8:36", "Si donc le Fils vous affranchit, vous serez réellement libres.", "JHN", "8", "36"),
+            ("Luc 1:37", "Car rien n'est impossible à Dieu.", "LUK", "1", "37"),
+            ("Matthieu 7:7", "Demandez, et l'on vous donnera ; cherchez, et vous trouverez ; frappez, et l'on vous ouvrira.", "MAT", "7", "7"),
+            ("Psaume 145:18", "L'Éternel est près de tous ceux qui l'invoquent, de tous ceux qui l'invoquent en vérité.", "PSA", "145", "18"),
+            ("Éphésiens 6:10", "Au reste, fortifiez-vous dans le Seigneur, et par sa force toute-puissante.", "EPH", "6", "10"),
+            ("Colossiens 3:23", "Quoi que vous fassiez, faites-le de bon cœur, comme pour le Seigneur et non pour des hommes.", "COL", "3", "23"),
+            ("Proverbes 16:9", "Le cœur de l'homme médite sa voie, mais c'est l'Éternel qui dirige ses pas.", "PRO", "16", "9"),
+            ("Jean 15:5", "Je suis le cep, vous êtes les sarments. Celui qui demeure en moi porte beaucoup de fruit, car sans moi vous ne pouvez rien faire.", "JHN", "15", "5"),
+            ("Romains 15:13", "Que le Dieu de l'espérance vous remplisse de toute joie et de toute paix dans la foi.", "ROM", "15", "13"),
+            ("Hébreux 4:16", "Approchons-nous donc avec assurance du trône de la grâce, afin d'obtenir miséricorde et de trouver grâce.", "HEB", "4", "16"),
+            ("1 Corinthiens 10:13", "Dieu, qui est fidèle, ne permettra pas que vous soyez tentés au-delà de vos forces ; mais avec la tentation il préparera aussi le moyen d'en sortir.", "1CO", "10", "13"),
+            ("2 Chroniques 7:14", "Si mon peuple sur qui est invoqué mon nom s'humilie, prie, et cherche ma face, et s'il se détourne de ses mauvaises voies, je l'exaucerai des cieux, je lui pardonnerai son péché, et je guérirai son pays.", "2CH", "7", "14"),
           ]
 
           now = datetime.utcnow()
           day = now.timetuple().tm_yday
-          ref, text = VERSES[day % len(VERSES)]
+          entry = VERSES[day % len(VERSES)]
+          ref, text, book, chapter, verse = entry
 
           APP_URL = "https://spirit.zenithlab.net"
           BOT_TOKEN = os.environ["BOT_TOKEN"]
           CHAT_ID = os.environ["CHAT_ID"]
+          MISTRAL_API_KEY = os.environ["MISTRAL_API_KEY"]
 
-          message = (
-            f"📖 *Verset du Jour*\n\n"
-            f"_{ref}_\n\n"
-            f"« {text} »\n\n"
-            f"⏱ *Choisissez votre durée d'étude :*"
+          youversion_url = f"https://www.bible.com/bible/93/{book}.{chapter}.{verse}.LSG"
+
+          def send_telegram(msg):
+              msg = msg[:4000]
+              payload = json.dumps({
+                  "chat_id": CHAT_ID,
+                  "text": msg,
+                  "parse_mode": "Markdown",
+                  "disable_web_page_preview": True,
+              }).encode()
+              req = urllib.request.Request(
+                  f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+                  data=payload,
+                  headers={"Content-Type": "application/json"},
+              )
+              with urllib.request.urlopen(req) as resp:
+                  result = json.loads(resp.read())
+              return result.get("ok", False)
+
+          def call_mistral(prompt):
+              try:
+                  payload = json.dumps({
+                      "model": "mistral-large-latest",
+                      "temperature": 0.7,
+                      "max_tokens": 700,
+                      "messages": [{"role": "user", "content": prompt}],
+                  }).encode()
+                  req = urllib.request.Request(
+                      "https://api.mistral.ai/v1/chat/completions",
+                      data=payload,
+                      headers={
+                          "Content-Type": "application/json",
+                          "Authorization": f"Bearer {MISTRAL_API_KEY}",
+                      },
+                  )
+                  with urllib.request.urlopen(req, timeout=60) as resp:
+                      result = json.loads(resp.read())
+                  return result["choices"][0]["message"]["content"].strip()
+              except Exception as e:
+                  print(f"Mistral error: {e}")
+                  return None
+
+          # Message 1 — Verset du jour
+          msg1 = (
+              f"📖 *Verset du Jour*\n\n"
+              f"_{ref}_\n\n"
+              f"« {text} »\n\n"
+              f"[📖 Lire sur YouVersion]({youversion_url})"
           )
+          ok = send_telegram(msg1)
+          print(f"{'✅' if ok else '❌'} Message 1 (verset) : {ref}")
+          time.sleep(1)
 
-          payload = {
-            "chat_id": CHAT_ID,
-            "text": message,
-            "parse_mode": "Markdown",
-            "reply_markup": {
-              "inline_keyboard": [[
-                {"text": "⏱ 2 min",  "url": f"{APP_URL}/?lectio=2"},
-                {"text": "⏱ 5 min",  "url": f"{APP_URL}/?lectio=5"},
-                {"text": "⏱ 10 min", "url": f"{APP_URL}/?lectio=10"},
-              ]]
-            }
-          }
-
-          data = json.dumps(payload).encode()
-          req = urllib.request.Request(
-            f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-            data=data,
-            headers={"Content-Type": "application/json"}
+          # Message 2 — Étude 2 min
+          prompt2 = (
+              f"Explique le verset biblique {ref}: '{text}' en répondant brièvement aux questions : "
+              f"Qui parle ? À qui ? Dans quel contexte ? Que signifie-t-il aujourd'hui ? "
+              f"Maximum 200 mots, style simple et accessible."
           )
-          with urllib.request.urlopen(req) as resp:
-            result = json.loads(resp.read())
-            if result.get("ok"):
-              print(f"✅ Verset envoyé : {ref}")
-            else:
-              print(f"❌ Erreur : {result}")
-              exit(1)
+          expl2 = call_mistral(prompt2)
+          if expl2:
+              body2 = expl2
+          else:
+              body2 = "_Explication indisponible._"
+          msg2 = (
+              f"⏱ *Étude rapide — 2 min*\n\n"
+              f"{body2}\n\n"
+              f"[Commencer l'étude (2 min)](https://spirit.zenithlab.net/?lectio=2)"
+          )
+          ok = send_telegram(msg2)
+          print(f"{'✅' if ok else '❌'} Message 2 (2 min)")
+          time.sleep(1)
+
+          # Message 3 — Étude 5 min
+          prompt3 = (
+              f"Explique le verset {ref}: '{text}' de manière approfondie : "
+              f"Qui parle et à qui ? Quel est le contexte historique et littéraire ? "
+              f"Que signifie le texte original ? Pourquoi ce message est important ? "
+              f"Comment l'appliquer aujourd'hui ? 350 mots maximum."
+          )
+          expl3 = call_mistral(prompt3)
+          if expl3:
+              body3 = expl3
+          else:
+              body3 = "_Explication indisponible._"
+          msg3 = (
+              f"📚 *Étude approfondie — 5 min*\n\n"
+              f"{body3}\n\n"
+              f"[Commencer l'étude (5 min)](https://spirit.zenithlab.net/?lectio=5)"
+          )
+          ok = send_telegram(msg3)
+          print(f"{'✅' if ok else '❌'} Message 3 (5 min)")
+          time.sleep(1)
+
+          # Message 4 — Étude 10 min
+          prompt4 = (
+              f"Fais une analyse exhaustive du verset {ref}: '{text}'. "
+              f"Réponds à : Qui parle (auteur, prophète, apôtre) ? À qui (destinataires, contexte historique) ? "
+              f"Comment (style littéraire, figures de rhétorique) ? Où (lieu géographique, contexte culturel) ? "
+              f"Pourquoi (intention théologique, problème adressé) ? Quel est le sens profond dans le canon biblique ? "
+              f"Quelles connexions avec d'autres textes ? Comment vivre ce verset ? "
+              f"500 mots maximum, style riche et structuré."
+          )
+          expl4 = call_mistral(prompt4)
+          if expl4:
+              body4 = expl4
+          else:
+              body4 = "_Explication indisponible._"
+          msg4 = (
+              f"🎓 *Étude complète — 10 min*\n\n"
+              f"{body4}\n\n"
+              f"[Commencer l'étude (10 min)](https://spirit.zenithlab.net/?lectio=10)\n"
+              f"[🙏 Ouvrir Spirit](https://spirit.zenithlab.net)"
+          )
+          ok = send_telegram(msg4)
+          print(f"{'✅' if ok else '❌'} Message 4 (10 min)")
           EOF
