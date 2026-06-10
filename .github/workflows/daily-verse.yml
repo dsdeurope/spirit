@@ -112,6 +112,18 @@ jobs:
                   result = json.loads(resp.read())
               return result.get("ok", False)
 
+          def clean(text):
+              import re
+              text = re.sub(r'#{1,6}\s*', '', text)       # ### titres
+              text = re.sub(r'\*\*(.+?)\*\*', r'\1', text) # **gras**
+              text = re.sub(r'\*(.+?)\*', r'\1', text)     # *italique*
+              text = re.sub(r'__(.+?)__', r'\1', text)     # __souligné__
+              text = re.sub(r'_(.+?)_', r'\1', text)       # _italique_
+              text = re.sub(r'^-{2,}\s*$', '', text, flags=re.MULTILINE)  # ---
+              text = re.sub(r'^\s*[-•]\s+', '• ', text, flags=re.MULTILINE) # listes
+              text = re.sub(r'\n{3,}', '\n\n', text)       # triple sauts de ligne
+              return text.strip()
+
           def call_mistral(prompt):
               try:
                   payload = json.dumps({
@@ -130,7 +142,7 @@ jobs:
                   )
                   with urllib.request.urlopen(req, timeout=60) as resp:
                       result = json.loads(resp.read())
-                  return result["choices"][0]["message"]["content"].strip()
+                  return clean(result["choices"][0]["message"]["content"])
               except Exception as e:
                   print(f"Mistral error: {e}")
                   return None
