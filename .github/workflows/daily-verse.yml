@@ -148,9 +148,12 @@ jobs:
 
           # Message 2 — Étude 2 min
           prompt2 = (
-              f"Explique le verset biblique {ref}: '{text}' en répondant brièvement aux questions : "
-              f"Qui parle ? À qui ? Dans quel contexte ? Que signifie-t-il aujourd'hui ? "
-              f"Maximum 200 mots, style simple et accessible."
+              f"Tu es un pasteur contemporain éminent. Pour le verset {ref}: '{text}', rédige en français un message court structuré ainsi :\n"
+              f"🔍 *Contexte* (2-3 phrases : qui parle, à qui, pourquoi)\n"
+              f"📜 *Ce que disent les théologiens* (1-2 pensées de grands théologiens comme Calvin, Luther, Spurgeon ou Wesley sur ce verset, en 2-3 phrases)\n"
+              f"🔥 *Exhortation* (1 phrase percutante pour aujourd'hui)\n"
+              f"🎤 *Prédication* (3-4 phrases dans le style d'un sermon pastoral chaleureux et accessible)\n"
+              f"Maximum 200 mots au total. Style vivant, accessible, inspirant."
           )
           expl2 = call_mistral(prompt2)
           if expl2:
@@ -168,10 +171,13 @@ jobs:
 
           # Message 3 — Étude 5 min
           prompt3 = (
-              f"Explique le verset {ref}: '{text}' de manière approfondie : "
-              f"Qui parle et à qui ? Quel est le contexte historique et littéraire ? "
-              f"Que signifie le texte original ? Pourquoi ce message est important ? "
-              f"Comment l'appliquer aujourd'hui ? 350 mots maximum."
+              f"Tu es un pasteur éminent et théologien accompli. Pour le verset {ref}: '{text}', rédige en français un message structuré ainsi :\n"
+              f"🔍 *Contexte biblique* (qui parle, à qui, situation historique et littéraire — 4-5 phrases)\n"
+              f"📜 *Regard des théologiens* (cite et commente 2-3 théologiens reconnus : Calvin, Luther, Spurgeon, Wesley, Barth, ou autres — leur interprétation spécifique de ce verset)\n"
+              f"💡 *Sens profond* (signification théologique et application au croyant d'aujourd'hui — 3-4 phrases)\n"
+              f"🔥 *Exhortation* (2-3 phrases prophétiques et personnelles qui touchent le cœur)\n"
+              f"🎤 *Prédication pastorale* (un paragraphe de style sermon — éloquent, chaleureux, structuré comme un pasteur contemporain s'adressant à son église)\n"
+              f"Maximum 380 mots. Style pastoral, profond et inspirant."
           )
           expl3 = call_mistral(prompt3)
           if expl3:
@@ -189,12 +195,18 @@ jobs:
 
           # Message 4 — Étude 10 min
           prompt4 = (
-              f"Fais une analyse exhaustive du verset {ref}: '{text}'. "
-              f"Réponds à : Qui parle (auteur, prophète, apôtre) ? À qui (destinataires, contexte historique) ? "
-              f"Comment (style littéraire, figures de rhétorique) ? Où (lieu géographique, contexte culturel) ? "
-              f"Pourquoi (intention théologique, problème adressé) ? Quel est le sens profond dans le canon biblique ? "
-              f"Quelles connexions avec d'autres textes ? Comment vivre ce verset ? "
-              f"500 mots maximum, style riche et structuré."
+              f"Tu es un théologien et pasteur de renommée internationale. Pour le verset {ref}: '{text}', rédige en français une étude exhaustive structurée ainsi :\n"
+              f"🔍 *Qui parle ?* (auteur, contexte de vie, mandat prophétique ou apostolique)\n"
+              f"👥 *À qui ?* (destinataires, situation historique, problème adressé)\n"
+              f"📍 *Où et quand ?* (contexte géographique, culturel, époque)\n"
+              f"❓ *Comment ?* (style littéraire, figures de rhétorique, structure du texte)\n"
+              f"🎯 *Pourquoi ?* (intention théologique, message central, urgence du propos)\n"
+              f"📜 *Ce que disent les grands théologiens* (Calvin, Luther, Spurgeon, Wesley, Barth, N.T. Wright ou autres — citations ou pensées précises sur ce verset)\n"
+              f"🔗 *Connexions bibliques* (2-3 autres passages qui éclairent ce verset)\n"
+              f"💡 *Sens profond dans le canon* (place dans la révélation progressive, christocentrisme)\n"
+              f"🔥 *Exhortation puissante* (un appel prophétique fort et personnel au croyant d'aujourd'hui)\n"
+              f"🎤 *Prédication complète* (2 paragraphes dans le style des grands prédicateurs contemporains — Tim Keller, T.D. Jakes, John MacArthur — éloquent, convaincu, transformateur)\n"
+              f"Maximum 550 mots. Style magistral, profond, pastoral et inspiré."
           )
           expl4 = call_mistral(prompt4)
           if expl4:
