@@ -1911,6 +1911,24 @@ function unlockApp() {
   setTimeout(() => {
     if(currentDailyVerse) saveVerseForToday(currentDailyVerse, false);
   }, 100);
+
+  // ── Deeplink Telegram : ?lectio=2|5|10 ──
+  const lectioParam = new URLSearchParams(window.location.search).get('lectio');
+  if (lectioParam) {
+    const min = parseInt(lectioParam);
+    if ([2, 5, 10].includes(min)) {
+      setTimeout(() => {
+        // Naviguer vers la page Lectio Divina
+        const lectioBtn = document.querySelector('[data-page="lectio"]');
+        if (lectioBtn) showPage('lectio', lectioBtn);
+        // Sélectionner le bon mode
+        const modeCard = document.querySelector(`.mode-card[onclick*="selectLectioMode(${min}"]`);
+        if (modeCard) selectLectioMode(min, modeCard);
+        // Démarrer la session
+        startLectio();
+      }, 700);
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════

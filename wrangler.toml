@@ -2,6 +2,9 @@ name = "lectio-divina-api"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
+[triggers]
+crons = ["0 5 * * *"]  # 6h00 Paris (UTC+1)
+
 # ═══════════════════════════════════════════════════════════
 # CONFIGURATION CLOUDFLARE WORKER
 # ═══════════════════════════════════════════════════════════
