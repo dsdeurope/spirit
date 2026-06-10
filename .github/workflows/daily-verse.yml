@@ -155,79 +155,74 @@ jobs:
           print(f"{'✅' if ok else '❌'} Message 1 (verset) : {ref}")
           time.sleep(1)
 
-          # Message 2 — Étude 2 min
+          # Message 2 — Étude 2 min + défi du jour
           prompt2 = (
-              f"Tu es un pasteur contemporain éminent. Pour le verset {ref}: '{text}', rédige en français un message court structuré ainsi :\n"
+              f"Tu es un pasteur contemporain éminent. Pour le verset {ref}: '{text}', rédige en français :\n"
               f"🔍 *Contexte* (2-3 phrases : qui parle, à qui, pourquoi)\n"
-              f"📜 *Ce que disent les théologiens* (1-2 pensées de grands théologiens comme Calvin, Luther, Spurgeon ou Wesley sur ce verset, en 2-3 phrases)\n"
+              f"📜 *Ce que disent les théologiens* (1-2 pensées de Calvin, Luther, Spurgeon ou Wesley — 2-3 phrases)\n"
               f"🔥 *Exhortation* (1 phrase percutante pour aujourd'hui)\n"
-              f"🎤 *Prédication* (3-4 phrases dans le style d'un sermon pastoral chaleureux et accessible)\n"
-              f"Maximum 200 mots au total. Style vivant, accessible, inspirant."
+              f"🎤 *Prédication* (3-4 phrases pastorales chaleureuses et accessibles)\n"
+              f"✅ *Défi du jour* (1 action concrète et simple à accomplir aujourd'hui en lien avec ce verset)\n"
+              f"Maximum 220 mots. Style vivant, accessible, inspirant."
           )
-          expl2 = call_mistral(prompt2)
-          if expl2:
-              body2 = expl2
-          else:
-              body2 = "_Explication indisponible._"
-          msg2 = (
-              f"⏱ *Étude rapide — 2 min*\n\n"
-              f"{body2}\n\n"
-              f"[Commencer l'étude (2 min)](https://spirit.zenithlab.net/?lectio=2)"
-          )
+          expl2 = call_mistral(prompt2) or "_Explication indisponible._"
+          msg2 = f"⏱ *Étude rapide — 2 min*\n\n{expl2}\n\n[Commencer l'étude (2 min)](https://spirit.zenithlab.net/?lectio=2)"
           ok = send_telegram(msg2)
           print(f"{'✅' if ok else '❌'} Message 2 (2 min)")
           time.sleep(1)
 
-          # Message 3 — Étude 5 min
+          # Message 3 — Étude 5 min + question de réflexion
           prompt3 = (
-              f"Tu es un pasteur éminent et théologien accompli. Pour le verset {ref}: '{text}', rédige en français un message structuré ainsi :\n"
+              f"Tu es un pasteur éminent et théologien accompli. Pour le verset {ref}: '{text}', rédige en français :\n"
               f"🔍 *Contexte biblique* (qui parle, à qui, situation historique et littéraire — 4-5 phrases)\n"
-              f"📜 *Regard des théologiens* (cite et commente 2-3 théologiens reconnus : Calvin, Luther, Spurgeon, Wesley, Barth, ou autres — leur interprétation spécifique de ce verset)\n"
-              f"💡 *Sens profond* (signification théologique et application au croyant d'aujourd'hui — 3-4 phrases)\n"
-              f"🔥 *Exhortation* (2-3 phrases prophétiques et personnelles qui touchent le cœur)\n"
-              f"🎤 *Prédication pastorale* (un paragraphe de style sermon — éloquent, chaleureux, structuré comme un pasteur contemporain s'adressant à son église)\n"
-              f"Maximum 380 mots. Style pastoral, profond et inspirant."
+              f"📜 *Regard des théologiens* (2-3 théologiens : Calvin, Luther, Spurgeon, Wesley, Barth — leur interprétation précise)\n"
+              f"💡 *Sens profond* (signification théologique et application au croyant — 3-4 phrases)\n"
+              f"🔥 *Exhortation* (2-3 phrases prophétiques et personnelles)\n"
+              f"🎤 *Prédication pastorale* (1 paragraphe style sermon — éloquent, chaleureux)\n"
+              f"💭 *Question de réflexion* (1 question personnelle profonde : en quoi ce verset parle-t-il à ta situation d'aujourd'hui ?)\n"
+              f"Maximum 400 mots. Style pastoral, profond et inspirant."
           )
-          expl3 = call_mistral(prompt3)
-          if expl3:
-              body3 = expl3
-          else:
-              body3 = "_Explication indisponible._"
-          msg3 = (
-              f"📚 *Étude approfondie — 5 min*\n\n"
-              f"{body3}\n\n"
-              f"[Commencer l'étude (5 min)](https://spirit.zenithlab.net/?lectio=5)"
-          )
+          expl3 = call_mistral(prompt3) or "_Explication indisponible._"
+          msg3 = f"📚 *Étude approfondie — 5 min*\n\n{expl3}\n\n[Commencer l'étude (5 min)](https://spirit.zenithlab.net/?lectio=5)"
           ok = send_telegram(msg3)
           print(f"{'✅' if ok else '❌'} Message 3 (5 min)")
           time.sleep(1)
 
           # Message 4 — Étude 10 min
           prompt4 = (
-              f"Tu es un théologien et pasteur de renommée internationale. Pour le verset {ref}: '{text}', rédige en français une étude exhaustive structurée ainsi :\n"
-              f"🔍 *Qui parle ?* (auteur, contexte de vie, mandat prophétique ou apostolique)\n"
-              f"👥 *À qui ?* (destinataires, situation historique, problème adressé)\n"
+              f"Tu es un théologien et pasteur de renommée internationale. Pour le verset {ref}: '{text}', rédige une étude exhaustive :\n"
+              f"🔍 *Qui parle ?* (auteur, contexte de vie, mandat)\n"
+              f"👥 *À qui ?* (destinataires, situation historique)\n"
               f"📍 *Où et quand ?* (contexte géographique, culturel, époque)\n"
-              f"❓ *Comment ?* (style littéraire, figures de rhétorique, structure du texte)\n"
-              f"🎯 *Pourquoi ?* (intention théologique, message central, urgence du propos)\n"
-              f"📜 *Ce que disent les grands théologiens* (Calvin, Luther, Spurgeon, Wesley, Barth, N.T. Wright ou autres — citations ou pensées précises sur ce verset)\n"
-              f"🔗 *Connexions bibliques* (2-3 autres passages qui éclairent ce verset)\n"
-              f"💡 *Sens profond dans le canon* (place dans la révélation progressive, christocentrisme)\n"
-              f"🔥 *Exhortation puissante* (un appel prophétique fort et personnel au croyant d'aujourd'hui)\n"
-              f"🎤 *Prédication complète* (2 paragraphes dans le style des grands prédicateurs contemporains — Tim Keller, T.D. Jakes, John MacArthur — éloquent, convaincu, transformateur)\n"
-              f"Maximum 550 mots. Style magistral, profond, pastoral et inspiré."
+              f"❓ *Comment ?* (style littéraire, figures de rhétorique)\n"
+              f"🎯 *Pourquoi ?* (intention théologique, message central)\n"
+              f"📜 *Grands théologiens* (Calvin, Luther, Spurgeon, Wesley, Barth, N.T. Wright — citations précises)\n"
+              f"🔗 *Connexions bibliques* (2-3 passages qui éclairent ce verset)\n"
+              f"💡 *Sens profond dans le canon* (révélation progressive, christocentrisme)\n"
+              f"🔥 *Exhortation puissante* (appel prophétique fort et personnel)\n"
+              f"🎤 *Prédication complète* (2 paragraphes style Tim Keller, T.D. Jakes ou John MacArthur)\n"
+              f"💭 *Question de réflexion profonde* (1 question qui pousse à l'action et à la transformation)\n"
+              f"Maximum 580 mots. Style magistral, profond, pastoral et inspiré."
           )
-          expl4 = call_mistral(prompt4)
-          if expl4:
-              body4 = expl4
-          else:
-              body4 = "_Explication indisponible._"
+          expl4 = call_mistral(prompt4) or "_Explication indisponible._"
           msg4 = (
-              f"🎓 *Étude complète — 10 min*\n\n"
-              f"{body4}\n\n"
+              f"🎓 *Étude complète — 10 min*\n\n{expl4}\n\n"
               f"[Commencer l'étude (10 min)](https://spirit.zenithlab.net/?lectio=10)\n"
               f"[🙏 Ouvrir Spirit](https://spirit.zenithlab.net)"
           )
           ok = send_telegram(msg4)
           print(f"{'✅' if ok else '❌'} Message 4 (10 min)")
+          time.sleep(1)
+
+          # Message 5 — Carte mémoire
+          mots = ' '.join(text.split()[:6])
+          msg5 = (
+              f"🧠 *Grave ce verset dans ta mémoire*\n\n"
+              f"📌 *{ref}*\n\n"
+              f"_{mots}..._\n\n"
+              f"Répète-le 3 fois à voix haute maintenant.\n"
+              f"Reviens ce soir — je te rappellerai 🌙"
+          )
+          ok = send_telegram(msg5)
+          print(f"{'✅' if ok else '❌'} Message 5 (carte mémoire)")
           EOF
