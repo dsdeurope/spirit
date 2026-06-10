@@ -229,12 +229,28 @@ jobs:
           # Message 5 — Carte mémoire
           mots = ' '.join(text.split()[:6])
           msg5 = (
-              f"🧠 *Grave ce verset dans ta mémoire*\n\n"
-              f"📌 *{ref}*\n\n"
-              f"_{mots}..._\n\n"
+              f"🧠 Grave ce verset dans ta mémoire\n\n"
+              f"📌 {ref}\n\n"
+              f"« {mots}... »\n\n"
               f"Répète-le 3 fois à voix haute maintenant.\n"
               f"Reviens ce soir — je te rappellerai 🌙"
           )
           ok = send_telegram(msg5)
           print(f"{'✅' if ok else '❌'} Message 5 (carte mémoire)")
+          time.sleep(1)
+
+          # Message 6 — Prière
+          prompt_priere = (
+              f"Tu es un grand homme de prière et pasteur. "
+              f"Rédige une prière en français inspirée du verset {ref}: '{text}'. "
+              f"La prière doit : s'adresser directement à Dieu (commence par 'Seigneur' ou 'Père céleste'), "
+              f"être personnelle et intime, refléter le message du verset, "
+              f"inclure une action de grâce, une demande et une consécration. "
+              f"Texte brut uniquement, aucun markdown, aucun ##, aucun **, emojis autorisés. "
+              f"Maximum 150 mots. Style sincère, profond et touchant."
+          )
+          priere = call_mistral(prompt_priere) or "Seigneur, que ta Parole habite en moi aujourd'hui. Amen."
+          msg6 = f"🙏 Prière du jour\n\n{priere}"
+          ok = send_telegram(msg6)
+          print(f"{'✅' if ok else '❌'} Message 6 (prière)")
           EOF
